@@ -12,7 +12,10 @@
 function hewa_shortcode_player( $atts ){
 
     // TODO: code this method.
+    $path = '...';
 
-    return 'I am the player';
+    $urls = hewa_get_clip_urls( $path );
+
+    return 'code the HTML5 player';
 }
 add_shortcode( HELIXWARE_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );
