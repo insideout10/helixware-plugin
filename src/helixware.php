@@ -26,7 +26,7 @@
  */
 
 // define constants.
-require_once( 'helixware_functions.php' );
+require_once( 'helixware_constants.php' );
 // provides general functions.
 require_once( 'helixware_functions.php' );
 // provides the [hw-player ...] shortcode.
