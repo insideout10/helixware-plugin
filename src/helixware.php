@@ -25,9 +25,13 @@
  * License: GPL2
  */
 
-// define constants.
+// Log functions.
+require_once( 'helixware_log.php' );
+// Define constants.
 require_once( 'helixware_constants.php' );
-// provides general functions.
+// Provides general functions.
 require_once( 'helixware_functions.php' );
-// provides the [hw-player ...] shortcode.
+// Load AJAX methods.
+require_once( 'ajax/helixware_ajax_m3u8.php' );
+// Provides the [hw-player ...] shortcode.
 require_once( 'shortcodes/helixware_shortcode_player.php' );
