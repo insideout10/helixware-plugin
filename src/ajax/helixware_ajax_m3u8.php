@@ -13,13 +13,14 @@ function hewa_ajax_load_m3u8() {
     if ( ! isset( $_GET['file'] ) ) {
         wp_die( 'The file parameter is not set.' );
     }
-
+	
     // Construct the URL using the configured *server* configuration parameter and the *file* parameter in the GET
     // request.
     // TODO: move this to a configuration setting.
     $server = 'http://streamer.a1.net/m3ugen/';
     $file   = $_GET['file'];
     $url    = $server . $file;
+	echo $url;
 
     $re      = '/' . str_replace( '/', '\/', $server ) . '(.+)\/[^\/]+$/';
     $matches = array();
