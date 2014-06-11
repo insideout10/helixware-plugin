@@ -1,4 +1,14 @@
 <?php
+
+function hewa_shortcode_player_ajax() {
+	
+	echo('STOCAZZO');
+	
+	wp_die();
+}
+add_action('wp_ajax_hewa_player', 'hewa_shortcode_player_ajax');
+add_action('wp_ajax_nopriv_hewa_player', 'hewa_shortcode_player_ajax');
+
 /**
  * This file contains the code to handle the [hewa-player ...] shortcode.
  */
@@ -57,7 +67,9 @@ function hewa_shortcode_player( $atts ){
 	wp_enqueue_script( 'helixwarejs', plugins_url( '../js/helixware.js', __FILE__ ) );
 	wp_localize_script( 'helixwarejs', 'videojs_params', array(
             'id' => 'hewa_video_' . get_the_ID(),	// Not clean YEEEEET
-            'swfurl' => plugins_url( $bower_path . 'videojs/dist/video-js/video-js.swf', __FILE__ )
+            'swfurl' => plugins_url( $bower_path . 'videojs/dist/video-js/video-js.swf', __FILE__ ),
+			'ajax_url'   => admin_url('admin-ajax.php'),
+            'action'     => 'hewa_player'
         )
     );
 	
