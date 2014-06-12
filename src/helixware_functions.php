@@ -2,6 +2,32 @@
 /**
  * This file contains general functions.
  */
+ 
+/**
+ * Change *plugins_url* response to return the correct path of WordLift files when working in development mode.
+ * @param $url The URL as set by the plugins_url method.
+ * @param $path The request path.
+ * @param $plugin The plugin folder.
+ * @return string The URL.
+ */
+function hewa_plugins_url($url, $path, $plugin)
+{
+
+    hewa_write_log("hewa_plugins_url [ url :: $url ][ path :: $path ][ plugin :: $plugin ]");
+
+    // Check if it's our pages calling the plugins_url.
+    if (1 !== preg_match('/\/helixware[^.]*.php$/i', $plugin)) {
+        return $url;
+    };
+
+    // Set the URL to plugins URL + helixware, in order to support the plugin being symbolic linked.
+    $plugin_url = plugins_url() . '/helixware/' . $path;
+
+    hewa_write_log("hewa_plugins_url [ match :: yes ][ plugin url :: $plugin_url ][ url :: $url ][ path :: $path ][ plugin :: $plugin ]");
+
+    return $plugin_url;
+}
+add_filter('plugins_url', 'hewa_plugins_url', 10, 3);
 
 /**
  * Retrieve the URLs for a clip with the specified path.

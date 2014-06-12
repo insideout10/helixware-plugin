@@ -28,8 +28,8 @@ function hewa_shortcode_player( $atts ){
 	$bower_path = 'bower_components/';
 	
 	// Videojs
-	wp_enqueue_style( 'videojs-css', plugins_url( $bower_path . 'videojs/dist/video-js/video-js.css', dirname(__FILE__) ) );
-	wp_enqueue_script( 'videojs', plugins_url( $bower_path . 'videojs/dist/video-js/video.js', dirname(__FILE__) ) );
+	wp_enqueue_style( 'videojs-css', plugins_url( $bower_path . 'videojs/dist/video-js/video-js.css', __FILE__ ) );
+	wp_enqueue_script( 'videojs', plugins_url( $bower_path . 'videojs/dist/video-js/video.js', __FILE__ ) );
 		 
 	// Videojs HLS plugin
 	/*wp_enqueue_script( 'videojs-contrib-media-sources', plugins_url( $bower_path . 'videojs-contrib-media-sources/src/videojs-media-sources.js', __FILE__ ) );
@@ -45,10 +45,10 @@ function hewa_shortcode_player( $atts ){
 	*/
 	
 	// Our js
-	wp_enqueue_script( 'helixwarejs', plugins_url( 'js/helixware.js', dirname(__FILE__) ) );
+	wp_enqueue_script( 'helixwarejs', plugins_url( 'js/helixware.js', __FILE__ ) );
 	wp_localize_script( 'helixwarejs', 'videojs_params', array(
             'id' => 'hewa_video_' . get_the_ID(),	// Not clean YEEEEET
-            'swfurl' => plugins_url( $bower_path . 'videojs/dist/video-js/video-js.swf', dirname(__FILE__) )
+            'swfurl' => plugins_url( $bower_path . 'videojs/dist/video-js/video-js.swf', __FILE__ )
         )
     );
 	
@@ -57,7 +57,6 @@ function hewa_shortcode_player( $atts ){
     $esc_id     = esc_attr( 'hewa_video_' . get_the_ID() );
 	$esc_width  = esc_attr( $hewa_atts['width'] );
 	$esc_height = esc_attr( $hewa_atts['height'] );
-	$esc_videojs_swf_url = plugins_url($videojs_path . 'video-js.swf', __FILE__);
 	
 	// Return HTML template
     return <<<EOF
