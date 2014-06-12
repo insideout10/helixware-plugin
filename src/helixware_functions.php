@@ -56,7 +56,7 @@ function hewa_get_clip_urls( $path ) {
     },
     "m3u8-redirector": {
         "caption": "Redirector M3U8 URL for HLS players (iOS).",
-        "file": "iPhone-src/cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4",
+        "file": "m3ugen/iPhone-src/cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4",
         "protocol": "http",
         "streamer": "http://streamer.a1.net/",
         "url": "http://streamer.a1.net/m3ugen/iPhone-src/cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4"
