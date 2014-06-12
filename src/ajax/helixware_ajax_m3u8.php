@@ -17,7 +17,7 @@ function hewa_ajax_load_m3u8() {
     // Construct the URL using the configured *server* configuration parameter and the *file* parameter in the GET
     // request.
     // TODO: move this to a configuration setting.
-    $server = 'http://streamer.a1.net/';
+    $server = 'http://streamer.a1.net/m3ugen/';
     $file   = $_GET['file'];
     $url    = $server . $file;
 
