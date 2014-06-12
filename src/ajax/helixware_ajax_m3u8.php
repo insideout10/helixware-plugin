@@ -20,7 +20,6 @@ function hewa_ajax_load_m3u8() {
     $server = 'http://streamer.a1.net/m3ugen/';
     $file   = $_GET['file'];
     $url    = $server . $file;
-	echo $url;
 
     $re      = '/' . str_replace( '/', '\/', $server ) . '(.+)\/[^\/]+$/';
     $matches = array();
