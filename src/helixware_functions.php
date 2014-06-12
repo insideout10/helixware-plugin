@@ -12,7 +12,6 @@
  */
 function hewa_plugins_url($url, $path, $plugin)
 {
-
     hewa_write_log("hewa_plugins_url [ url :: $url ][ path :: $path ][ plugin :: $plugin ]");
 
     // Check if it's our pages calling the plugins_url.
