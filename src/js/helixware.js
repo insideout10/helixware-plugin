@@ -2,14 +2,21 @@ $ = jQuery;
 
 $(document).ready(function(){
 	
+	// We could have many players, and in future they may interact with each other
+	// (i.e. when a player starts the others should stop)
+	var players = [];
+	
 	// Telling videojs where the flash fallback is.
-	// (this include did not work via wp_enqueues_script)	
 	videojs.options.flash.swf = videojs_params.swfurl;
 	
-	// Including hls as a fallback, after html5 and flash
-	//videojs.options.techOrder.push('hls');
+	// Css selector for the videos
+	var videoCssClass = '.' + videojs_params.class;
 	
-	var player = videojs( videojs_params.id );
-
-	console.log('fix id param from wp');
+	// Loop over player containers
+	$( videoCssClass ).each( function(){
+		
+		// Creating new player in the current container
+		container = '#' + this.id;
+		players.push = videojs( container );
+	});
 });
