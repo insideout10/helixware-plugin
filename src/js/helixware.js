@@ -10,7 +10,6 @@ $(document).ready(function(){
 	//videojs.options.techOrder.push('hls');
 	
 	var player = videojs( videojs_params.id );
-	player.play();
 
 	console.log('fix id param from wp');
 });

@@ -10,7 +10,7 @@
  *
  * @return A structure with the clip data.
  */
-function hewa_get_clip_urls( $path ) {
+function hewa_get_clip_urls_and_types( $path ) {
 
     // TODO: provide here the actual functions.
 
@@ -58,4 +58,28 @@ EOF;
     // return an object instance.
     return json_decode( $json );
 
+}
+
+/**
+ * Take a list of objects (with url and type)
+ * and build the <source> tags to write into the video tag
+ * 
+ * @param structure outputted by *hewa_get_clip_urls*.
+ *
+ * @return HTML markup with a list of <source> tags, to put into the <video> tag.
+ */
+ function hewa_build_video_sources( $urls_and_type ){
+ 	
+	$src='rtmp://streamer.a1.net/cdn/&amp;mp4:A1TAAdmin/VendorAdm/tests/test-signal-3.mp4';
+    $type = 'rtmp/mp4';
+	$sources = '<source src="' . $src . '" type="' . $type . '" >';
+	
+
+	$action = 'hewa_m3u8';
+	$src = admin_url('admin-ajax.php') . '?action=' . $action . 
+	 		'&file=' . 'iPhone-src%2Fcdn%2FA1TAAdmin%2FVendorAdm%2Ftests%2Ftest-signal-3.mp4';
+	$type = 'application/x-mpegURL';
+	$sources = $sources . '<source src="' . $src . '" type="' . $type . '" >';
+	
+	return $sources;
 }

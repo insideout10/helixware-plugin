@@ -21,7 +21,8 @@ function hewa_shortcode_player( $atts ){
 
     // TODO: code this method.
     $path = '...';
-    $urls = hewa_get_clip_urls( $path );
+    $urls = hewa_get_clip_urls_and_types( $path );
+	$sources = hewa_build_video_sources( $urls );
 	
 	// Load scripts and css on page
 	$bower_path = '../bower_components/';
@@ -57,17 +58,6 @@ function hewa_shortcode_player( $atts ){
 	$esc_width  = esc_attr( $hewa_atts['width'] );
 	$esc_height = esc_attr( $hewa_atts['height'] );
 	$esc_videojs_swf_url = plugins_url($videojs_path . 'video-js.swf', __FILE__);
-	
-    $src='rtmp://streamer.a1.net/cdn/&amp;mp4:A1TAAdmin/VendorAdm/tests/test-signal-3.mp4';
-    $type = 'rtmp/mp4';
-	$sources = '<source src="' . $src . '" type="' . $type . '" >';
-	
-
-	$action = 'hewa_m3u8';
-	$src = admin_url('admin-ajax.php') . '?action=' . $action . 
-	 		'&file=' . 'iPhone-src%2Fcdn%2FA1TAAdmin%2FVendorAdm%2Ftests%2Ftest-signal-3.mp4';
-	$type = 'application/x-mpegURL';
-	$sources = $sources . '<source src="' . $src . '" type="' . $type . '" >';
 	
 	// Return HTML template
     return <<<EOF
