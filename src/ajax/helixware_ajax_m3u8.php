@@ -17,11 +17,11 @@ function hewa_ajax_load_m3u8() {
     // Construct the URL using the configured *server* configuration parameter and the *file* parameter in the GET
     // request.
     // TODO: move this to a configuration setting.
-    $server = 'http://streamer.a1.net/m3ugen/';
+    $server = 'http://streamer.a1.net/';
     $file   = $_GET['file'];
     $url    = $server . $file;
 
-    $re      = '/' . str_replace( '/', '\/', $server ) . '(.+)\/[^\/]+$/';
+    $re      = '/' . str_replace( '/', '\/', $server ) . 'm3ugen\/(.+)\/[^\/]+$/';
     $matches = array();
     if ( 1 !== preg_match( $re, $url, $matches ) ) {
         wp_die( "Cannot parse the URL [ re :: $re ][ url :: $url ]." );
