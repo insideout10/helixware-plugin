@@ -74,12 +74,12 @@ class AjaxTest extends WP_UnitTestCase
     {
     }
 
-//    /**
-//     * @runInSeparateProcess
-//     */
-//    public function test_ajax()
-//    {
-//
+    /**
+     * @runInSeparateProcess
+     */
+    public function test_ajax()
+    {
+
 //        if (!function_exists('xdebug_get_headers')) {
 //            $this->markTestSkipped('xdebug is required for this test');
 //        }
@@ -91,6 +91,6 @@ class AjaxTest extends WP_UnitTestCase
 //        $contents = ob_get_clean();
 //
 //        $this->assertTrue(in_array('Content-Type: application/json', $headers));
-//    }
+    }
 
 }
