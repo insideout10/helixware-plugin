@@ -74,23 +74,23 @@ class AjaxTest extends WP_UnitTestCase
     {
     }
 
-    /**
-     * @runInSeparateProcess
-     */
-    public function test_ajax()
-    {
-
-        if (!function_exists('xdebug_get_headers')) {
-            $this->markTestSkipped('xdebug is required for this test');
-        }
-
-
-        ob_start();
-        // TODO: call ajax method
-        $headers = xdebug_get_headers();
-        $contents = ob_get_clean();
-
-        $this->assertTrue(in_array('Content-Type: application/json', $headers));
-    }
+//    /**
+//     * @runInSeparateProcess
+//     */
+//    public function test_ajax()
+//    {
+//
+//        if (!function_exists('xdebug_get_headers')) {
+//            $this->markTestSkipped('xdebug is required for this test');
+//        }
+//
+//
+//        ob_start();
+//        // TODO: call ajax method
+//        $headers = xdebug_get_headers();
+//        $contents = ob_get_clean();
+//
+//        $this->assertTrue(in_array('Content-Type: application/json', $headers));
+//    }
 
 }
