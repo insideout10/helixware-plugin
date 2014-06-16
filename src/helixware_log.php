@@ -16,7 +16,7 @@ function hewa_write_log( $log )
     $handler = apply_filters( 'hewa_write_log_handler', null );
 
     if ( is_null( $handler ) ) {
-        return wl_write_log_handler( $log );
+        return hewa_write_log_handler( $log );
     }
 
     call_user_func( $handler, $log );
