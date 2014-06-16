@@ -23,7 +23,7 @@ add_action( 'admin_menu', 'hewa_admin_menu' );
 function helixware_admin_options_page() {
     ?>
     <div class="wrap">
-        <h2>HelixWare Options</h2>
+        <h2><?php esc_html_e( 'HelixWare Options', HEWA_LANGUAGE_DOMAIN ) ?></h2>
         <form action="options.php" method="POST">
             <?php settings_fields( 'helixware' ); ?>
             <?php do_settings_sections( 'helixware' ); ?>
