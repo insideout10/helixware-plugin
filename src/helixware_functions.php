@@ -56,7 +56,7 @@ function hewa_get_clip_urls( $path ) {
     },
     "m3u8-redirector": {
         "caption": "Redirector M3U8 URL for HLS players (iOS).",
-        "file": "iPhone-src/cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4",
+        "file": "m3ugen/iPhone-src/cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4",
         "protocol": "http",
         "streamer": "http://streamer.a1.net/",
         "url": "http://streamer.a1.net/m3ugen/iPhone-src/cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4"
@@ -79,43 +79,5 @@ function hewa_get_clip_urls( $path ) {
 EOF;
 
     // Return an object instance.
-    $urls = json_decode( $json );
-	
-	// Builod html <source> attributes
-	$sources = array();
-	foreach( $urls as $u ) {
-		// rtmp
-		if( $u->protocol == 'rtmp' ) {
-			$sources[] = array(
-				'src' => $u->url,
-				'type' => 'rtmp/mp4'
-			);
-		}
-		// m3u8
-		if( strpos( $u->caption, 'M3U8' ) ){	// Don't know how to check for the m3u8
-			$sources[] = array(
-				'src' => admin_url('admin-ajax.php') . '?action=hewa_m3u8&file=' . $u->file,
-				'type' => 'application/x-mpegURL'
-			);
-		}	
-	}
-	
-	return $sources;
-}
-
-/**
- * Take a list of objects (with url and type)
- * and build the <source> tags to write into the video tag
- * 
- * @param structure outputted by *hewa_get_clip_urls*.
- *
- * @return HTML markup with a list of <source> tags, to put into the <video> tag.
- */
- function hewa_build_video_sources( $urls ){
- 	
-	$sources = '';
-	foreach( $urls as $u ){
-		$sources = $sources . '<source src= "' . $u['src'] . '" type="' . $u['type'] . '" >';
-	}
-	return $sources;
+    return json_decode( $json );
 }

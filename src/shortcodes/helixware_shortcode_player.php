@@ -13,49 +13,88 @@
 function hewa_shortcode_player( $atts ){
 	
 	// Extract attributes and set default values
-    $hewa_atts = shortcode_atts(array(
-        'width'      => '100%',
-        'height'     => '300px',
-        'path' => 'cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4'
+    // TODO: the default path might point to a custom video that invites the user to select a video.
+    // TODO: default width and height ratio should be calculated from the video.
+    $params = shortcode_atts( array(
+        'width'  => 480,
+        'height' => 270,
+        'path'   => 'cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4'
     ), $atts);
-	
-	// Retrieving sources
-    $urls = hewa_get_clip_urls( $hewa_atts['path'] );
-	// Formatting sources as <source> tags for the <video>
-	$sources = hewa_build_video_sources( $urls );
-	
-	// Css class of the video
-	$hewa_css_class = HELIXWARE_SHORTCODE_PREFIX . 'player';
-	
-	// Load scripts and css on page
-	$bower_path = 'bower_components/';
-	
-	// Videojs
-	wp_enqueue_style( 'videojs-css', plugins_url( $bower_path . 'videojs/dist/video-js/video-js.css', __FILE__ ) );
-	wp_enqueue_script( 'videojs', plugins_url( $bower_path . 'videojs/dist/video-js/video.js', __FILE__ ) );
-	
-	// Our js
-	wp_enqueue_script( 'helixwarejs', plugins_url( 'js/helixware.js', __FILE__ ) );
-	wp_localize_script( 'helixwarejs', 'videojs_params', array(
-            'class' => $hewa_css_class,
-            'swfurl' => plugins_url( $bower_path . 'videojs/dist/video-js/video-js.swf', __FILE__ )
+
+    // Videojs
+    wp_enqueue_style(
+        'videojs-css',
+        plugins_url( 'bower_components/video.js-dist/dist/video-js/video-js.min.css', __FILE__ )
+    );
+    wp_enqueue_script(
+        'videojs',
+        plugins_url( 'bower_components/video.js-dist/dist/video-js/video.js', __FILE__ )
+    );
+
+    // Our js
+    wp_enqueue_script( 'helixwarejs', plugins_url( 'js/helixware.js', __FILE__ ) );
+    wp_localize_script( 'helixwarejs', 'videojs_params', array(
+            'class'  => 'hewa-player',
+            'swfurl' => plugins_url( 'bower_components/video.js-dist/dist/video-js/video-js.swf', __FILE__ )
         )
     );
-	
-	// Escaping atts.
-    $esc_class  = esc_attr( $hewa_css_class );
-    $esc_id     = esc_attr( $hewa_css_class . '_' . get_the_ID() );
-	$esc_data_id = esc_attr( get_the_ID() );
-	$esc_width  = esc_attr( $hewa_atts['width'] );
-	$esc_height = esc_attr( $hewa_atts['height'] );
+
+    // Retrieving sources
+    $clips    = hewa_get_clip_urls( $params['path'] );
+
+    // TODO: the above call might return an error, handle it here and display a friendly message.
+
+    // Setting width and height
+	$width_e  = esc_attr( $params['width'] );
+	$height_e = esc_attr( $params['height'] );
 	
 	// Return HTML template
-    return <<<EOF
-<video id=$esc_id class="video-js vjs-default-skin $esc_class" data-id="$esc_data_id"
-		controls preload="auto" width="$esc_width" height="$esc_height" >
-		$sources
-	<p class="vjs-no-js">To view this video consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-</video>
+    echo <<<EOF
+        <video class='video-js vjs-default-skin hewa-player' controls preload='auto' data-setup='{ "techOrder": ["html5", "flash"] }'
+            width="$width_e" height="$height_e">
+EOF;
+
+    // Print the streaming sources, we only need to:
+    //  * HLS streaming (m3u8) for Safari, iOS, Android
+    //  * Flash for all the others (Chrome, Internet Explorer, Safari)
+    foreach( $clips as $key => $clip ) {
+        switch ( $key ) {
+
+            // HLS streaming.
+            case 'm3u8-redirector':
+
+                hewa_player_print_source_tag(
+                    admin_url('admin-ajax.php') . '?action=hewa_m3u8&file=' . urlencode( $clip->file ),
+                    'application/x-mpegURL'
+                );
+                break;
+
+            // Flash streaming.
+            case 'flash-direct':
+
+                hewa_player_print_source_tag( $clip->url, 'rtmp/mp4' );
+                break;
+
+        }
+    }
+
+    echo <<<EOF
+	        <p class="vjs-no-js">To view this video consider upgrading to a web browser that <a
+	            href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+        </video>
 EOF;
 }
 add_shortcode( HELIXWARE_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );
+
+/**
+ * Print a *source* tag with the provided *src* and *type* attributes.
+ *
+ * @param string $source The URL source of the stream.
+ * @param string $type The type of the stream.
+ */
+function hewa_player_print_source_tag( $source, $type ) {
+
+    $source_e = esc_attr( $source );
+    $type_e   = esc_attr( $type );
+    echo "<source src='$source_e' type='$type_e'>";
+}

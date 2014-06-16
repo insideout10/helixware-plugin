@@ -6,7 +6,13 @@
  */
 
 /**
- * Load an m3u8 file from remote.
+ * Load an m3u8 file from a remote Helix Server install.
+ *
+ * The remote file may express the stream location relative to the server, therefore it won't work because we're
+ * proxying the request. This requires us to prepend the server name and base path to the file path in the remote
+ * .m3u8 file.
+ *
+ * This method is available via AJAX as *admin-ajax.php?action=hewa_m3u8&file=<filename>
  */
 function hewa_ajax_load_m3u8() {
 
@@ -21,6 +27,7 @@ function hewa_ajax_load_m3u8() {
     $file   = $_GET['file'];
     $url    = $server . $file;
 
+    // Determine the base path that will be prepended to the file path.
     $re      = '/' . str_replace( '/', '\/', $server ) . 'm3ugen\/(.+)\/[^\/]+$/';
     $matches = array();
     if ( 1 !== preg_match( $re, $url, $matches ) ) {
@@ -35,7 +42,7 @@ function hewa_ajax_load_m3u8() {
     if ( is_wp_error( $response ) ) {
 
         hewa_write_log( "hewa_ajax_load_m3u8 : error [ response :: " . var_export( $response ) . " ]" );
-        wp_die('An error occurred while request the remote resource.');
+        wp_die( 'An error occurred while request the remote resource.' );
     }
 
     // Send the output.

@@ -20,7 +20,7 @@
  * Plugin URI: http://insideout.io
  * Description: HelixWare turns WordPress in a Video web site
  * Version: 1.0.0-SNAPSHOT
- * Author: ziodave, pieroit
+ * Author: InsideOut10
  * Author URI: http://twitter.com/ziodave
  * License: GPL2
  */

@@ -1,7 +1,0 @@
-.DS_Store
-dist/*
-/node_modules/
-*~
-*.iml
-*.swp
-tmp/**
