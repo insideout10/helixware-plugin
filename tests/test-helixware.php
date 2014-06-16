@@ -22,9 +22,29 @@ class HelixWareTest extends WP_UnitTestCase
         parent::tearDown();
     }
 
-    function test_helixware() {
+    /**
+     * Test the output from the print source tag method.
+     */
+    function test_hewa_player_print_source_tag() {
 
-        // TODO: create tests.
+        $source = 'http://example.org/file.mp4';
+        $type   = 'video/mp4';
+
+        ob_start();
+        hewa_player_print_source_tag( $source, $type );
+        $output = ob_get_clean();
+
+        $this->assertEquals( "<source src='$source' type='$type'>", $output );
+
+    }
+
+    /**
+     * @expectedException WPDieException
+     * @expectedExceptionMessage The file parameter is not set.
+     */
+    function test_hewa_ajax_load_m3u8_file_not_set() {
+
+        hewa_ajax_load_m3u8();
 
     }
 

@@ -7,10 +7,12 @@
 /**
  * Creates the code to display an HTML5 player for the specified file.
  *
+ * @uses hewa_get_clip_urls to load the clip URLs from the remote HelixWare server.
+ *
  * @param array $atts An array of parameters, including the *path* value.
  * @return string An HTML coe fragment.
  */
-function hewa_shortcode_player( $atts ){
+function hewa_shortcode_player( $atts ) {
 	
 	// Extract attributes and set default values
     // TODO: the default path might point to a custom video that invites the user to select a video.
