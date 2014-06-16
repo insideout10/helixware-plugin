@@ -53,35 +53,54 @@ function hewa_admin_settings() {
     // Add the field for Server URL.
     add_settings_field(
         'hewa_server_url',
-        'Server URL',
-        'hewa_admin_settings_server_url_callback',
+        __( 'Server URL', HEWA_LANGUAGE_DOMAIN ),
+        'hewa_admin_settings_input_text',
         'helixware',
-        'hewa_settings_section'
+        'hewa_settings_section',
+        array(
+            'name'    => 'hewa_server_url',
+            'default' => ''
+        )
     );
 
     // Add the field for Application Key.
     add_settings_field(
         'hewa_app_key',
-        'Application Key',
-        'hewa_admin_settings_app_key_callback',
+        __( 'Application Key', HEWA_LANGUAGE_DOMAIN ),
+        'hewa_admin_settings_input_text',
         'helixware',
-        'hewa_settings_section'
+        'hewa_settings_section',
+        array(
+            'name'    => 'hewa_app_key',
+            'default' => ''
+        )
     );
 
     // Add the field for Application Secret.
     add_settings_field(
         'hewa_app_secret',
-        'Application Secret',
-        'hewa_admin_settings_app_secret_callback',
+        __( 'Application Secret', HEWA_LANGUAGE_DOMAIN ),
+        'hewa_admin_settings_input_text',
         'helixware',
-        'hewa_settings_section'
+        'hewa_settings_section',
+        array(
+            'name'    => 'hewa_app_secret',
+            'default' => ''
+        )
     );
 
 }
 add_action( 'admin_init', 'hewa_admin_settings' );
 
+/**
+ * Print the general section header.
+ */
 function hewa_admin_settings_section_callback() {
-    echo '<p>General settings</p>';
+
+    echo '<p>' .
+        esc_html__( 'Set here the basic settings for HelixWare including the URL for HelixWare Server and the application data.' ) .
+        '</p>';
+
 }
 
 /**
@@ -90,46 +109,13 @@ function hewa_admin_settings_section_callback() {
  *
  * @uses hewa_get_option to get the option value.
  *
- * @param string $name The option name.
- * @param string $default The default value (default: empty string).
+ * @param array $args An array with a *name* field containing the option name and a *default* field with its default
+ *                    value.
  */
-function hewa_admin_settings_input_text( $name, $default = '' ) {
+function hewa_admin_settings_input_text( $args ) {
 
-    $value_e = esc_attr( hewa_get_option( $name, $default ) );
-    $name_e  = esc_attr( $name );
+    $value_e = esc_attr( hewa_get_option( $args['name'], $args['default'] ) );
+    $name_e  = esc_attr( $args['name'] );
 
     echo "<input name='" . HEWA_SETTINGS . "[$name_e]' type='text' value='$value_e' size='40' />";
-}
-
-/**
- * Print the HelixWare Server URL input box.
- *
- * @uses hewa_admin_settings_input_text to print the input box.
- */
-function hewa_admin_settings_server_url_callback() {
-
-    hewa_admin_settings_input_text( 'hewa_server_url', '' );
-
-}
-
-/**
- * Print the HelixWare Application Key input box.
- *
- * @uses hewa_admin_settings_input_text to print the input box.
- */
-function hewa_admin_settings_app_key_callback() {
-
-    hewa_admin_settings_input_text( 'hewa_app_key', '' );
-
-}
-
-/**
- * Print the HelixWare Application Secret input box.
- *
- * @uses hewa_admin_settings_input_text to print the input box.
- */
-function hewa_admin_settings_app_secret_callback() {
-
-    hewa_admin_settings_input_text( 'hewa_app_secret', '' );
-
 }
