@@ -52,39 +52,39 @@ function hewa_admin_settings() {
 
     // Add the field for Server URL.
     add_settings_field(
-        'hewa_server_url',
+        HEWA_SETTINGS_SERVER_URL,
         __( 'Server URL', HEWA_LANGUAGE_DOMAIN ),
         'hewa_admin_settings_input_text',
         'helixware',
         'hewa_settings_section',
         array(
-            'name'    => 'hewa_server_url',
+            'name'    => HEWA_SETTINGS_SERVER_URL,
             'default' => ''
         )
     );
 
     // Add the field for Application Key.
     add_settings_field(
-        'hewa_app_key',
+        HEWA_SETTINGS_APPLICATION_KEY,
         __( 'Application Key', HEWA_LANGUAGE_DOMAIN ),
         'hewa_admin_settings_input_text',
         'helixware',
         'hewa_settings_section',
         array(
-            'name'    => 'hewa_app_key',
+            'name'    => HEWA_SETTINGS_APPLICATION_KEY,
             'default' => ''
         )
     );
 
     // Add the field for Application Secret.
     add_settings_field(
-        'hewa_app_secret',
+        HEWA_SETTINGS_APPLICATION_SECRET,
         __( 'Application Secret', HEWA_LANGUAGE_DOMAIN ),
         'hewa_admin_settings_input_text',
         'helixware',
         'hewa_settings_section',
         array(
-            'name'    => 'hewa_app_secret',
+            'name'    => HEWA_SETTINGS_APPLICATION_SECRET,
             'default' => ''
         )
     );
