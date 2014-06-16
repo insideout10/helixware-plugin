@@ -86,7 +86,7 @@ EOF;
         </video>
 EOF;
 }
-add_shortcode( HELIXWARE_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );
+add_shortcode( HEWA_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );
 
 /**
  * Print a *source* tag with the provided *src* and *type* attributes.

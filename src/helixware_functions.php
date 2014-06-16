@@ -81,3 +81,17 @@ EOF;
     // Return an object instance.
     return json_decode( $json );
 }
+
+/**
+ * Get the value for a setting or return a default value.
+ *
+ * @param string $name The setting name.
+ * @param mixed $default The default value if the setting is not found (null if not provided).
+ * @return mixed The setting value, or the default value.
+ */
+function hewa_get_option( $name, $default = null ) {
+
+    $settings = (array) get_option( HEWA_SETTINGS );
+    return ( isset( $settings[$name] ) ? esc_attr( $settings[$name] ) : $default );
+
+}

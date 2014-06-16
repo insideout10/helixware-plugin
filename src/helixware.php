@@ -35,3 +35,6 @@ require_once( 'helixware_functions.php' );
 require_once( 'ajax/helixware_ajax_m3u8.php' );
 // Provides the [hw-player ...] shortcode.
 require_once( 'shortcodes/helixware_shortcode_player.php' );
+
+// admin screen
+require_once( 'admin/helixware_admin_settings.php' );
