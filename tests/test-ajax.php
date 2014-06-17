@@ -119,6 +119,7 @@ class AjaxTest extends WP_UnitTestCase
         $this->assertTrue( isset( $object->email ) );
         $this->assertTrue( isset( $object->enabled ) );
         $this->assertTrue( $object->enabled );
+        $this->assertTrue( isset( $object->message ) );
         $this->assertTrue( isset( $object->authorities ) );
         $this->assertTrue( isset( $object->account->name ) );
         $this->assertTrue( isset( $object->account->maxQuota ) );
