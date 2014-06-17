@@ -6,7 +6,7 @@
 function hewa_admin_quota_notice() {
 ?>
     <div id="hewa-notice-quota" class="updated">
-        <p><?php _e( '<strong>HelixWare Quota:</strong> loading...', HEWA_LANGUAGE_DOMAIN ); ?></p>
+        <p><strong>HelixWare Quota:</strong> <?php _e( 'loading...', HEWA_LANGUAGE_DOMAIN ); ?></p>
     </div>
     <script type="text/javascript">
         jQuery(function($) {
