@@ -40,8 +40,11 @@ require_once( 'shortcodes/helixware_shortcode_player.php' );
 
 // Files related to the admin screen.
 
+// Provide the admin quota AJAX call.
+require_once( 'ajax/helixware_ajax_quota.php' );
+
 // Provide the admin settings screen.
 require_once( 'admin/helixware_admin_settings.php' );
 
-// Provide the admin quota AJAX call.
-require_once( 'ajax/helixware_ajax_quota.php' );
+// Run admin notices.
+require_once( 'admin/helixware_admin_notices.php' );

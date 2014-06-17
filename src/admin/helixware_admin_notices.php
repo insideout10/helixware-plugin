@@ -1,0 +1,24 @@
+<?php
+/**
+ * This file contains functions that display notices in the admin screen.
+ */
+
+function hewa_admin_quota_notice() {
+?>
+    <div id="hewa-notice-quota" class="updated">
+        <p><?php _e( '<strong>HelixWare Quota:</strong> loading...', HEWA_LANGUAGE_DOMAIN ); ?></p>
+    </div>
+    <script type="text/javascript">
+        jQuery(function($) {
+            console.log('requesting data...');
+            var data = {
+                action: 'hewa_quota'
+            };
+            $.post(ajaxurl, data, function(response) {
+                $('#hewa-notice-quota').html('<p><strong>HelixWare Quota:</strong> ' + response.message + '</p>');
+            });
+        });
+    </script>
+<?php
+}
+add_action( 'admin_notices', 'hewa_admin_quota_notice' );

@@ -95,3 +95,19 @@ function hewa_get_option( $name, $default = null ) {
     return ( isset( $settings[$name] ) ? esc_attr( $settings[$name] ) : $default );
 
 }
+
+/**
+ * Format the specified value in bytes.
+ *
+ * @param int $size The size in bytes.
+ * @param int $precision The number of decimals.
+ * @return string The formatted string.
+ */
+function hewa_format_bytes( $size, $precision = 2) {
+
+    $base = log( $size ) / log( 1024 );
+    $suffixes = array( '', 'kb', 'Mb', 'Gb', 'Tb' );
+
+    return round( pow( 1024, $base - floor( $base ) ), $precision ) . $suffixes[floor( $base )];
+
+}
