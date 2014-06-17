@@ -10,7 +10,6 @@ function hewa_admin_quota_notice() {
     </div>
     <script type="text/javascript">
         jQuery(function($) {
-            console.log('requesting data...');
             var data = {
                 action: 'hewa_quota'
             };
