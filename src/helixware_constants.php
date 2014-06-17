@@ -16,3 +16,6 @@ define( 'HEWA_SETTINGS', 'helixware_settings' );
 define( 'HEWA_SETTINGS_SERVER_URL', 'hewa_server_url' );
 define( 'HEWA_SETTINGS_APPLICATION_KEY', 'hewa_app_key' );
 define( 'HEWA_SETTINGS_APPLICATION_SECRET', 'hewa_app_secret' );
+
+// Define the clip custom post name.
+define( 'HEWA_POST_TYPE_CLIP', 'hewa_clip' );

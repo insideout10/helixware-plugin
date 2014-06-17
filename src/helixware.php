@@ -27,14 +27,22 @@
 
 // Log functions.
 require_once( 'helixware_log.php' );
+
 // Define constants.
 require_once( 'helixware_constants.php' );
+
 // Provides general functions.
 require_once( 'helixware_functions.php' );
+
+// Register the Video custom post type.
+require_once( 'helixware_post_type_clip.php' );
+
 // Provides HelixServer API calls functions.
 require_once( 'helixware_server.php' );
+
 // Load AJAX methods.
 require_once( 'ajax/helixware_ajax_m3u8.php' );
+
 // Provides the [hw-player ...] shortcode.
 require_once( 'shortcodes/helixware_shortcode_player.php' );
 
@@ -48,3 +56,6 @@ require_once( 'admin/helixware_admin_settings.php' );
 
 // Run admin notices.
 require_once( 'admin/helixware_admin_notices.php' );
+
+// Add custom meta-boxes to the admin screens.
+require_once( 'admin/helixware_admin_metaboxes.php' );
