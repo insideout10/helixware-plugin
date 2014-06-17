@@ -31,10 +31,17 @@ require_once( 'helixware_log.php' );
 require_once( 'helixware_constants.php' );
 // Provides general functions.
 require_once( 'helixware_functions.php' );
+// Provides HelixServer API calls functions.
+require_once( 'helixware_server.php' );
 // Load AJAX methods.
 require_once( 'ajax/helixware_ajax_m3u8.php' );
 // Provides the [hw-player ...] shortcode.
 require_once( 'shortcodes/helixware_shortcode_player.php' );
 
-// admin screen
+// Files related to the admin screen.
+
+// Provide the admin settings screen.
 require_once( 'admin/helixware_admin_settings.php' );
+
+// Provide the admin quota AJAX call.
+require_once( 'ajax/helixware_ajax_quota.php' );
