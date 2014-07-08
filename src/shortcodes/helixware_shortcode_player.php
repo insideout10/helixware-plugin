@@ -66,7 +66,9 @@ EOF;
             case 'm3u8-redirector':
 
                 hewa_player_print_source_tag(
-                    admin_url('admin-ajax.php') . '?action=hewa_m3u8&file=' . urlencode( $format->bitrates[0]->file ),
+                    $format->bitrates[0]->url,
+                    // The following line is for streaming servers that do not provide a cross domain xml.
+                    // admin_url('admin-ajax.php') . '?action=hewa_m3u8&file=' . urlencode( $format->bitrates[0]->file ),
                     'application/x-mpegURL'
                 );
                 break;
