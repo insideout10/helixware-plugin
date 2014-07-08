@@ -19,3 +19,12 @@ define( 'HEWA_SETTINGS_APPLICATION_SECRET', 'hewa_app_secret' );
 
 // Define the clip custom post name.
 define( 'HEWA_POST_TYPE_CLIP', 'hewa_clip' );
+
+define( 'HEWA_API_HTTP_OPTIONS', serialize( array(
+    'timeout' => 60,
+    'redirection' => 5,
+    'httpversion' => '1.0',
+    'blocking' => true,
+    'cookies' => array(),
+    'sslverify' => false
+) ) );

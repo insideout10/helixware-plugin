@@ -26,7 +26,7 @@ function hewa_server_call( $endpoint ) {
     $url        = $server_url . $endpoint;
 
     // Prepare the default arguments.
-    $args = array(
+    $args = array_merge_recursive( unserialize( HEWA_API_HTTP_OPTIONS ), array(
         'method'  => 'GET',
         'headers' => array(
             'Content-Type'         => 'application/json; charset=UTF-8',
@@ -34,14 +34,14 @@ function hewa_server_call( $endpoint ) {
             'X-Application-Key'    => $app_key,
             'X-Application-Secret' => $app_secret
         )
-    );
+    ) );
 
     // Perform the request.
     $response = wp_remote_request( $url, $args );
 
     // If an error occurs, print the error and exit.
     if ( is_wp_error( $response ) || 200 !== $response['response']['code'] ) {
-        wp_die( __( 'An error occurred while calling the remote server', HEWA_LANGUAGE_DOMAIN ) );
+        wp_die( __( 'An error occurred while calling the remote server (' . $response->get_error_message() . ')', HEWA_LANGUAGE_DOMAIN ) );
     }
 
     // Return the response as a string.
