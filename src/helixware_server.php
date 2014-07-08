@@ -41,7 +41,7 @@ function hewa_server_call( $endpoint ) {
 
     // If an error occurs, print the error and exit.
     if ( is_wp_error( $response ) || 200 !== $response['response']['code'] ) {
-        wp_die( __( 'An error occurred while calling the remote server (' . $response->get_error_message() . ')', HEWA_LANGUAGE_DOMAIN ) );
+        wp_die( __( 'An error occurred while calling the remote server', HEWA_LANGUAGE_DOMAIN ) );
     }
 
     // Return the response as a string.

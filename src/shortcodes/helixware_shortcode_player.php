@@ -18,9 +18,9 @@ function hewa_shortcode_player( $atts ) {
     // TODO: the default path might point to a custom video that invites the user to select a video.
     // TODO: default width and height ratio should be calculated from the video.
     $params = shortcode_atts( array(
-        'width'  => 480,
-        'height' => 270,
-        'path'   => 'cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4'
+        'width'    => 480,
+        'height'   => 270,
+        'asset_id' => 5
     ), $atts);
 
     // Videojs
@@ -42,7 +42,7 @@ function hewa_shortcode_player( $atts ) {
     );
 
     // Retrieving sources
-    $clips    = hewa_get_clip_urls( $params['path'] );
+    $streams    = hewa_get_clip_urls( $params['asset_id'] );
 
     // TODO: the above call might return an error, handle it here and display a friendly message.
 
@@ -59,14 +59,14 @@ EOF;
     // Print the streaming sources, we only need to:
     //  * HLS streaming (m3u8) for Safari, iOS, Android
     //  * Flash for all the others (Chrome, Internet Explorer, Safari)
-    foreach( $clips as $key => $clip ) {
+    foreach( $streams->formats as $key => $format ) {
         switch ( $key ) {
 
             // HLS streaming.
             case 'm3u8-redirector':
 
                 hewa_player_print_source_tag(
-                    admin_url('admin-ajax.php') . '?action=hewa_m3u8&file=' . urlencode( $clip->file ),
+                    admin_url('admin-ajax.php') . '?action=hewa_m3u8&file=' . urlencode( $format->bitrates[0]->file ),
                     'application/x-mpegURL'
                 );
                 break;
@@ -74,7 +74,7 @@ EOF;
             // Flash streaming.
             case 'flash-direct':
 
-                hewa_player_print_source_tag( $clip->url, 'rtmp/mp4' );
+                hewa_player_print_source_tag( $format->bitrates[0]->url, 'rtmp/mp4' );
                 break;
 
         }
