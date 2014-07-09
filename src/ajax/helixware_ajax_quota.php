@@ -17,12 +17,13 @@ function hewa_ajax_quota() {
     $used_quota = $quota->account->currentQuota;
     $free_quota = $max_quota - $used_quota;
     $percent_free = ( $free_quota / $max_quota ) * 100;
+    $percent_free = round( $percent_free, 0 );  // second number is how many decimal places you want to show
     $message    = __( 'You have %s%% of free space (%s out of %s total).', HEWA_LANGUAGE_DOMAIN );
     $quota->message = sprintf( $message, $percent_free, hewa_format_bytes( $free_quota ), hewa_format_bytes( $max_quota ) );
 
     echo json_encode( $quota );
 
     wp_die();
-
+    
 }
 add_action( 'wp_ajax_hewa_quota', 'hewa_ajax_quota' );

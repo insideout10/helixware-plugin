@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "video.js-dist": "dist",
-    "videojs-persistvolume": "~0.1.1"
+    "videojs-persistvolume": "~0.1.1",
+    "videojs-resolution-selector": "~0.0.2"
   }
 }
