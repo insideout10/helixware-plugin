@@ -35,7 +35,7 @@ require_once( 'helixware_constants.php' );
 require_once( 'helixware_functions.php' );
 
 // Register the Video custom post type.
-require_once( 'helixware_post_type_clip.php' );
+//require_once( 'helixware_post_type_clip.php' );
 
 // Provides HelixServer API calls functions.
 require_once( 'helixware_server.php' );

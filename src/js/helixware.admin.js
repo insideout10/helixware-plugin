@@ -150,4 +150,7 @@ jQuery(function ($) {
     // Bind our *file uploaded* handler.
     uploader.bind( 'FileUploaded', fileUploaded );
 
+    // Set the new file size limit.
+    uploader.settings.filters.max_file_size = "1gb";
+
 });
