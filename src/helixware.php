@@ -54,6 +54,9 @@ require_once( 'admin/helixware_admin.php');
 // Provide the admin quota AJAX call.
 require_once( 'ajax/helixware_ajax_quota.php' );
 
+// Provide the create post AJAX call.
+require_once( 'ajax/helixware_ajax_create_post.php' );
+
 // Provide the admin settings screen.
 require_once( 'admin/helixware_admin_settings.php' );
 

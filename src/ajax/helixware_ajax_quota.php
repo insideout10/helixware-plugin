@@ -25,4 +25,4 @@ function hewa_ajax_quota() {
     wp_die();
 
 }
-add_action( 'wp_ajax_hewa_quota', 'hewa_ajax_quota' );
+add_action( 'wp_ajax_' . HEWA_SHORTCODE_PREFIX . 'quota', 'hewa_ajax_quota' );

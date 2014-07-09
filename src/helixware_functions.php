@@ -39,50 +39,6 @@ function hewa_get_clip_urls( $asset_id ) {
 
     return json_decode( hewa_server_call( '/4/users/streams/' . $asset_id ) );
 
-//    // create a sample JSON.
-//    $json = <<<EOF
-//{
-//    "flash-direct": {
-//        "caption": "Direct RTMP URL for Flash players.",
-//        "file": "cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4",
-//        "protocol": "rtmp",
-//        "streamer": "rtmp://streamer.a1.net/",
-//        "url": "rtmp://streamer.a1.net/cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4"
-//    },
-//    "flash-redirector": {
-//        "caption": "Redirector Flash/SMIL URL for Flash players.",
-//        "file": "flashgen/cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4",
-//        "protocol": "http",
-//        "streamer": "http://streamer.a1.net/",
-//        "url": "http://streamer.a1.net/flashgen/cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4"
-//    },
-//    "m3u8-redirector": {
-//        "caption": "Redirector M3U8 URL for HLS players (iOS).",
-//        "file": "m3ugen/iPhone-src/cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4",
-//        "protocol": "http",
-//        "streamer": "http://streamer.a1.net/",
-//        "url": "http://streamer.a1.net/m3ugen/iPhone-src/cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4"
-//    },
-//    "rtsp-direct": {
-//        "caption": "Direct RTSP URL.",
-//        "file": "cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4",
-//        "protocol": "rtsp",
-//        "streamer": "rtsp://streamer.a1.net/",
-//        "url": "rtsp://streamer.a1.net/cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4"
-//    },
-//    "sdp-redirector": {
-//        "caption": "Redirector URL using SDP protocol.",
-//        "file": "sdpgen/cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4",
-//        "protocol": "http",
-//        "streamer": "http://streamer.a1.net/",
-//        "url": "http://streamer.a1.net/sdpgen/cdn/A1TAAdmin/VendorAdm/tests/test-signal-3.mp4"
-//    }
-//}
-//EOF;
-//
-//    // Return an object instance.
-//    return json_decode( $json );
-
 }
 
 /**
@@ -93,6 +49,11 @@ function hewa_get_clip_urls( $asset_id ) {
  * @return mixed The setting value, or the default value.
  */
 function hewa_get_option( $name, $default = null ) {
+
+    // Set the default supported extensions.
+    if ( HEWA_SETTINGS_FILE_EXTENSIONS === $name ) {
+        return 'mp4,mpg,mpeg,mov,avi,wmv,mp3,aac';
+    }
 
     $settings = (array) get_option( HEWA_SETTINGS );
     return ( isset( $settings[$name] ) ? esc_attr( $settings[$name] ) : $default );
