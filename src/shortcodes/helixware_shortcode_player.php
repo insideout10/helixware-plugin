@@ -32,6 +32,10 @@ function hewa_shortcode_player( $atts ) {
         'videojs',
         plugins_url( 'bower_components/video.js-dist/dist/video-js/video.js', __FILE__ )
     );
+    // Videojs persist volume
+    wp_enqueue_script(
+        'videojs-persistvolume',
+        plugins_url('bower_components/videojs-persistvolume/videojs.persistvolume.js', __FILE__ ) );
 
     // Our js
     wp_enqueue_script( 'helixwarejs', plugins_url( 'js/helixware.js', __FILE__ ) );
@@ -47,12 +51,13 @@ function hewa_shortcode_player( $atts ) {
     // TODO: the above call might return an error, handle it here and display a friendly message.
 
     // Setting width and height
+    $id = esc_attr( 'hewa_player_' . get_the_id() );
 	$width_e  = esc_attr( $params['width'] );
 	$height_e = esc_attr( $params['height'] );
 	
 	// Return HTML template
     echo <<<EOF
-        <video class='video-js vjs-default-skin hewa-player' controls preload='auto' data-setup='{ "techOrder": ["html5", "flash"] }'
+        <video id='$id' class='video-js vjs-default-skin hewa-player' controls preload='auto' data-setup='{ "techOrder": ["html5", "flash"] }'
             width="$width_e" height="$height_e">
 EOF;
 
