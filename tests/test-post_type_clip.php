@@ -23,6 +23,8 @@ class PostTypeVideoTest extends WP_UnitTestCase
 
     public function test_post_type_video_exists() {
 
+        $this->markTestSkipped('The hewa_clip type has been removed.');
+
         $types = get_post_types( array(
             'public' => true
         ) );
