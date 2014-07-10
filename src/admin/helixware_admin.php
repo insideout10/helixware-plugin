@@ -17,6 +17,7 @@ function hewa_admin_scripts() {
         'extensions'  => hewa_get_option( HEWA_SETTINGS_FILE_EXTENSIONS ),
         'form_action' => admin_url( 'admin-ajax.php' ),
         'ajax_action' => 'hewa_create_post',
+        'max_file_size' => HEWA_SETTINGS_MAX_FILE_SIZE,
         'post_types'  => array_map(
             function( $item ) {
                 return array(
@@ -38,6 +39,9 @@ function hewa_admin_scripts() {
     // Set the options.
     wp_localize_script( 'hewa_admin_js', 'hewa_admin_options', $options );
 
+    // Enqueue the stylesheet.
+    wp_enqueue_style( 'hewa_admin_css', plugins_url( 'css/helixware.admin.css', __FILE__ ) );
+
 }
 add_action( 'admin_enqueue_scripts', 'hewa_admin_scripts' );
 
@@ -49,7 +53,7 @@ function hewa_admin_media_post_upload_ui() {
 
 ?>
     <span class="hewa-max-upload-size"><?php
-        printf( __( 'HelixWare maximum upload file size: 1GB.', HEWA_LANGUAGE_DOMAIN ) ); ?></span>
+        printf( __( 'HelixWare maximum upload file size: ' . HEWA_SETTINGS_MAX_FILE_SIZE . '.', HEWA_LANGUAGE_DOMAIN ) ); ?></span>
 <?php
 
 }

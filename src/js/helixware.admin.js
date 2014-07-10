@@ -26,6 +26,19 @@ jQuery(function ($) {
 
     }
 
+
+//    /**
+//     * Set the max file size according to the file type.
+//     *
+//     * @param up The uploaded instance.
+//     * @param file The file being uploaded.
+//     */
+//    var handleUploadFile = function(up, file) {
+//
+//        up.settings.filters.max_file_size = ( isVideo( file ) ? hewa_admin_options.max_file_size : maxFileSize );
+//
+//    }
+
     /**
      * Our handler for the *fileUploaded* method from the uploader. At the end of the process, the handler set back
      * again to the WordPress handler.
@@ -48,13 +61,13 @@ jQuery(function ($) {
         elem.html(
             '<img class="pinkynail"><div class="filename new">' +
                 '<span class="title">' + asset.title + '</span>' +
-                '<div id="' + divId + '" style="position: absolute; top: 0px; right: 0px; vertical-align: middle;">' +
+                '<div id="' + divId + '" class="hewa-asset">' +
                 postTypeSelect +
                 '<input type="hidden" name="asset_id" value="' + asset.id +'">' +
                 '<input type="text" name="post_title" placeholder="' + hewa_admin_options.labels.title +
-                    '" value="' +asset.title +'">' +
+                '" value="' +asset.title +'">' +
                 '<input type="text" name="post_tags" placeholder="' + hewa_admin_options.labels.tags + '">' +
-                '<button type="button" class="hewa-submit-button">' + hewa_admin_options.labels.save + '</button>' +
+                '<button type="button" class="hewa-submit-button button">' + hewa_admin_options.labels.save + '</button>' +
                 '</div></div>' );
 
 
@@ -97,7 +110,6 @@ jQuery(function ($) {
         if ( ! isVideo( file ) ) {
 
             params.url = url;
-            params.filters.max_file_size = maxFileSize;
             params.file_data_name = fileDataName;
 
             return;
@@ -118,12 +130,39 @@ jQuery(function ($) {
         params.headers['X-Application-Key']    = hewa_admin_options.key;
         params.headers['X-Application-Secret'] = hewa_admin_options.secret;
 
-        // Increase the max file size limit.
-        params.filters.max_file_size = "1gb";
-
         // Set the filename.
         params.file_data_name = 'file';
 
+    };
+
+
+    /**
+     * Check if the file size is in the constraint according to its type. This function is
+     *
+     * @param maxSizes An object with a *default* size and a *helixware* size.
+     * @param file     The file being uploaded.
+     * @param cb       The uploader callback.
+     */
+    var maxFileSizeFilter = function( maxSizes, file, cb ) {
+        var undef;
+
+        // Set the max size according to the file type.
+        var maxSize = plupload.parseSize( isVideo( file ) ? maxSizes.helixware : maxSizes.default );
+
+        console.log( '[ max-size :: ' + maxSize + ' ]' );
+
+        // Invalid file size
+        if (file.size !== undef && maxSize && file.size > maxSize) {
+
+            this.trigger('Error', {
+                code : plupload.FILE_SIZE_ERROR,
+                message : plupload.translate('File size error.'),
+                file : file
+            });
+            cb(false);
+        } else {
+            cb(true);
+        }
     };
 
 
@@ -145,12 +184,19 @@ jQuery(function ($) {
     // Set the default *file_data_name*.
     fileDataName = uploader.settings.file_data_name;
 
+//    uploader.bind( 'UploadFile', handleUploadFile );
+
     uploader.bind( 'BeforeUpload', handleBeforeUpload );
 
     // Bind our *file uploaded* handler.
     uploader.bind( 'FileUploaded', fileUploaded );
 
-    // Set the new file size limit.
-    uploader.settings.filters.max_file_size = "1gb";
+    // Filter the max file size according to the file type.
+    plupload.addFileFilter( 'hewa_max_file_size', maxFileSizeFilter );
+    uploader.settings.filters.max_file_size = hewa_admin_options.max_file_size;
+    uploader.settings.filters.hewa_max_file_size = {
+        'default'  : maxFileSize,
+        'helixware': hewa_admin_options.max_file_size
+    };
 
 });

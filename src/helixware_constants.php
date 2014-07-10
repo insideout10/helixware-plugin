@@ -29,3 +29,7 @@ define( 'HEWA_API_HTTP_OPTIONS', serialize( array(
     'cookies' => array(),
     'sslverify' => false
 ) ) );
+
+// The max file size for HelixWare-related uploads. This information is used with the uploader as well as for display
+// to the user.
+define( 'HEWA_SETTINGS_MAX_FILE_SIZE', '5Gb' );
