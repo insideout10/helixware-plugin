@@ -37,15 +37,6 @@ function hewa_shortcode_player( $atts ) {
         'videojs-persistvolume',
         plugins_url('bower_components/videojs-persistvolume/videojs.persistvolume.js', __FILE__ ) );
 
-    // Videojs resolution selector
-    wp_enqueue_style(
-        'videojs-resolution-selector',
-        plugins_url( 'bower_components/videojs-resolution-selector/button-styles.css', __FILE__ )
-    );
-    wp_enqueue_script(
-        'videojs-resolution-selector',
-        plugins_url('bower_components/videojs-resolution-selector/video-quality-selector.js', __FILE__ ) );
-
     // Our js
     wp_enqueue_script( 'helixwarejs', plugins_url( 'js/helixware.js', __FILE__ ) );
     wp_localize_script( 'helixwarejs', 'videojs_params', array(

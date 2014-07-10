@@ -28,22 +28,13 @@ jQuery(function ($) {
     	var id = $(el).attr('id');	// Get id of the video element
 	    var vid = videojs( id );	// Launch videojs
 
+	    // Assign height
+	    vid.height( vHeight );
+	    
 	    vid.ready( function(){
-		    // Assign height
-	    	vid.height( vHeight );
 
 	    	// Activate plugins
 		    vid.persistvolume({namespace: 'So-Viral-So-Hot'});
-		    vid.resolutionSelector();
-
-		    // Listen for the changeRes event
-			vid.on( 'changeRes', function() {
-
-				// player.getCurrentRes() can be used to get the currently selected resolution
-				console.log( 'Current Res is: ' + vid.getCurrentRes() );
-			});
-
-			//console.log(vid);
 
 		});
 	});
