@@ -18,8 +18,7 @@ function hewa_shortcode_player( $atts ) {
     // TODO: the default path might point to a custom video that invites the user to select a video.
     // TODO: default width and height ratio should be calculated from the video.
     $params = shortcode_atts( array(
-        'width'    => 480,
-        'height'   => 270,
+        'width'    => '100%', // by default we stretch the full width of the containing element.
         'asset_id' => 5
     ), $atts);
 
@@ -32,6 +31,11 @@ function hewa_shortcode_player( $atts ) {
         'videojs',
         plugins_url( 'bower_components/video.js-dist/dist/video-js/video.js', __FILE__ )
     );
+    
+    // Videojs persist volume
+    wp_enqueue_script(
+        'videojs-persistvolume',
+        plugins_url('bower_components/videojs-persistvolume/videojs.persistvolume.js', __FILE__ ) );
 
     // Our js
     wp_enqueue_script( 'helixwarejs', plugins_url( 'js/helixware.js', __FILE__ ) );
@@ -46,14 +50,20 @@ function hewa_shortcode_player( $atts ) {
 
     // TODO: the above call might return an error, handle it here and display a friendly message.
 
+    // Establish video ratio, to be used client-side* to determine height
+    // *necessary because if width is a percentage, we can't know width in pixels here.
+    if( ! isset( $streams->ratio ) || is_null( $streams->ratio ) || ! is_numeric( $streams->ratio ) )
+        $streams->ratio = 1.77;
+
     // Setting width and height
-	$width_e  = esc_attr( $params['width'] );
-	$height_e = esc_attr( $params['height'] );
+    $id      = esc_attr( 'hewa_player_' . get_the_id() );
+	$width_e = esc_attr( $params['width'] );
+    $ratio_e = esc_attr( $streams->ratio );
 	
 	// Return HTML template
     echo <<<EOF
-        <video class='video-js vjs-default-skin hewa-player' controls preload='auto' data-setup='{ "techOrder": ["html5", "flash"] }'
-            width="$width_e" height="$height_e">
+        <video id='$id' class='video-js vjs-default-skin hewa-player' controls preload='auto'
+            width="$width_e" data-ratio="$ratio_e">
 EOF;
 
     // Print the streaming sources, we only need to:
@@ -64,19 +74,22 @@ EOF;
 
             // HLS streaming.
             case 'm3u8-redirector':
-
-                hewa_player_print_source_tag(
-                    $format->bitrates[0]->url,
-                    // The following line is for streaming servers that do not provide a cross domain xml.
-                    // admin_url('admin-ajax.php') . '?action=hewa_m3u8&file=' . urlencode( $format->bitrates[0]->file ),
-                    'application/x-mpegURL'
-                );
+                foreach( $format->bitrates as $version ) {
+                    hewa_player_print_source_tag(
+                        $version->url,
+                        // The following line is for streaming servers that do not provide a cross domain xml.
+                        // admin_url('admin-ajax.php') . '?action=hewa_m3u8&file=' . urlencode( $version->file ),
+                        'application/x-mpegURL',
+                        $version->width
+                    );
+                }
                 break;
 
             // Flash streaming.
             case 'flash-direct':
-
-                hewa_player_print_source_tag( $format->bitrates[0]->url, 'rtmp/mp4' );
+                foreach( $format->bitrates as $version ) {
+                    hewa_player_print_source_tag( $version->url, 'rtmp/mp4', $version->width );
+                }
                 break;
 
         }
@@ -94,11 +107,16 @@ add_shortcode( HEWA_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );
  * Print a *source* tag with the provided *src* and *type* attributes.
  *
  * @param string $source The URL source of the stream.
- * @param string $type The type of the stream.
+ * @param string $type   The type of the stream.
+ * @param string $width  The width of the encoded stream.
  */
-function hewa_player_print_source_tag( $source, $type ) {
+function hewa_player_print_source_tag( $source, $type, $width ) {
 
+    // Escape del params.
     $source_e = esc_attr( $source );
     $type_e   = esc_attr( $type );
-    echo "<source src='$source_e' type='$type_e'>";
+    $res_e    = esc_attr( $width );
+
+    echo "<source src='$source_e' type='$type_e' data-res='$res_e'>";
+
 }
