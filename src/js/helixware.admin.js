@@ -149,8 +149,6 @@ jQuery(function ($) {
         // Set the max size according to the file type.
         var maxSize = plupload.parseSize( isVideo( file ) ? maxSizes.helixware : maxSizes.default );
 
-        console.log( '[ max-size :: ' + maxSize + ' ]' );
-
         // Invalid file size
         if (file.size !== undef && maxSize && file.size > maxSize) {
 
