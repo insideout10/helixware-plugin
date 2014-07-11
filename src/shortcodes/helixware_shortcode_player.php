@@ -18,7 +18,7 @@ function hewa_shortcode_player( $atts ) {
     // TODO: the default path might point to a custom video that invites the user to select a video.
     // TODO: default width and height ratio should be calculated from the video.
     $params = shortcode_atts( array(
-        'width'    => 480,
+        'width'    => '100%', // by default we stretch the full width of the containing element.
         'asset_id' => 5
     ), $atts);
 
@@ -60,11 +60,11 @@ function hewa_shortcode_player( $atts ) {
 
     // Establish video ratio, to be used client-side* to determine height
     // *necessary because if width is a percentage, we can't know width in pixels here.
-    if( !isset( $streams->ratio ) || is_null( $streams->ratio ) || !is_numeric( $streams->ratio ) )
+    if( ! isset( $streams->ratio ) || is_null( $streams->ratio ) || ! is_numeric( $streams->ratio ) )
         $streams->ratio = 1.77;
 
     // Setting width and height
-    $id = esc_attr( 'hewa_player_' . get_the_id() );
+    $id      = esc_attr( 'hewa_player_' . get_the_id() );
 	$width_e = esc_attr( $params['width'] );
     $ratio_e = esc_attr( $streams->ratio );
 	
@@ -118,12 +118,16 @@ add_shortcode( HEWA_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );
  * Print a *source* tag with the provided *src* and *type* attributes.
  *
  * @param string $source The URL source of the stream.
- * @param string $type The type of the stream.
+ * @param string $type   The type of the stream.
+ * @param string $width  The width of the encoded stream.
  */
-function hewa_player_print_source_tag( $source, $type, $resolution ) {
+function hewa_player_print_source_tag( $source, $type, $width ) {
 
+    // Escape del params.
     $source_e = esc_attr( $source );
     $type_e   = esc_attr( $type );
-    $res_e    = esc_attr( $resolution );
+    $res_e    = esc_attr( $width );
+
     echo "<source src='$source_e' type='$type_e' data-res='$res_e'>";
+
 }

@@ -1,28 +1,11 @@
-jQuery(function ($) {
-
-	// Used to compute height of player from width and ratio
-	getOptimalRatio = function( el ){
-
-		// Get width of the player in pixels
-    	//( could not be done from php if user gives width:100% )
-    	var vWidth = $(el).width();
-
-    	// Get ratio
-    	var vRatio = $(el).data( 'ratio' );
-
-    	return parseInt( vWidth/vRatio );
-	};
-
-
+jQuery( function ( $ ) {
 
     // Telling videojs where the flash fallback is.
-    videojs.options.techOrder = ['html5', 'flash'];
+    // videojs.options.techOrder = ['html5', 'flash']; // this is the default.
     videojs.options.flash.swf = videojs_params.swfurl;
 
     // Looping over players
-    $('.hewa-player').each(function( i, el ){
-
-	    var vHeight = getOptimalRatio( el );
+    $( '.hewa-player' ).each( function( i, el ) {
 
 	    // Find quality buttons on DOM
 		var qualityButtons = $(el).next('.hewa-player-toolbar').children();
@@ -32,19 +15,18 @@ jQuery(function ($) {
 		});
 		console.log(qualityButtons);
 
-
-	    // Create video
-    	var id = $(el).attr('id');	// Get id of the video element
-	    var vid = videojs( id );	// Launch videojs
+        // Calculate the height using the ratio.
+	    var height = parseInt( $(el).width() / $(el).data( 'ratio' ), 10 )
 
 	    // Assign height
-	    vid.height( vHeight );
+        videojs( $(el).attr('id') )
+            .height( height )
+	        .ready( function( ) {
 
-	    vid.ready( function(){
+                // Activate plugins
+                vid.persistvolume( { namespace: 'hewa' } );
 
-	    	// Activate plugins
-		    vid.persistvolume({namespace: 'So-Viral-So-Hot'});
-		});
+		    });
 	});
 
 });

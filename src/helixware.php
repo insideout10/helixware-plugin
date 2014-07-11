@@ -35,7 +35,7 @@ require_once( 'helixware_constants.php' );
 require_once( 'helixware_functions.php' );
 
 // Register the Video custom post type.
-require_once( 'helixware_post_type_clip.php' );
+//require_once( 'helixware_post_type_clip.php' );
 
 // Provides HelixServer API calls functions.
 require_once( 'helixware_server.php' );
@@ -48,8 +48,14 @@ require_once( 'shortcodes/helixware_shortcode_player.php' );
 
 // Files related to the admin screen.
 
+// Load general functions: scripts.
+require_once( 'admin/helixware_admin.php');
+
 // Provide the admin quota AJAX call.
 require_once( 'ajax/helixware_ajax_quota.php' );
+
+// Provide the create post AJAX call.
+require_once( 'ajax/helixware_ajax_create_post.php' );
 
 // Provide the admin settings screen.
 require_once( 'admin/helixware_admin_settings.php' );

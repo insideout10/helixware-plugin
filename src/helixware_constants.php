@@ -16,6 +16,7 @@ define( 'HEWA_SETTINGS', 'helixware_settings' );
 define( 'HEWA_SETTINGS_SERVER_URL', 'hewa_server_url' );
 define( 'HEWA_SETTINGS_APPLICATION_KEY', 'hewa_app_key' );
 define( 'HEWA_SETTINGS_APPLICATION_SECRET', 'hewa_app_secret' );
+define( 'HEWA_SETTINGS_FILE_EXTENSIONS', 'hewa_file_extensions' );
 
 // Define the clip custom post name.
 define( 'HEWA_POST_TYPE_CLIP', 'hewa_clip' );
@@ -28,3 +29,7 @@ define( 'HEWA_API_HTTP_OPTIONS', serialize( array(
     'cookies' => array(),
     'sslverify' => false
 ) ) );
+
+// The max file size for HelixWare-related uploads. This information is used with the uploader as well as for display
+// to the user.
+define( 'HEWA_SETTINGS_MAX_FILE_SIZE', '5Gb' );
