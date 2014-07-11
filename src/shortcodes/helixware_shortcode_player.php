@@ -35,7 +35,15 @@ function hewa_shortcode_player( $atts ) {
     // Videojs persist volume
     wp_enqueue_script(
         'videojs-persistvolume',
-        plugins_url('bower_components/videojs-persistvolume/videojs.persistvolume.js', __FILE__ ) );
+        plugins_url( 'bower_components/videojs-persistvolume/videojs.persistvolume.js', __FILE__ ) );
+
+    // Videojs resolution blog_privacy_selector
+    wp_enqueue_style(
+        'videojs-resolution-selector-css',
+        plugins_url( 'bower_components/videojs-resolution-selector/button-styles.css', __FILE__ ) );
+    wp_enqueue_script(
+        'videojs-resolution-selector',
+        plugins_url( 'bower_components/videojs-resolution-selector/video-quality-selector.js', __FILE__ ) );
 
     // Our js
     wp_enqueue_script( 'helixwarejs', plugins_url( 'js/helixware.js', __FILE__ ) );
@@ -99,6 +107,9 @@ EOF;
 	        <p class="vjs-no-js">To view this video consider upgrading to a web browser that <a
 	            href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
         </video>
+        <div class="hewa-player-toolbar">
+            <span class="hewa-ld">LD </span><span class="hewa-sd"> SD </span><span class="hewa-hd"> HD </span>
+        </div>
 EOF;
 }
 add_shortcode( HEWA_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );

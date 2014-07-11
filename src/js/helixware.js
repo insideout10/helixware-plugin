@@ -24,18 +24,26 @@ jQuery(function ($) {
 
 	    var vHeight = getOptimalRatio( el );
 
+	    // Find quality buttons on DOM
+		var qualityButtons = $(el).next('.hewa-player-toolbar').children();
+		// Add listeners
+		qualityButtons.on('click', function(){
+			console.log('aaa');
+		});
+		console.log(qualityButtons);
+
+
 	    // Create video
     	var id = $(el).attr('id');	// Get id of the video element
 	    var vid = videojs( id );	// Launch videojs
 
 	    // Assign height
 	    vid.height( vHeight );
-	    
+
 	    vid.ready( function(){
 
 	    	// Activate plugins
 		    vid.persistvolume({namespace: 'So-Viral-So-Hot'});
-
 		});
 	});
 
