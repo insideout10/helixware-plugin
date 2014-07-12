@@ -103,7 +103,7 @@ function hewa_admin_create_post( $asset_id, $post_type, $post_title, $post_tags)
     }
 
     // Set the post thumbnail.
-    hewa_admin_set_post_thumbnail( $asset_id, $post_title, $post_id );
+    hewa_admin_set_post_thumbnail( $asset_id, $post_id );
 
     // Return the post id.
     echo $post_id;

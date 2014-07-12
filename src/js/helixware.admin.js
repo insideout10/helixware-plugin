@@ -56,16 +56,17 @@ jQuery(function ($) {
         // Get the asset data, the element where the data is shown and a reference to the div containing the meta-data.
         var asset  = $.parseJSON( response.response );
         var elem   = $('#media-item-' + file.id);
-        var divId = 'hewa-asset-' + asset.id;
+        var divId  = 'hewa-asset-' + asset.id;
 
         elem.html(
-            '<img class="pinkynail"><div class="filename new">' +
+            '<img src="' + hewa_admin_options.form_action + '?action=hewa_still_image&id=' + asset.id +
+                '&w=150&tc=10" class="pinkynail" onerror="function () {this.style.visibility=\'none\';}"><div class="filename new">' +
                 '<span class="title">' + asset.title + '</span>' +
                 '<div id="' + divId + '" class="hewa-asset">' +
                 postTypeSelect +
                 '<input type="hidden" name="asset_id" value="' + asset.id +'">' +
                 '<input type="text" name="post_title" placeholder="' + hewa_admin_options.labels.title +
-                '" value="' +asset.title +'">' +
+                '" value="' + asset.title +'">' +
                 '<input type="text" name="post_tags" placeholder="' + hewa_admin_options.labels.tags + '">' +
                 '<button type="button" class="hewa-submit-button button">' + hewa_admin_options.labels.save + '</button>' +
                 '</div></div>' );
@@ -75,20 +76,20 @@ jQuery(function ($) {
 
             var div = $( event.target).parent();
 
-            var data   = {
+            var assetData   = {
                 'assetId'  : div.children('input[name="asset_id"]').val(),
                 'postType' : div.children('select[name="post_type"]').val(),
                 'postTitle': div.children('input[name="post_title"]').val(),
                 'postTags' : div.children('input[name="post_tags"]').val()
             };
 
-            $.post( hewa_admin_options.form_action + '?action=' + hewa_admin_options.ajax_action, data)
+            $.post( hewa_admin_options.form_action + '?action=' + hewa_admin_options.ajax_action, assetData)
                 .done( function( data ) {
 
                     div.html( '<a href="' + hewa_admin_options.form_action + '?action=hewa_edit_post&id=' + data +
                         '">Edit</a>' );
 
-                });
+                } );
 
         } );
 

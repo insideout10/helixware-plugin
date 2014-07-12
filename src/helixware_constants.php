@@ -22,7 +22,7 @@ define( 'HEWA_SETTINGS_FILE_EXTENSIONS', 'hewa_file_extensions' );
 define( 'HEWA_POST_TYPE_CLIP', 'hewa_clip' );
 
 define( 'HEWA_API_HTTP_OPTIONS', serialize( array(
-    'timeout' => 60,
+    'timeout' => 300,
     'redirection' => 5,
     'httpversion' => '1.0',
     'blocking' => true,
