@@ -102,6 +102,9 @@
 	
 	// Handle clicks on the menu items
 	_V_.ResolutionMenuItem.prototype.onClick = function() {
+
+		this.player().currentTime( 5 );
+		return;
 		
 		var player = this.player(),
 			video_el = player.el().firstChild,
@@ -116,10 +119,13 @@
 		// Make sure the loadedmetadata event will fire
 		if ( 'none' == video_el.preload ) { video_el.preload = 'metadata'; }
 		
+		console.log('hewa: called resolution change');
+
 		// Change the source and make sure we don't start the video over		
 		player.src( player.availableRes[this.resolution] ).one( 'loadedmetadata', function() {
 			
 			player.currentTime( current_time );
+			console.log('hewa: get time ', current_time);
 			
 			if ( ! is_paused ) { player.play(); }
 		});
@@ -224,7 +230,7 @@
 	_V_.plugin( 'resolutionSelector', function( options ) {
 		
 		// Only enable the plugin on HTML5 videos
-		if ( ! this.el().firstChild.canPlayType  ) { return; }
+		//if ( ! this.el().firstChild.canPlayType  ) { return; }
 		
 		var player = this,
 			sources	= player.options().sources,

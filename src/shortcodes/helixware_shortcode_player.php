@@ -107,9 +107,6 @@ EOF;
 	        <p class="vjs-no-js">To view this video consider upgrading to a web browser that <a
 	            href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
         </video>
-        <div class="hewa-player-toolbar">
-            <span class="hewa-ld">LD </span><span class="hewa-sd"> SD </span><span class="hewa-hd"> HD </span>
-        </div>
 EOF;
 }
 add_shortcode( HEWA_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );
