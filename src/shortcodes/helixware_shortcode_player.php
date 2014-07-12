@@ -22,29 +22,6 @@ function hewa_shortcode_player( $atts ) {
         'asset_id' => 5
     ), $atts);
 
-    // Videojs
-    wp_enqueue_style(
-        'videojs-css',
-        plugins_url( 'bower_components/video.js-dist/dist/video-js/video-js.min.css', __FILE__ )
-    );
-    wp_enqueue_script(
-        'videojs',
-        plugins_url( 'bower_components/video.js-dist/dist/video-js/video.js', __FILE__ )
-    );
-    
-    // Videojs persist volume
-    wp_enqueue_script(
-        'videojs-persistvolume',
-        plugins_url( 'bower_components/videojs-persistvolume/videojs.persistvolume.js', __FILE__ ) );
-
-    // Videojs resolution blog_privacy_selector
-    wp_enqueue_style(
-        'videojs-resolution-selector-css',
-        plugins_url( 'bower_components/videojs-resolution-selector/button-styles.css', __FILE__ ) );
-    wp_enqueue_script(
-        'videojs-resolution-selector',
-        plugins_url( 'bower_components/videojs-resolution-selector/video-quality-selector.js', __FILE__ ) );
-
     // Our js
     wp_enqueue_script( 'helixwarejs', plugins_url( 'js/helixware.js', __FILE__ ) );
     wp_localize_script( 'helixwarejs', 'videojs_params', array(
@@ -70,8 +47,13 @@ function hewa_shortcode_player( $atts ) {
 	
 	// Return HTML template
     echo <<<EOF
-        <video id='$id' class='video-js vjs-default-skin hewa-player' controls preload='auto'
-            width="$width_e" data-ratio="$ratio_e">
+        <div id='$id' class='hewa-player'
+            data-engine="flash"
+            data-rtmp="rtmp://totalerg.insideout.io/helixware/totalerg/wp-test"
+            >
+            <video controls preload='auto' width="$width_e" data-ratio="$ratio_e">
+                <source src="1-video_3.mp4" type="video/flash">
+                <source src="2-video_3.mp4" type="video/flash">
 EOF;
 
     // Print the streaming sources, we only need to:
@@ -104,7 +86,10 @@ EOF;
     }
 
     echo <<<EOF
-        </video>
+            </video>
+        </div>
+        <link rel="stylesheet" href="http://releases.flowplayer.org/5.4.6/skin/minimalist.css">
+        <script src="http://releases.flowplayer.org/5.4.6/flowplayer.min.js"></script>
 EOF;
 }
 add_shortcode( HEWA_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );
