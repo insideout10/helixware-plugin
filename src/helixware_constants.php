@@ -22,7 +22,7 @@ define( 'HEWA_SETTINGS_FILE_EXTENSIONS', 'hewa_file_extensions' );
 define( 'HEWA_POST_TYPE_CLIP', 'hewa_clip' );
 
 define( 'HEWA_API_HTTP_OPTIONS', serialize( array(
-    'timeout' => 60,
+    'timeout' => 300,
     'redirection' => 5,
     'httpversion' => '1.0',
     'blocking' => true,
@@ -33,3 +33,9 @@ define( 'HEWA_API_HTTP_OPTIONS', serialize( array(
 // The max file size for HelixWare-related uploads. This information is used with the uploader as well as for display
 // to the user.
 define( 'HEWA_SETTINGS_MAX_FILE_SIZE', '5Gb' );
+
+// TODO: move these options to the plugin configuration.
+// Define the options for the still image.
+define( 'HEWA_STILL_IMAGE_WIDTH', 1200 );
+define( 'HEWA_STILL_IMAGE_TIMECODE_SECONDS', 15 );
+define( 'HEWA_STILL_IMAGE_CONTENT_TYPE', 'image/png' );
