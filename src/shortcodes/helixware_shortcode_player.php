@@ -104,8 +104,6 @@ EOF;
     }
 
     echo <<<EOF
-	        <p class="vjs-no-js">To view this video consider upgrading to a web browser that <a
-	            href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
         </video>
 EOF;
 }

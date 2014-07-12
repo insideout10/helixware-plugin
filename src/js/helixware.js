@@ -1,7 +1,7 @@
 jQuery( function ( $ ) {
 
     // Telling videojs where the flash fallback is.
-    videojs.options.flash.swf = videojs_params.swfurl;
+    //videojs.options.flash.swf = videojs_params.swfurl;
 
     // Looping over players
     $( '.hewa-player' ).each( function( i, el ) {
@@ -30,6 +30,7 @@ jQuery( function ( $ ) {
                 this.persistvolume( { namespace: 'hewa' } );
                 this.resolutionSelector();
 		    });
+            
 	});
 
 });
