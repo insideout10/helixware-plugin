@@ -35,6 +35,9 @@ flowplayer(function (api, root) {
                         // store current position
                         pos = api.ready && !api.finished ? api.video.time : 0;
 
+                        // THE SECRET TO HAPPYNESS
+                        api.unload();
+
                         api.load(resolution.sources, function (e, api) {
                             // seek to stored position
                             if (pos) {
@@ -57,7 +60,6 @@ flowplayer(function (api, root) {
                 button.toggleClass(selected, button.hasClass("fp-defaultres"));
             });
         });
-
     }
 
 
