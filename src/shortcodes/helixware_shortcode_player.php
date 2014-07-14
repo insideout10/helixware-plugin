@@ -22,6 +22,12 @@ function hewa_shortcode_player( $atts ) {
         'asset_id' => 5
     ), $atts);
 
+    // Flowplayer
+    // ENQUEUE PLAYER SCRIPT HERE
+    wp_enqueue_style( 'flowplayer-css', 'http://releases.flowplayer.org/5.4.6/skin/minimalist.css' );
+    wp_enqueue_style( 'flowplayer-buttons-css', plugins_url( 'css/flowplayerButtons.css', __FILE__ ) );
+    wp_enqueue_script( 'flowplayer', 'http://releases.flowplayer.org/5.4.6/flowplayer.min.js' );
+
     // Our js
     wp_enqueue_script( 'helixwarejs', plugins_url( 'js/helixware.js', __FILE__ ) );
     wp_localize_script( 'helixwarejs', 'videojs_params', array(
@@ -47,13 +53,8 @@ function hewa_shortcode_player( $atts ) {
 	
 	// Return HTML template
     echo <<<EOF
-        <div id='$id' class='hewa-player'
-            data-engine="flash"
-            data-rtmp="rtmp://totalerg.insideout.io/helixware/totalerg/wp-test"
-            >
+        <div id='$id' class='hewa-player'>
             <video controls preload='auto' width="$width_e" data-ratio="$ratio_e">
-                <source src="1-video_3.mp4" type="video/flash">
-                <source src="2-video_3.mp4" type="video/flash">
 EOF;
 
     // Print the streaming sources, we only need to:
@@ -88,8 +89,6 @@ EOF;
     echo <<<EOF
             </video>
         </div>
-        <link rel="stylesheet" href="http://releases.flowplayer.org/5.4.6/skin/minimalist.css">
-        <script src="http://releases.flowplayer.org/5.4.6/flowplayer.min.js"></script>
 EOF;
 }
 add_shortcode( HEWA_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );

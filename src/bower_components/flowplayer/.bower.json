@@ -1,0 +1,15 @@
+{
+  "name": "flowplayer",
+  "homepage": "https://github.com/flowplayer/flowplayer",
+  "version": "5.4.6",
+  "_release": "5.4.6",
+  "_resolution": {
+    "type": "version",
+    "tag": "5.4.6",
+    "commit": "95c15eb2c0b5607984c55030fbbc7a79aa00d336"
+  },
+  "_source": "git://github.com/flowplayer/flowplayer.git",
+  "_target": "~5.4.6",
+  "_originalSource": "flowplayer",
+  "_direct": true
+}
