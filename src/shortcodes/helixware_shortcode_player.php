@@ -39,22 +39,30 @@ function hewa_shortcode_player( $atts ) {
     // Retrieving sources
     $streams    = hewa_get_clip_urls( $params['asset_id'] );
 
-    // TODO: the above call might return an error, handle it here and display a friendly message.
+    print_r($streams->formats);
+    $rtmp_server = $streams->formats['flash-direct']->streamer;
+
+    // TODO: the above calls might return an error, handle it here and display a friendly message.
 
     // Establish video ratio, to be used client-side* to determine height
     // *necessary because if width is a percentage, we can't know width in pixels here.
     if( ! isset( $streams->ratio ) || is_null( $streams->ratio ) || ! is_numeric( $streams->ratio ) )
-        $streams->ratio = 1.77;
+        $streams->ratio = 1.77; // 16:9 
 
     // Setting width and height
-    $id      = esc_attr( 'hewa_player_' . get_the_id() );
-	$width_e = esc_attr( $params['width'] );
-    $ratio_e = esc_attr( $streams->ratio );
+    $id             = esc_attr( 'hewa_player_' . get_the_id() );
+	$width_e        = esc_attr( $params['width'] );
+    $ratio_e        = esc_attr( $streams->ratio );
+    $rtmp_server_e  = esc_attr( $rtmp_server );
 	
 	// Return HTML template
     echo <<<EOF
-        <div id='$id' class='hewa-player'>
-            <video controls preload='auto' width="$width_e" data-ratio="$ratio_e">
+        <div id='$id' class='hewa-player'
+            data-width="$width_e"
+            data-ratio="$ratio_e"
+            data-rtmp-server="$rtmp_server_e">
+            
+            <video controls preload='auto'>
 EOF;
 
     // Print the streaming sources, we only need to:
