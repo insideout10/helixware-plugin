@@ -68,8 +68,8 @@ jQuery( function ( $ ) {
     // Looping over player divs
     $( '.hewa-player' ).each( function( i, el ) {
 
+        // get rtmp server address from data-rtmp-server attribute
         var rtmpServer = $(el).data('rtmp-server');
-        console.log(rtmpServer);
 
         // build resolutions array
         var resolutions = [];
@@ -83,7 +83,7 @@ jQuery( function ( $ ) {
             if( type == 'rtmp/mp4' ) {
                 // for some reason, in rtmp streaming flowplayer doesn't want the full url to the clip.
                 // that's why there is a separate variable 'rtmpServer' (see player instantiation).
-                //src = src.replace( rtmpServer, '' );    // take away server address
+                src = src.replace( rtmpServer, '' );    // take away server address
                 src = { flash: src };
             }
             else if( type == 'application/x-mpegURL' )
@@ -117,6 +117,8 @@ jQuery( function ( $ ) {
                 return 1;
             return 0;
         });
+
+        console.log(resolutions);
 
         // Establish video width and ratio.
         var width = $(el).data('width');    // passed with data because in css gets overwritten from flowplayer

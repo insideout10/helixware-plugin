@@ -24,9 +24,9 @@ function hewa_shortcode_player( $atts ) {
 
     // Flowplayer
     // ENQUEUE PLAYER SCRIPT HERE
-    wp_enqueue_style( 'flowplayer-css', 'http://releases.flowplayer.org/5.4.6/skin/minimalist.css' );
+    wp_enqueue_style( 'flowplayer-css', plugins_url( 'js/flowplayer/skin/minimalist.css', __FILE__ ) );
     wp_enqueue_style( 'flowplayer-buttons-css', plugins_url( 'css/flowplayerButtons.css', __FILE__ ) );
-    wp_enqueue_script( 'flowplayer', 'http://releases.flowplayer.org/5.4.6/flowplayer.min.js' );
+    wp_enqueue_script( 'flowplayer', plugins_url('js/flowplayer/flowplayer.min.js', __FILE__ ) );
 
     // Our js
     wp_enqueue_script( 'helixwarejs', plugins_url( 'js/helixware.js', __FILE__ ) );
@@ -39,8 +39,8 @@ function hewa_shortcode_player( $atts ) {
     // Retrieving sources
     $streams    = hewa_get_clip_urls( $params['asset_id'] );
 
-    print_r($streams->formats);
-    $rtmp_server = $streams->formats['flash-direct']->streamer;
+    // Store rtmp server address in a variable
+    $rtmp_server = $streams->formats->{'flash-direct'}->streamer;
 
     // TODO: the above calls might return an error, handle it here and display a friendly message.
 
