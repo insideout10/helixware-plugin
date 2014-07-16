@@ -2,9 +2,6 @@ $ = jQuery;
 
     setUpFlowApi = function (api, root) {
 
-        //if (/flash/.test(location.search))
-        //   flowplayer.conf.engine = "flash";
-
         // check whether hls will be picked by the flowplayer engine
         var hls = flowplayer.support.video &&
                 !!$('<video/>')[0].canPlayType('application/x-mpegURL').replace('no', '');
@@ -34,8 +31,6 @@ $ = jQuery;
 
                             // restart streaming
                             api.load(resolution.sources, function (e, api, video) {
-                                console.log(e, api, video);
-
                                 // seek to stored position
                                 if (pos) {
                                     api.seek(pos);
@@ -87,8 +82,10 @@ $ = jQuery;
 
 jQuery( function ( $ ) {
 
+    var isMobile = helixwareParams.isMobile? true : false;
+
     // Looping over player divs
-    $( '.hewa-player' ).each( function( i, el ) {
+    $( '.' + helixwareParams.playerClass ).each( function( i, el ) {
 
         // get rtmp server address from data-rtmp-server attribute
         var rtmpServer = $(el).data('rtmp-server');
@@ -132,35 +129,41 @@ jQuery( function ( $ ) {
                 resolutions.push( source );
             }
         });
+        
+        if( resolutions !== [] ) {       // Only proceed if sources were found
+            
+            // Order resolutions by width
+            resolutions.sort( function(a,b) {
+                if (a.width > b.width)
+                    return 1;
+                return 0;
+            });
 
-        // order resolutions by width
-        resolutions.sort( function(a,b) {
-            if (a.width < b.width)
-                return 1;
-            return 0;
-        });
+            // Choose lowest resolution as default
+            resolutions[0].isDefault = true;
 
-        // Establish video width and ratio.
-        var width = $(el).data('width');    // passed with data because in css gets overwritten from flowplayer
-        $( el ).width( width );               // assign width
-        width = $(el).width();              // to get the width in number of pixels even if it was a percentage
-        var ratio = $(el).data( 'ratio' );  // flowplayer wants the inverse of ratio
-        var height = width / ratio;
+            // Establish video width and ratio.
+            var width = $(el).data('width');    // passed with data because in css gets overwritten from flowplayer
+            $( el ).width( width );               // assign width
+            width = $(el).width();              // to get the width in number of pixels even if it was a percentage
+            var ratio = $(el).data( 'ratio' );  // flowplayer wants the inverse of ratio
+            var height = width / ratio;
 
-        // Assign width
-        $( el ).width( width )
-             .height( height )
-             .css('background-color', 'gray');
+            // Assign width
+            $( el ).width( width )
+                 .height( height )
+                 .css('background-color', 'gray');
 
-        // player instantiation
-        $( el ).flowplayer({
-            rtmp: rtmpServer,
-            resolutions: resolutions,
-            playlist: [resolutions[0].sources]
-        });
+            // player instantiation
+            $( el ).flowplayer({
+                rtmp: rtmpServer,
+                resolutions: resolutions,
+                playlist: [resolutions[0].sources]
+            });
 
-        // set up api for this player
-        var flowApi = flowplayer( $(el) );
-        setUpFlowApi( flowApi, el );
+            // set up api for this player
+            var flowApi = flowplayer( $(el) );
+            setUpFlowApi( flowApi, el );
+        }
     });
 });

@@ -30,9 +30,9 @@ function hewa_shortcode_player( $atts ) {
 
     // Our js
     wp_enqueue_script( 'helixwarejs', plugins_url( 'js/helixware.js', __FILE__ ) );
-    wp_localize_script( 'helixwarejs', 'videojs_params', array(
-            'class'  => 'hewa-player',
-            'swfurl' => plugins_url( 'bower_components/video.js-dist/dist/video-js/video-js.swf', __FILE__ )
+    wp_localize_script( 'helixwarejs', 'helixwareParams', array(
+            'playerClass'  => 'hewa-player',
+            'isMobile' => wp_is_mobile()
         )
     );
 
