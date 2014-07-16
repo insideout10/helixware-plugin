@@ -82,8 +82,6 @@ $ = jQuery;
 
 jQuery( function ( $ ) {
 
-    var isMobile = helixwareParams.isMobile? true : false;
-
     // Looping over player divs
     $( '.' + helixwareParams.playerClass ).each( function( i, el ) {
 
