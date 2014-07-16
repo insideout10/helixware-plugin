@@ -33,9 +33,9 @@ class HelixWareTest extends WP_UnitTestCase
         $type   = 'video/mp4';
         $width  = 960;
 
-        ob_start();
-        hewa_player_print_source_tag( $source, $type, 960 );
-        $output = ob_get_clean();
+//        ob_start();
+        $output = hewa_player_print_source_tag( $source, $type, 960 );
+//        $output = ob_get_clean();
 
         $this->assertEquals( "<source src='$source' type='$type' data-res='$width'>", $output );
 

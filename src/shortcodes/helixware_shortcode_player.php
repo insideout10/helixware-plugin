@@ -10,7 +10,7 @@
  * @uses hewa_get_clip_urls to load the clip URLs from the remote HelixWare server.
  *
  * @param array $atts An array of parameters, including the *path* value.
- * @return string An HTML coe fragment.
+ * @return string An HTML code fragment.
  */
 function hewa_shortcode_player( $atts ) {
 	
@@ -61,10 +61,7 @@ function hewa_shortcode_player( $atts ) {
     $ratio_e = esc_attr( $streams->ratio );
 	
 	// Return HTML template
-    echo <<<EOF
-        <video id='$id' class='video-js vjs-default-skin hewa-player' controls preload='auto'
-            width="$width_e" data-ratio="$ratio_e">
-EOF;
+    $result = "<video id='$id' class='video-js vjs-default-skin hewa-player' controls preload='auto' width='$width_e' data-ratio='$ratio_e''>";
 
     // Print the streaming sources, we only need to:
     //  * HLS streaming (m3u8) for Safari, iOS, Android
@@ -75,7 +72,7 @@ EOF;
             // HLS streaming.
             case 'm3u8-redirector':
                 foreach( $format->bitrates as $version ) {
-                    hewa_player_print_source_tag(
+                    $result .= hewa_player_print_source_tag(
                         $version->url,
                         // The following line is for streaming servers that do not provide a cross domain xml.
                         // admin_url('admin-ajax.php') . '?action=hewa_m3u8&file=' . urlencode( $version->file ),
@@ -88,18 +85,18 @@ EOF;
             // Flash streaming.
             case 'flash-direct':
                 foreach( $format->bitrates as $version ) {
-                    hewa_player_print_source_tag( $version->url, 'rtmp/mp4', $version->width );
+                    $result .= hewa_player_print_source_tag( $version->url, 'rtmp/mp4', $version->width );
                 }
                 break;
 
         }
     }
 
-    echo <<<EOF
-	        <p class="vjs-no-js">To view this video consider upgrading to a web browser that <a
-	            href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-        </video>
-EOF;
+//    $result .= "<p class='vjs-no-js'>To view this video consider upgrading to a web browser that <a href='http://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a></p></video>";
+
+    $result .= "</video>";
+
+    return $result;
 }
 add_shortcode( HEWA_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );
 
@@ -109,6 +106,7 @@ add_shortcode( HEWA_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );
  * @param string $source The URL source of the stream.
  * @param string $type   The type of the stream.
  * @param string $width  The width of the encoded stream.
+ * @return string The html fragment.
  */
 function hewa_player_print_source_tag( $source, $type, $width ) {
 
@@ -117,6 +115,6 @@ function hewa_player_print_source_tag( $source, $type, $width ) {
     $type_e   = esc_attr( $type );
     $res_e    = esc_attr( $width );
 
-    echo "<source src='$source_e' type='$type_e' data-res='$res_e'>";
+    return "<source src='$source_e' type='$type_e' data-res='$res_e'>";
 
 }
