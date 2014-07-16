@@ -1,16 +1,13 @@
 $ = jQuery;
-jQuery( function ( $ ) {
 
-    console.log('supported tech: ', flowplayer.engine);
+    setUpFlowApi = function (api, root) {
 
-    //if (/flash/.test(location.search))
-     //   flowplayer.conf.engine = "flash";
-
-    flowplayer(function (api, root) {
+        //if (/flash/.test(location.search))
+        //   flowplayer.conf.engine = "flash";
 
         // check whether hls will be picked by the flowplayer engine
-        var hls = flowplayer.support.video && api.conf.engine === "html5" &&
-        !!$('<video/>')[0].canPlayType('application/x-mpegURL').replace('no', '');
+        var hls = flowplayer.support.video &&
+                !!$('<video/>')[0].canPlayType('application/x-mpegURL').replace('no', '');
         var qsel;
         var selected = 'fp-selectedres';
 
@@ -32,13 +29,12 @@ jQuery( function ( $ ) {
                             // store current position
                             pos = api.ready && !api.finished ? api.video.time : 0;
 
-                            // THE SECRET TO HAPPYNESS.
                             // Piero 1 - Flowplayer 0
                             api.unload();   // destroy current streaming
 
                             // restart streaming
                             api.load(resolution.sources, function (e, api, video) {
-                                console.log(root);
+                                console.log(e, api, video);
 
                                 // seek to stored position
                                 if (pos) {
@@ -51,7 +47,7 @@ jQuery( function ( $ ) {
                             });
                         }
                     })
-                    .appendTo(qsel);
+                    .appendTo( $(root).find(qsel) );
             });
 
             api.bind('unload', function () {
@@ -86,9 +82,10 @@ jQuery( function ( $ ) {
             }
         }
 
-    });
+    };
 
 
+jQuery( function ( $ ) {
 
     // Looping over player divs
     $( '.hewa-player' ).each( function( i, el ) {
@@ -143,17 +140,15 @@ jQuery( function ( $ ) {
             return 0;
         });
 
-        console.log(resolutions);
-
         // Establish video width and ratio.
         var width = $(el).data('width');    // passed with data because in css gets overwritten from flowplayer
-        $(el).width( width );               // assign width
+        $( el ).width( width );               // assign width
         width = $(el).width();              // to get the width in number of pixels even if it was a percentage
         var ratio = $(el).data( 'ratio' );  // flowplayer wants the inverse of ratio
         var height = width / ratio;
 
         // Assign width
-        $(el).width( width )
+        $( el ).width( width )
              .height( height )
              .css('background-color', 'gray');
 
@@ -163,5 +158,9 @@ jQuery( function ( $ ) {
             resolutions: resolutions,
             playlist: [resolutions[0].sources]
         });
+
+        // set up api for this player
+        var flowApi = flowplayer( $(el) );
+        setUpFlowApi( flowApi, el );
     });
 });
