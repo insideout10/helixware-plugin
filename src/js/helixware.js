@@ -1,85 +1,84 @@
-$ = jQuery;
 
-    setUpFlowApi = function (api, root) {
+flowplayer( function (api, root) {
 
-        // check whether hls will be picked by the flowplayer engine
-        var hls = flowplayer.support.video &&
-                !!$('<video/>')[0].canPlayType('application/x-mpegURL').replace('no', '');
-        var qsel;
-        var selected = 'fp-selectedres';
+    // check whether hls will be picked by the flowplayer engine
+    var hls = flowplayer.support.video &&
+            !!$('<video/>')[0].canPlayType('application/x-mpegURL').replace('no', '');
+    var qsel;
+    var selected = 'fp-selectedres';
 
-        // manual selection
-        if (api.conf.resolutions !== undefined && flowplayer.support.inlineVideo && !hls) {
+    // manual selection
+    if (api.conf.resolutions !== undefined && flowplayer.support.inlineVideo && !hls) {
 
-            // create the manual quality selection widget and append it to the UI
-            qsel = $('<div/>').addClass('fp-qsel').appendTo('.fp-ui', root);
+        // create the manual quality selection widget and append it to the UI
+        qsel = $('<div/>').addClass('fp-qsel').appendTo('.fp-ui', root);
 
-            $.each(api.conf.resolutions, function (i, resolution) {
-            // generate a selector button for each resolution
+        $.each(api.conf.resolutions, function (i, resolution) {
+        // generate a selector button for each resolution
 
-                $('<div/>').addClass(resolution.isDefault ? 'fp-defaultres ' + selected : '')
-                    .text(resolution.label)
-                    .click(function() {
-                        if (!$(this).hasClass(selected)) {
-                            var buttons = $('div', qsel),
-                            
-                            // store current position
-                            pos = api.ready && !api.finished ? api.video.time : 0;
+            $('<div/>').addClass(resolution.isDefault ? 'fp-defaultres ' + selected : '')
+                .text(resolution.label)
+                .click(function() {
+                    if (!$(this).hasClass(selected)) {
+                        var buttons = $('div', qsel),
+                        
+                        // store current position
+                        pos = api.ready && !api.finished ? api.video.time : 0;
 
-                            // Piero 1 - Flowplayer 0
-                            api.unload();   // destroy current streaming
+                        // Piero 1 - Flowplayer 0
+                        api.unload();   // destroy current streaming
 
-                            // restart streaming
-                            api.load(resolution.sources, function (e, api, video) {
-                                // seek to stored position
-                                if (pos) {
-                                    api.seek(pos);
-                                }
-                            });
+                        // restart streaming
+                        api.load(resolution.sources, function (e, api, video) {
+                            // seek to stored position
+                            if (pos) {
+                                api.seek(pos);
+                            }
+                        });
 
-                            buttons.each(function () {
-                                $(this).toggleClass(selected, buttons.index(this) === i);
-                            });
-                        }
-                    })
-                    .appendTo( $(root).find(qsel) );
-            });
-
-            api.bind('unload', function () {
-                // highlight default resolution
-                $('div', qsel).each(function () {
-                    var button = $(this);
-
-                    button.toggleClass(selected, button.hasClass('fp-defaultres'));
-                });
-            });
-
-            // Check for local storage support (should be for all but Opera-mini)
-            if(typeof(Storage) !== "undefined") {
-                // Volume persistence.
-                var volumeLabel = 'flowplayerVolume';
-                // when volume changes, register in local storage
-                api.bind('volume', function ( e, api, video ) {
-                    window.localStorage.setItem( volumeLabel, api.volumeLevel );
-                });
-                // when player loads, set stored volume (if any)
-                api.bind('ready', function ( e, api, video ) {
-                    var vol = window.localStorage.getItem( volumeLabel );
-                    if( vol !== null ) {        // check if there was a value stored
-                        setTimeout( function() {
-                            if( vol == 'NaN' ) // the value is always returned as a string, don't use isNaN()
-                                api.mute( true );
-                            else
-                                api.volume( vol );
-                        }, 3000);
+                        buttons.each(function () {
+                            $(this).toggleClass(selected, buttons.index(this) === i);
+                        });
                     }
-                });
-            }
+                })
+                .appendTo( $(root).find(qsel) );
+        });
+
+        api.bind('unload', function () {
+            // highlight default resolution
+            $('div', qsel).each(function () {
+                var button = $(this);
+
+                button.toggleClass(selected, button.hasClass('fp-defaultres'));
+            });
+        });
+
+        // Check for local storage support (should be for all but Opera-mini)
+        if(typeof(Storage) !== "undefined") {
+            // Volume persistence.
+            var volumeLabel = 'flowplayerVolume';
+            // when volume changes, register in local storage
+            api.bind('volume', function ( e, api, video ) {
+                window.localStorage.setItem( volumeLabel, api.volumeLevel );
+            });
+            // when player loads, set stored volume (if any)
+            api.bind('ready', function ( e, api, video ) {
+                var vol = window.localStorage.getItem( volumeLabel );
+                if( vol !== null ) {        // check if there was a value stored
+                    // we will try to set the volume many later (flowplayer bug)
+                    setTimeout(function(){
+                        if( vol == 'NaN' ) // the value is always returned as a string, don't use isNaN()
+                            api.mute( true );
+                        else
+                            api.volume( vol );
+                    }, 3000);
+                }
+            });
         }
+    }
+});
 
-    };
-
-
+$ = jQuery;
 jQuery( function ( $ ) {
 
     // Looping over player divs
@@ -158,10 +157,6 @@ jQuery( function ( $ ) {
                 resolutions: resolutions,
                 playlist: [resolutions[0].sources]
             });
-
-            // set up api for this player
-            var flowApi = flowplayer( $(el) );
-            setUpFlowApi( flowApi, el );
         }
     });
 });
