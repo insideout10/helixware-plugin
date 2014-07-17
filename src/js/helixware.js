@@ -7,8 +7,8 @@ flowplayer( function (api, root) {
     var qsel;
     var selected = 'fp-selectedres';
 
-    // manual selection
-    if (api.conf.resolutions !== undefined && flowplayer.support.inlineVideo && !hls) {
+    // build resolutions menu
+    if ( api.conf.resolutions !== undefined ) {
 
         // create the manual quality selection widget and append it to the UI
         qsel = $('<div/>').addClass('fp-qsel').appendTo('.fp-ui', root);
