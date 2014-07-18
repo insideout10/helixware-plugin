@@ -3,7 +3,7 @@ flowplayer( function (api, root) {
 
     // check whether hls will be picked by the flowplayer engine
     var hls = flowplayer.support.video &&
-            !!$('<video/>')[0].canPlayType('application/x-mpegURL').replace('no', '');
+            !!$('<video/>')[0].canPlayType('application/x-mpegurl').replace('no', '');
     var qsel;
     var selected = 'fp-selectedres';
 
