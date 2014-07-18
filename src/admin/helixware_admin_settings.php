@@ -102,6 +102,18 @@ function hewa_admin_settings() {
         )
     );
 
+    // Add the field for the post template Id.
+    add_settings_field(
+        HEWA_SETTINGS_JWPLAYER_ID,
+        __( 'JWPlayer Key', HEWA_LANGUAGE_DOMAIN ),
+        'hewa_admin_settings_select_page',
+        'helixware',
+        'hewa_settings_section',
+        array(
+            'name'    => HEWA_SETTINGS_JWPLAYER_ID,
+            'default' => ''
+        )
+    );
 }
 add_action( 'admin_init', 'hewa_admin_settings' );
 

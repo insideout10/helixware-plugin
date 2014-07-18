@@ -22,38 +22,38 @@ class HelixWareTest extends WP_UnitTestCase
         parent::tearDown();
     }
 
-    /**
-     * Test the output from the print source tag method.
-     *
-     * @uses hewa_player_print_source_tag to print source tags.
-     */
-    function test_hewa_player_print_source_tag() {
+//    /**
+//     * Test the output from the print source tag method.
+//     *
+//     * @uses hewa_player_print_source_tag to print source tags.
+//     */
+//    function test_hewa_player_print_source_tag() {
+//
+//        $source = 'http://example.org/file.mp4';
+//        $type   = 'video/mp4';
+//        $width  = 960;
+//
+////        ob_start();
+//        $output = hewa_player_print_source_tag( $source, $type, 960 );
+////        $output = ob_get_clean();
+//
+//        $this->assertEquals( "<source src='$source' type='$type' data-res='$width'>", $output );
+//
+//    }
 
-        $source = 'http://example.org/file.mp4';
-        $type   = 'video/mp4';
-        $width  = 960;
-
-//        ob_start();
-        $output = hewa_player_print_source_tag( $source, $type, 960 );
-//        $output = ob_get_clean();
-
-        $this->assertEquals( "<source src='$source' type='$type' data-res='$width'>", $output );
-
-    }
-
-    /**
-     * Test the *hewa_ajax_load_m3u8* for exceptions when the $_GET['file'] parameter is not set.
-     *
-     * @uses hewa_ajax_load_m3u8 to load a remote m3u8 file.
-     *
-     * @expectedException WPDieException
-     * @expectedExceptionMessage The file parameter is not set.
-     */
-    function test_hewa_ajax_load_m3u8_file_not_set() {
-
-        hewa_ajax_load_m3u8();
-
-    }
+//    /**
+//     * Test the *hewa_ajax_load_m3u8* for exceptions when the $_GET['file'] parameter is not set.
+//     *
+//     * @uses hewa_ajax_load_m3u8 to load a remote m3u8 file.
+//     *
+//     * @expectedException WPDieException
+//     * @expectedExceptionMessage The file parameter is not set.
+//     */
+//    function test_hewa_ajax_load_m3u8_file_not_set() {
+//
+//        hewa_ajax_load_m3u8();
+//
+//    }
 
     /**
      * Test the *hewa_get_option* method.

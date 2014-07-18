@@ -16,7 +16,5 @@
     "tests"
   ],
   "dependencies": {
-    "video.js-dist": "dist",
-    "videojs-persistvolume": "~0.1.1"
   }
 }
