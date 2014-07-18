@@ -24,7 +24,7 @@ function hewa_ajax_load_rss() {
     $asset_id = $_GET['id'];
     $streams  = hewa_get_clip_urls( $asset_id );
 
-    $ratio    = $streams->ratio;
+//    $ratio    = $streams->ratio;
     $m3u8     = $streams->formats->{'m3u8-redirector'};
 
 

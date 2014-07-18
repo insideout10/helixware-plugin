@@ -18,8 +18,9 @@ function hewa_shortcode_player( $atts ) {
     // TODO: the default path might point to a custom video that invites the user to select a video.
     // TODO: default width and height ratio should be calculated from the video.
     $params = shortcode_atts( array(
-        'width'    => '100%', // by default we stretch the full width of the containing element.
-        'asset_id' => 5
+        'width'       => '100%', // by default we stretch the full width of the containing element.
+        'asset_id'    => 5,
+        'aspectratio' => '5:3'
     ), $atts);
 
     // Queue the scripts.
@@ -29,10 +30,11 @@ function hewa_shortcode_player( $atts ) {
     $jwplayer_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' );
 
     // Get the asset Id.
-    $id       = uniqid( 'hewa-player- ');
+    $id       = uniqid( 'hewa-player-');
     $asset_id = $params['asset_id'];
     $playlist = admin_url( 'admin-ajax.php?action=hewa_rss&id=' . $asset_id );
     $width    = $params['width'];
+    $aspectratio = $params['aspectratio'];
 
     $loading  = esc_html__( 'Loading player...', HEWA_LANGUAGE_DOMAIN );
 
@@ -44,7 +46,8 @@ function hewa_shortcode_player( $atts ) {
                 jwplayer('$id').setup({
                     androidhls: true,
                     playlist: '$playlist',
-                    width: '$width'
+                    width: '$width',
+                    aspectratio: '$aspectratio'
                 });
             } );
         </script>
