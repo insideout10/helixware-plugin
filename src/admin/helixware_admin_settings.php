@@ -89,6 +89,19 @@ function hewa_admin_settings() {
         )
     );
 
+    // Add the field for the post template Id.
+    add_settings_field(
+        HEWA_SETTINGS_TEMPLATE_ID,
+        __( 'Template Id', HEWA_LANGUAGE_DOMAIN ),
+        'hewa_admin_settings_select_page',
+        'helixware',
+        'hewa_settings_section',
+        array(
+            'name'    => HEWA_SETTINGS_TEMPLATE_ID,
+            'default' => ''
+        )
+    );
+
 }
 add_action( 'admin_init', 'hewa_admin_settings' );
 
@@ -113,6 +126,26 @@ function hewa_admin_settings_section_callback() {
  *                    value.
  */
 function hewa_admin_settings_input_text( $args ) {
+
+    $value_e = esc_attr( hewa_get_option( $args['name'], $args['default'] ) );
+    $name_e  = esc_attr( $args['name'] );
+
+    echo "<input name='" . HEWA_SETTINGS . "[$name_e]' type='text' value='$value_e' size='40' />";
+}
+
+
+/**
+ * Print an input box with the specified name. The value is loaded from the stored settings. If not found, the default
+ * value is used.
+ *
+ * @uses hewa_get_option to get the option value.
+ *
+ * @param array $args An array with a *name* field containing the option name and a *default* field with its default
+ *                    value.
+ */
+function hewa_admin_settings_select_page( $args ) {
+
+    // TODO: change this in a page select.
 
     $value_e = esc_attr( hewa_get_option( $args['name'], $args['default'] ) );
     $name_e  = esc_attr( $args['name'] );

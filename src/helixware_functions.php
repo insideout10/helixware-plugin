@@ -61,6 +61,26 @@ function hewa_get_option( $name, $default = null ) {
 }
 
 /**
+ * Set the option with the specified name, to the specified value.
+ *
+ * @param string $name  The option name.
+ * @param string $value The option value.
+ * @return bool The result from the *add_option/update_option* call.
+ */
+function hewa_set_option( $name, $value ) {
+
+    // If no settings are saved yet, create them.
+    if ( false === ( $settings = get_option( HEWA_SETTINGS ) ) ) {
+        return add_option( HEWA_SETTINGS, array( $name => $value ) );
+    }
+
+    // Else update the settings.
+    $settings[$name] = $value;
+    return update_option( HEWA_SETTINGS, $settings );
+
+}
+
+/**
  * Format the specified value in bytes.
  *
  * @param int $size The size in bytes.

@@ -71,7 +71,7 @@ add_action( 'post-upload-ui', 'hewa_admin_media_post_upload_ui' );
  * @param string $post_tags  A comma separated list of tags.
  * @return int The post Id.
  */
-function hewa_admin_create_post( $asset_id, $post_type, $post_title, $post_tags) {
+function hewa_admin_create_post( $asset_id, $post_type, $post_title, $post_tags ) {
 
     hewa_write_log( '[ asset-id :: ' + $asset_id + ' ][ post-type :: ' + $post_type + ' ][ post-title :: ' + $post_title
         + ' ][ post-tags :: ' + $post_tags + ' ]' );
@@ -79,8 +79,10 @@ function hewa_admin_create_post( $asset_id, $post_type, $post_title, $post_tags)
     // Set the player shortcode.
     $player_shortcode = HEWA_SHORTCODE_PREFIX . 'player';
 
+
     // Set the post content to the player shortcode to the loaded asset Id.
-    $post_content = "[$player_shortcode asset_id=$asset_id]";
+    $post_content = apply_filters( HEWA_FILTERS_CREATE_POST_CONTENT, $asset_id, $post_type, $post_title, $post_tags );
+//    $post_content = "[$player_shortcode asset_id=$asset_id]";
 
     // Create the post with the following parameters.
     $args = array(
@@ -110,6 +112,37 @@ function hewa_admin_create_post( $asset_id, $post_type, $post_title, $post_tags)
 
 }
 
+
+/**
+ * Create the content for the video post using a template if any has been provided.
+ *
+ * @param int $asset_id      The video asset Id.
+ * @param string $post_type  The post type.
+ * @param string $post_title The post title.
+ * @param string $post_tags   A comma separated list of tags.
+ * @return string The post content.
+ */
+function hewa_admin_filters_create_post_content( $asset_id, $post_type, $post_title, $post_tags ) {
+
+    // If a template Id is not specified then return the plain shortcode with the asset Id.
+    if ( null === ( $template_id = hewa_get_option( HEWA_SETTINGS_TEMPLATE_ID ) ) // check that the option is set.
+        || empty( $template_id ) // check that the value is set.
+        || null === ( $template = get_post( $template_id ) ) ) { // check that the template exists.
+        // Set the player shortcode.
+        return '[' . HEWA_SHORTCODE_PREFIX . 'player asset_id="' . $asset_id . '"]';
+    }
+
+    // Else get the post content and replace the markers.
+    $content = $template->post_content;
+    $content = str_replace( '{asset_id}', $asset_id, $content );
+    $content = str_replace( '{post_type}', $post_type, $content );
+    $content = str_replace( '{post_title}', $post_title, $content );
+    $content = str_replace( '{post_tags}', $post_tags, $content );
+
+    return $content;
+
+}
+add_filter( HEWA_FILTERS_CREATE_POST_CONTENT, 'hewa_admin_filters_create_post_content', 10, 4 );
 
 /**
  * Set the post thumbnail for the specified post Id by getting a thumbnail of the specified asset.

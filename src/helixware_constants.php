@@ -17,6 +17,7 @@ define( 'HEWA_SETTINGS_SERVER_URL', 'hewa_server_url' );
 define( 'HEWA_SETTINGS_APPLICATION_KEY', 'hewa_app_key' );
 define( 'HEWA_SETTINGS_APPLICATION_SECRET', 'hewa_app_secret' );
 define( 'HEWA_SETTINGS_FILE_EXTENSIONS', 'hewa_file_extensions' );
+define( 'HEWA_SETTINGS_TEMPLATE_ID', 'hewa_template_id' );
 
 // Define the clip custom post name.
 define( 'HEWA_POST_TYPE_CLIP', 'hewa_clip' );
@@ -39,3 +40,6 @@ define( 'HEWA_SETTINGS_MAX_FILE_SIZE', '5Gb' );
 define( 'HEWA_STILL_IMAGE_WIDTH', 1200 );
 define( 'HEWA_STILL_IMAGE_TIMECODE_SECONDS', 15 );
 define( 'HEWA_STILL_IMAGE_CONTENT_TYPE', 'image/png' );
+
+// This filter is used to get the post content for new posts.
+define( 'HEWA_FILTERS_CREATE_POST_CONTENT', 'hewa_filters_create_post_content' );
