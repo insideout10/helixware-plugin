@@ -73,16 +73,11 @@ add_action( 'post-upload-ui', 'hewa_admin_media_post_upload_ui' );
  */
 function hewa_admin_create_post( $asset_id, $post_type, $post_title, $post_tags ) {
 
-    hewa_write_log( '[ asset-id :: ' + $asset_id + ' ][ post-type :: ' + $post_type + ' ][ post-title :: ' + $post_title
-        + ' ][ post-tags :: ' + $post_tags + ' ]' );
-
-    // Set the player shortcode.
-    $player_shortcode = HEWA_SHORTCODE_PREFIX . 'player';
-
+    hewa_write_log( '[ asset-id :: ' . $asset_id . ' ][ post-type :: ' . $post_type . ' ][ post-title :: ' . $post_title
+        . ' ][ post-tags :: ' . $post_tags . ' ]' );
 
     // Set the post content to the player shortcode to the loaded asset Id.
     $post_content = apply_filters( HEWA_FILTERS_CREATE_POST_CONTENT, $asset_id, $post_type, $post_title, $post_tags );
-//    $post_content = "[$player_shortcode asset_id=$asset_id]";
 
     // Create the post with the following parameters.
     $args = array(
@@ -108,7 +103,7 @@ function hewa_admin_create_post( $asset_id, $post_type, $post_title, $post_tags 
     hewa_admin_set_post_thumbnail( $asset_id, $post_id );
 
     // Return the post id.
-    echo $post_id;
+    echo (string)$post_id;
 
 }
 

@@ -60,7 +60,7 @@ jQuery(function ($) {
 
         elem.html(
             '<img src="' + hewa_admin_options.form_action + '?action=hewa_still_image&id=' + asset.id +
-                '&w=150&tc=10" class="pinkynail" onerror="function () {this.style.visibility=\'none\';}"><div class="filename new">' +
+                '&w=150&tc=10" class="pinkynail" onerror="this.style.visibility = \'hidden\';"><div class="filename new">' +
                 '<span class="title">' + asset.title + '</span>' +
                 '<div id="' + divId + '" class="hewa-asset">' +
                 postTypeSelect +
