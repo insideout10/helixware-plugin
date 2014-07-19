@@ -21,11 +21,13 @@ function hewa_ajax_load_rss() {
         wp_die( __( 'The id parameter is required.', HEWA_LANGUAGE_DOMAIN ) );
     }
 
-    $asset_id = $_GET['id'];
-    $streams  = hewa_get_clip_urls( $asset_id );
+    $asset_id  = $_GET['id'];
+    $title     = ( isset( $_GET['t'] ) ? $_GET['t'] : '' );
+    $image_url = ( isset( $_GET['i'] ) ? $_GET['i'] : '' );
+    $streams   = hewa_get_clip_urls( $asset_id );
 
 //    $ratio    = $streams->ratio;
-    $m3u8     = $streams->formats->{'m3u8-redirector'};
+    $m3u8      = $streams->formats->{'m3u8-redirector'};
 
 
     ob_start();
@@ -34,24 +36,46 @@ function hewa_ajax_load_rss() {
     echo <<<EOF
 <rss version="2.0" xmlns:jwplayer="http://rss.jwpcdn.com/">
     <channel>
-        <item>
-            <jwplayer:source file="/wp-admin/admin-ajax.php?action=hewa_m3u8&amp;id=$asset_id" label="Auto" default="true" type="hls" />
-
 EOF;
 
-    for ( $i = 0; $i < sizeof( $m3u8->bitrates ); $i++ ) {
+    hewa_echo_rss_item( $asset_id, $m3u8, $title, $image_url );
 
-        $bitrate    = $m3u8->bitrates[$i];
-        $width_p    = $bitrate->width . 'p';
-        $url        = $bitrate->url;
+    // Add a list for the listbar if we have a category.
+    if ( isset( $_GET['cat'] ) ) {
 
-        echo "<jwplayer:source file=\"$url\" label=\"$width_p\" type=\"hls\" />\n";
+        // Get the category Id.
+        $category_id = ( is_numeric( $_GET['cat'] ) ? $_GET['cat'] : get_category_by_slug( $_GET['cat'] )->term_ID );
+        $posts_count = ( isset( $_GET['max'] ) && is_numeric( $_GET['max'] ) ? $_GET['max'] : 5 );
+
+        // Query for posts.
+        $posts       = get_posts( array(
+            'category'       => $category_id,
+            'posts_per_page' => $posts_count
+        ) );
+
+        foreach ( $posts as $post ) {
+
+            $matches = array();
+            if ( 1 === preg_match( '/ asset_id=(\d+)/', $post->post_content, $matches ) ) {
+
+                $this_asset_id = $matches[1];
+
+                // Don't add the same asset.
+                if ( $asset_id === $this_asset_id ) {
+                    continue;
+                }
+
+                $thumbnail_id   = get_post_thumbnail_id( $post->ID );
+                // TODO: get attachment of the required size.
+                $attachment_url = wp_get_attachment_url( $thumbnail_id );
+                hewa_echo_rss_item( $this_asset_id, null, $post->post_title, $attachment_url );
+
+            }
+        }
 
     }
 
     echo <<<EOF
-            <jwplayer:source file="/wp-admin/admin-ajax.php?action=hewa_smil&amp;id=$asset_id" label="Auto" type="rtmp" />
-        </item>
     </channel>
 </rss>
 EOF;
@@ -62,3 +86,48 @@ EOF;
 }
 add_action( 'wp_ajax_hewa_rss', 'hewa_ajax_load_rss' );
 add_action( 'wp_ajax_nopriv_hewa_rss', 'hewa_ajax_load_rss' );
+
+
+function hewa_echo_rss_item( $asset_id, $m3u8 = null, $title = null, $image_url = null ) {
+
+    // Get the ajax URL.
+    $ajax_url = admin_url( 'admin-ajax.php' );
+
+    echo "<item>";
+
+    if ( null !== $title ) {
+
+        // Escape the title.
+        $title_h = esc_html( $title );
+        echo "<title>$title_h</title>";
+
+    }
+
+    if ( null !== $image_url && ! empty( $image_url ) ) {
+        echo "<jwplayer:image>$image_url</jwplayer:image>";
+    }
+
+    echo "<jwplayer:source file=\"$ajax_url?action=hewa_m3u8&amp;id=$asset_id\" label=\"Auto\" default=\"true\" type=\"hls\" />";
+
+    // TODO: make the following URL parametric and use the authenticated PHP call.
+    echo "<jwplayer:track file=\"https://totalerg.insideout.io/api/4/users/assets/$asset_id/vtt?w=95&amp;i=5\" kind=\"thumbnails\" />";
+
+    if ( null !== $m3u8 ) {
+        for ( $i = 0; $i < sizeof( $m3u8->bitrates ); $i++ ) {
+
+            $bitrate    = $m3u8->bitrates[$i];
+            $width_p    = $bitrate->width . 'p';
+            $url        = $bitrate->url;
+
+            echo "<jwplayer:source file=\"$url\" label=\"$width_p\" type=\"hls\" />\n";
+
+        }
+    }
+
+    echo <<<EOF
+        <jwplayer:source file="$ajax_url?action=hewa_smil&amp;id=$asset_id" label="Auto" type="rtmp" />
+    </item>
+
+EOF;
+
+}

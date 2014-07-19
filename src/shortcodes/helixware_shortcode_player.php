@@ -18,9 +18,12 @@ function hewa_shortcode_player( $atts ) {
     // TODO: the default path might point to a custom video that invites the user to select a video.
     // TODO: default width and height ratio should be calculated from the video.
     $params = shortcode_atts( array(
-        'width'       => '100%', // by default we stretch the full width of the containing element.
-        'asset_id'    => 5,
-        'aspectratio' => '5:3'
+        'width'        => '100%', // by default we stretch the full width of the containing element.
+        'asset_id'     => 5,
+        'aspectratio'  => '5:3',
+        'listbar'      => null,
+        'listbar_size' => 240,
+        'listbar_cat'  => 'for-you'
     ), $atts);
 
     // Queue the scripts.
@@ -32,9 +35,33 @@ function hewa_shortcode_player( $atts ) {
     // Get the asset Id.
     $id       = uniqid( 'hewa-player-');
     $asset_id = $params['asset_id'];
-    $playlist = admin_url( 'admin-ajax.php?action=hewa_rss&id=' . $asset_id );
-    $width    = $params['width'];
-    $aspectratio = $params['aspectratio'];
+    $title_u  = urlencode( get_the_title() );
+
+    // Get the thumbnail URL.
+    // TODO: get the thumbnail of the right size.
+    $attachment_url = wp_get_attachment_url( get_post_thumbnail_id() );
+    $image_u  = urlencode( $attachment_url );
+
+    // Build the player array which will then be translated to JavaScript for JWPlayer initialization.
+    $player                = array();
+    $player['androidhls']  = true;
+    $player['playlist']    = admin_url( 'admin-ajax.php?action=hewa_rss&id=' . $asset_id .
+        '&t=' . $title_u . // set the title
+        '&i=' . $image_u . // set the image
+        ( null !== $params['listbar'] ? '&cat=' . $params['listbar_cat'] : '' ) ); // add the category if we have the listbar.
+    $player['width']       = $params['width'];
+    $player['aspectratio'] = $params['aspectratio'];
+
+    // Build the playlist object.
+    if ( null !== $params['listbar'] ) {
+        $player['listbar'] = array(
+            'position' => $params['listbar'],
+            'size'     => $params['listbar_size']
+        );
+    }
+
+    // Create the JSON version of the player.
+    $player_json = json_encode( $player );
 
     $loading  = esc_html__( 'Loading player...', HEWA_LANGUAGE_DOMAIN );
 
@@ -43,12 +70,7 @@ function hewa_shortcode_player( $atts ) {
         <script type="text/javascript">
             jQuery( function( $ ) {
                 jwplayer.key = '$jwplayer_key';
-                jwplayer('$id').setup({
-                    androidhls: true,
-                    playlist: '$playlist',
-                    width: '$width',
-                    aspectratio: '$aspectratio'
-                });
+                jwplayer('$id').setup($player_json);
             } );
         </script>
 EOF;
