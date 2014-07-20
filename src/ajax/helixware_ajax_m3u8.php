@@ -30,10 +30,14 @@ function hewa_ajax_load_m3u8() {
     ob_start();
     header( "Content-Type: application/vnd.apple.mpegurl" );
 
-    echo "#EXTM3U\n";
-    for ( $i = 0; $i < sizeof( $m3u8->bitrates ); $i++ ) {
+    // Sort the bitrates.
+    $bitrates = $m3u8->bitrates;
+    usort( $bitrates, function( $a, $b ) { return $a - $b; } );
 
-        $bitrate    = $m3u8->bitrates[$i];
+    echo "#EXTM3U\n";
+    for ( $i = 0; $i < sizeof( $bitrates ); $i++ ) {
+
+        $bitrate    = $bitrates[$i];
         $bandwidth  = $bitrate->bitrate;
         $width_p    = $bitrate->width . 'p';
         $resolution = $bitrate->width . 'x' . intval( $bitrate->width / $ratio );

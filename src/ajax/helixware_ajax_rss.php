@@ -35,7 +35,8 @@ function hewa_ajax_load_rss() {
 
     echo <<<EOF
 <rss version="2.0" xmlns:jwplayer="http://rss.jwpcdn.com/">
-    <channel>
+ <channel>
+
 EOF;
 
     hewa_echo_rss_item( $asset_id, $m3u8, $title, $image_url );
@@ -76,7 +77,7 @@ EOF;
     }
 
     echo <<<EOF
-    </channel>
+ </channel>
 </rss>
 EOF;
 
@@ -93,24 +94,24 @@ function hewa_echo_rss_item( $asset_id, $m3u8 = null, $title = null, $image_url 
     // Get the ajax URL.
     $ajax_url = admin_url( 'admin-ajax.php' );
 
-    echo "<item>";
+    echo "  <item>\n";
 
     if ( null !== $title ) {
 
         // Escape the title.
         $title_h = esc_html( $title );
-        echo "<title>$title_h</title>";
+        echo "   <title>$title_h</title>\n";
 
     }
 
     if ( null !== $image_url && ! empty( $image_url ) ) {
-        echo "<jwplayer:image>$image_url</jwplayer:image>";
+        echo "   <jwplayer:image>$image_url</jwplayer:image>\n";
     }
 
-    echo "<jwplayer:source file=\"$ajax_url?action=hewa_m3u8&amp;id=$asset_id\" label=\"Auto\" default=\"true\" type=\"hls\" />";
+    echo "   <jwplayer:source file=\"$ajax_url?action=hewa_m3u8&amp;id=$asset_id\" label=\"Auto\" default=\"true\" type=\"hls\" />\n";
 
     // TODO: make the following URL parametric and use the authenticated PHP call.
-    echo "<jwplayer:track file=\"https://totalerg.insideout.io/api/4/users/assets/$asset_id/vtt?w=95&amp;i=5\" kind=\"thumbnails\" />";
+    echo "   <jwplayer:track file=\"https://totalerg.insideout.io/api/4/users/assets/$asset_id/vtt?w=95&amp;i=5\" kind=\"thumbnails\" />\n";
 
     if ( null !== $m3u8 ) {
         for ( $i = 0; $i < sizeof( $m3u8->bitrates ); $i++ ) {
@@ -119,14 +120,14 @@ function hewa_echo_rss_item( $asset_id, $m3u8 = null, $title = null, $image_url 
             $width_p    = $bitrate->width . 'p';
             $url        = $bitrate->url;
 
-            echo "<jwplayer:source file=\"$url\" label=\"$width_p\" type=\"hls\" />\n";
+            echo "   <jwplayer:source file=\"$url\" label=\"$width_p\" type=\"hls\" />\n";
 
         }
     }
 
     echo <<<EOF
-        <jwplayer:source file="$ajax_url?action=hewa_smil&amp;id=$asset_id" label="Auto" type="rtmp" />
-    </item>
+   <jwplayer:source file="$ajax_url?action=hewa_smil&amp;id=$asset_id" label="Auto" type="rtmp" />
+  </item>
 
 EOF;
 

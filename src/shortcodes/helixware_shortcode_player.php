@@ -23,7 +23,8 @@ function hewa_shortcode_player( $atts ) {
         'aspectratio'  => '5:3',
         'listbar'      => null,
         'listbar_size' => 240,
-        'listbar_cat'  => 'for-you'
+        'listbar_cat'  => 'for-you',
+        'autostart'    => true
     ), $atts);
 
     // Queue the scripts.
@@ -45,6 +46,7 @@ function hewa_shortcode_player( $atts ) {
     // Build the player array which will then be translated to JavaScript for JWPlayer initialization.
     $player                = array();
     $player['androidhls']  = true;
+    $player['autostart']   = ( $params['autostart'] ? 'true' : 'false' );
     $player['playlist']    = admin_url( 'admin-ajax.php?action=hewa_rss&id=' . $asset_id .
         '&t=' . $title_u . // set the title
         '&i=' . $image_u . // set the image
@@ -79,6 +81,19 @@ EOF;
 
 }
 add_shortcode( HEWA_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );
+
+
+/**
+ * Send the shortcode output as echo. This appears to be required if we're in a slider.
+ *
+ * @param array $atts The shortcode attributes.
+ */
+function hewa_shortcode_player_echo( $atts ) {
+
+    echo hewa_shortcode_player( $atts );
+
+}
+add_shortcode( HEWA_SHORTCODE_PREFIX . 'player_echo', 'hewa_shortcode_player_echo' );
 
 ///**
 // * Print a *source* tag with the provided *src* and *type* attributes.

@@ -39,9 +39,13 @@ function hewa_ajax_load_smil() {
 		<switch>
 EOF;
 
-    for ( $i = 0; $i < sizeof( $flash->bitrates ); $i++ ) {
+    // Sort the bitrates.
+    $bitrates = $flash->bitrates;
+    usort( $bitrates, function( $a, $b ) { return $a - $b; } );
 
-        $bitrate    = $flash->bitrates[$i];
+    for ( $i = 0; $i < sizeof( $bitrates ); $i++ ) {
+
+        $bitrate    = $bitrates[$i];
         $width      = $bitrate->width;
         $bandwidth  = $bitrate->bitrate;
         $height     = intval( $width / $ratio );
