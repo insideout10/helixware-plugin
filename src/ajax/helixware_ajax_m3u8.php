@@ -32,7 +32,7 @@ function hewa_ajax_load_m3u8() {
 
     // Sort the bitrates.
     $bitrates = $m3u8->bitrates;
-    usort( $bitrates, function( $a, $b ) { return $a - $b; } );
+    usort( $bitrates, function( $a, $b ) { return $a->bitrate - $b->bitrate; } );
 
     echo "#EXTM3U\n";
     for ( $i = 0; $i < sizeof( $bitrates ); $i++ ) {

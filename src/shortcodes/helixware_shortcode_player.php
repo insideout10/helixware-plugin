@@ -24,7 +24,8 @@ function hewa_shortcode_player( $atts ) {
         'listbar'      => null,
         'listbar_size' => 240,
         'listbar_cat'  => 'for-you',
-        'autostart'    => true
+        'autostart'    => true,
+        'max'          => 5
     ), $atts);
 
     // Queue the scripts.
@@ -52,6 +53,7 @@ function hewa_shortcode_player( $atts ) {
         admin_url( 'admin-ajax.php?action=hewa_rss&id=' . $asset_id .
             '&t=' . $title_u . // set the title
             '&i=' . $image_u . // set the image
+            '&max=' . $params['max'] . // set the maximum number of elements
             ( null !== $params['listbar'] ? '&cat=' . $params['listbar_cat'] : '' ) // add the category if we have the listbar.
         )
     );

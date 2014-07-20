@@ -41,7 +41,7 @@ EOF;
 
     // Sort the bitrates.
     $bitrates = $flash->bitrates;
-    usort( $bitrates, function( $a, $b ) { return $a - $b; } );
+    usort( $bitrates, function( $a, $b ) { return $a->bitrate - $b->bitrate; } );
 
     for ( $i = 0; $i < sizeof( $bitrates ); $i++ ) {
 
