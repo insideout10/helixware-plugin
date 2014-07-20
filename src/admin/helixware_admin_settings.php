@@ -102,6 +102,7 @@ function hewa_admin_settings() {
         )
     );
 
+
     // Add the field for the post template Id.
     add_settings_field(
         HEWA_SETTINGS_JWPLAYER_ID,
@@ -114,6 +115,49 @@ function hewa_admin_settings() {
             'default' => ''
         )
     );
+
+
+    // Add the field for the post template Id.
+    add_settings_field(
+        HEWA_SETTINGS_JWPLAYER_DEFAULT_SKIN,
+        __( 'JWPlayer Default Skin', HEWA_LANGUAGE_DOMAIN ),
+        'hewa_admin_settings_select_page',
+        'helixware',
+        'hewa_settings_section',
+        array(
+            'name'    => HEWA_SETTINGS_JWPLAYER_DEFAULT_SKIN,
+            'default' => ''
+        )
+    );
+
+
+    // Add the field for the post template Id.
+    add_settings_field(
+        HEWA_SETTINGS_JWPLAYER_LOGO_URL,
+        __( 'JWPlayer Logo', HEWA_LANGUAGE_DOMAIN ),
+        'hewa_admin_settings_select_page',
+        'helixware',
+        'hewa_settings_section',
+        array(
+            'name'    => HEWA_SETTINGS_JWPLAYER_LOGO_URL,
+            'default' => ''
+        )
+    );
+
+
+    // Add the field for the post template Id.
+    add_settings_field(
+        HEWA_SETTINGS_JWPLAYER_LOGO_LINK,
+        __( 'JWPlayer Logo Link', HEWA_LANGUAGE_DOMAIN ),
+        'hewa_admin_settings_select_page',
+        'helixware',
+        'hewa_settings_section',
+        array(
+            'name'    => HEWA_SETTINGS_JWPLAYER_LOGO_LINK,
+            'default' => ''
+        )
+    );
+
 }
 add_action( 'admin_init', 'hewa_admin_settings' );
 
