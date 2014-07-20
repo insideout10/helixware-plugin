@@ -44,3 +44,6 @@ define( 'HEWA_STILL_IMAGE_CONTENT_TYPE', 'image/png' );
 
 // This filter is used to get the post content for new posts.
 define( 'HEWA_FILTERS_CREATE_POST_CONTENT', 'hewa_filters_create_post_content' );
+
+// This filter can be used to append parameters to the playlist URL.
+define( 'HEWA_FILTERS_PLAYER_PLAYLIST_URL', 'hewa_filters_player_playlist_url' );

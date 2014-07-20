@@ -47,10 +47,14 @@ function hewa_shortcode_player( $atts ) {
     $player                = array();
     $player['androidhls']  = true;
     $player['autostart']   = ( $params['autostart'] ? 'true' : 'false' );
-    $player['playlist']    = admin_url( 'admin-ajax.php?action=hewa_rss&id=' . $asset_id .
-        '&t=' . $title_u . // set the title
-        '&i=' . $image_u . // set the image
-        ( null !== $params['listbar'] ? '&cat=' . $params['listbar_cat'] : '' ) ); // add the category if we have the listbar.
+    $player['playlist']    = apply_filters(
+        HEWA_FILTERS_PLAYER_PLAYLIST_URL,
+        admin_url( 'admin-ajax.php?action=hewa_rss&id=' . $asset_id .
+            '&t=' . $title_u . // set the title
+            '&i=' . $image_u . // set the image
+            ( null !== $params['listbar'] ? '&cat=' . $params['listbar_cat'] : '' ) // add the category if we have the listbar.
+        )
+    );
     $player['width']       = $params['width'];
     $player['aspectratio'] = $params['aspectratio'];
 

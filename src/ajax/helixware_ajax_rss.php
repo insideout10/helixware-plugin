@@ -45,7 +45,7 @@ EOF;
     if ( isset( $_GET['cat'] ) ) {
 
         // Get the category Id.
-        $category_id = ( is_numeric( $_GET['cat'] ) ? $_GET['cat'] : get_category_by_slug( $_GET['cat'] )->term_ID );
+        $category_id = ( is_numeric( $_GET['cat'] ) ? $_GET['cat'] : get_category_by_slug( $_GET['cat'] )->cat_ID );
         $posts_count = ( isset( $_GET['max'] ) && is_numeric( $_GET['max'] ) ? $_GET['max'] : 5 );
 
         // Query for posts.
