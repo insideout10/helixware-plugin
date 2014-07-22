@@ -51,7 +51,8 @@ EOF;
         // Query for posts.
         $posts       = get_posts( array(
             'category'       => $category_id,
-            'posts_per_page' => $posts_count
+            'posts_per_page' => $posts_count,
+            'numberposts'    => $posts_count
         ) );
 
         foreach ( $posts as $post ) {
