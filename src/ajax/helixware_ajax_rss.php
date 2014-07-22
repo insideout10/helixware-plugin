@@ -108,6 +108,7 @@ function hewa_echo_rss_item( $asset_id, $m3u8 = null, $title = null, $image_url 
         echo "   <jwplayer:image>$image_url</jwplayer:image>\n";
     }
 
+    echo "   <jwplayer:source file=\"$ajax_url?action=hewa_smil&amp;id=$asset_id\" label=\"Auto\" type=\"rtmp\" />\n";
     echo "   <jwplayer:source file=\"$ajax_url?action=hewa_m3u8&amp;id=$asset_id\" label=\"Auto\" default=\"true\" type=\"hls\" />\n";
 
     // TODO: make the following URL parametric and use the authenticated PHP call.
@@ -125,10 +126,6 @@ function hewa_echo_rss_item( $asset_id, $m3u8 = null, $title = null, $image_url 
         }
     }
 
-    echo <<<EOF
-   <jwplayer:source file="$ajax_url?action=hewa_smil&amp;id=$asset_id" label="Auto" type="rtmp" />
-  </item>
-
-EOF;
+    echo "</item>";
 
 }

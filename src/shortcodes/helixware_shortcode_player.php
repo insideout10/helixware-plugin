@@ -39,9 +39,9 @@ function hewa_shortcode_player( $atts ) {
     $jwplayer_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' );
 
     // Get the asset Id.
-    $id       = uniqid( 'hewa-player-');
-    $asset_id = $params['asset_id'];
-    $title_u  = urlencode( get_the_title() );
+    $player_id = uniqid( 'hewa-player-');
+    $asset_id  = $params['asset_id'];
+    $title_u   = urlencode( get_the_title() );
 
     // Get the thumbnail URL.
     // TODO: get the thumbnail of the right size.
@@ -80,12 +80,32 @@ function hewa_shortcode_player( $atts ) {
         $player['skin'] = $params['skin'];
     }
 
-    // Build the playlist object.
-    if ( null !== $params['listbar'] ) {
+    // The loading string.
+    $loading  = esc_html__( 'Loading player...', HEWA_LANGUAGE_DOMAIN );
+
+    // Prepare an empty result variable.
+    $result  = '';
+
+    // Build the *responsive* listbar.
+    if ( null !== $params['listbar'] && 'responsive' === $params['listbar'] ) {
+        wp_enqueue_style( 'helixware-player-css', plugins_url( 'css/helixware.player.css', dirname( __FILE__ ) ) );
+
+        $listbar_id = uniqid( 'hewa-listbar-');;
+        $result     = '<div class="hewa-container">' .
+            "<div class=\"hewa-player-container\"><div id=\"$player_id\">$loading</div></div>" .
+            "<div class=\"hewa-listbar-container\"><ul id=\"$listbar_id\" class=\"hewa-listbar\"></ul></div>" .
+            '</div>';
+
+    }
+
+    // Build a standard listbar.
+    if ( null !== $params['listbar'] && 'responsive' !== $params['listbar'] ) {
         $player['listbar'] = array(
             'position' => $params['listbar'],
             'size'     => $params['listbar_size']
         );
+
+        $result .= "<div id=\"$player_id\">$loading</div>";
     }
 
     // Set the GA setting.
@@ -94,19 +114,60 @@ function hewa_shortcode_player( $atts ) {
     // Create the JSON version of the player.
     $player_json = json_encode( $player );
 
-    $loading  = esc_html__( 'Loading player...', HEWA_LANGUAGE_DOMAIN );
-
-    $result = <<<EOF
-        <div id="$id">$loading</div>
+    // Start printing out the player javascript.
+    $result .= <<<EOF
         <script type="text/javascript">
             jQuery( function( $ ) {
                 jwplayer.key = '$jwplayer_key';
-                jwplayer('$id').setup($player_json);
-            } );
-        </script>
+                jwplayer('$player_id')
+                    .setup($player_json);
+
 EOF;
 
-    return $result;
+    // If the listbar Id is set, then print-out related events.
+    if ( isset( $listbar_id ) ) {
+
+        $result .= <<<EOF
+            jwplayer('$player_id')
+                .onReady( function () {
+                    var html     = '';
+                    var player   = jwplayer('$player_id');
+                    var playlist = player.getPlaylist();
+
+                    for (var i = 0; i < playlist.length; i++) {
+
+                        html += '<li><a href="javascript:jwplayer(\'$player_id\').playlistItem(' + i + ');">';
+
+                        if ( undefined != playlist[i].image ) {
+                            html += '<img height="75" width="120" src="' + playlist[i].image + '" />';
+                        }
+
+                        html += '<div class="hewa-listbar-title">' + playlist[i].title + '</div></a>';
+
+                        if ( undefined != playlist[i].description ) {
+                            html += '<div class="hewa-listbar-description">' + description + '</div>';
+                        }
+
+                        html += '</li>';
+
+                        $('#$listbar_id').html( html );
+
+                    }
+
+                    $('#$listbar_id').css('height', player.getHeight() + 'px');
+
+                })
+                .onResize(function (event) {
+
+                    $('#$listbar_id').css('height', event.height + 'px');
+
+                });
+
+EOF;
+    }
+
+        // Close the script and return the results.
+        return $result . '});</script>';
 
 }
 add_shortcode( HEWA_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );
@@ -123,22 +184,3 @@ function hewa_shortcode_player_echo( $atts ) {
 
 }
 add_shortcode( HEWA_SHORTCODE_PREFIX . 'player_echo', 'hewa_shortcode_player_echo' );
-
-///**
-// * Print a *source* tag with the provided *src* and *type* attributes.
-// *
-// * @param string $source The URL source of the stream.
-// * @param string $type   The type of the stream.
-// * @param string $width  The width of the encoded stream.
-// * @return string The html fragment.
-// */
-//function hewa_player_print_source_tag( $source, $type, $width ) {
-//
-//    // Escape del params.
-//    $source_e = esc_attr( $source );
-//    $type_e   = esc_attr( $type );
-//    $res_e    = esc_attr( $width );
-//
-//    return "<source src='$source_e' type='$type_e' data-res='$res_e'>";
-//
-//}
