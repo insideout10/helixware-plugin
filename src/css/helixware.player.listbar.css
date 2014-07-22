@@ -1,0 +1,66 @@
+.hewa-listbar-container {
+    background: none;
+}
+
+.hewa-listbar {
+    list-style: none;
+    padding: 8px;
+    height: 140px;
+}
+
+.hewa-listbar li {
+    white-space: normal;
+}
+
+@media (min-width: 640px) {
+
+    .hewa-container {
+        display: table;
+        width: 100%;
+    }
+
+    .hewa-player-container {
+        display: table-cell;
+        width: 100%;
+    }
+
+    .hewa-listbar-container {
+        display: table-cell;
+        vertical-align: top;
+        width: 240px;
+    }
+
+    .hewa-listbar {
+        overflow: auto;
+    }
+}
+
+@media (max-width: 640px) {
+
+    .hewa-container {
+        display: block;
+        width: 100%;
+    }
+
+    .hewa-listbar-container {
+        display: block;
+        width: 100%;
+    }
+
+    .hewa-listbar {
+        display: block;
+        width: 100%;
+        max-height: 140px;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+        margin: 0;
+    }
+
+    .hewa-listbar li {
+        display: inline-block;
+        list-style: none;
+        width: 220px;
+        padding: 5px 10px;
+    }
+}

@@ -32,9 +32,6 @@ function hewa_shortcode_player( $atts ) {
         'ga_idstring'  => 'title'
     ), $atts);
 
-    // Queue the scripts.
-    wp_enqueue_script( 'jwplayer', plugins_url('js/jwplayer-6.9/jwplayer.js', __FILE__ ) );
-
     // Get the player key.
     $jwplayer_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' );
 
@@ -50,6 +47,7 @@ function hewa_shortcode_player( $atts ) {
 
     // Build the player array which will then be translated to JavaScript for JWPlayer initialization.
     $player                = array();
+    $player['key']         = $jwplayer_key;
     $player['androidhls']  = true;
     $player['autostart']   = ( $params['autostart'] ? 'true' : 'false' );
     $player['playlist']    = apply_filters(
@@ -80,34 +78,44 @@ function hewa_shortcode_player( $atts ) {
         $player['skin'] = $params['skin'];
     }
 
-    // Build the playlist object.
-    if ( null !== $params['listbar'] ) {
-        $player['listbar'] = array(
-            'position' => $params['listbar'],
-            'size'     => $params['listbar_size']
-        );
-    }
-
     // Set the GA setting.
     $player['ga'] = array( 'idstring' => $params['ga_idstring'] );
 
-    // Create the JSON version of the player.
-    $player_json = json_encode( $player );
+    // Build the playlist object.
+    if ( null !== $params['listbar'] ) {
+        $player_listbar = array(
+            'position' => $params['listbar'],
+           'size'     => $params['listbar_size']
+        );
+        unset( $params['listbar'] );
+    } else {
+        $player_listbar = null;
+    }
 
-    $loading  = esc_html__( 'Loading player...', HEWA_LANGUAGE_DOMAIN );
+    // Queue the scripts.
+    wp_enqueue_script( 'jwplayer', plugins_url('js/jwplayer-6.9/jwplayer.js', __FILE__ ) );
+    wp_enqueue_script( 'helixware-player', plugins_url( 'js/helixware.player.js', __FILE__ ) );
+    wp_localize_script( 'helixware-player', 'hewaPlayerParams', array(
+        'id'        => $id,
+        'setup'     => $player,
+        'listbar'   => $player_listbar
+    ));
+    // Queue listbar responsive css
+    wp_enqueue_style( 'helixware-player-listbar-css', plugins_url( 'css/helixware.player.listbar.css', __FILE__ ) );
 
-    $result = <<<EOF
+    $loading = esc_html__( 'Loading player...', HEWA_LANGUAGE_DOMAIN );
+
+    // Outuput base html on page
+    return <<<EOF
+<div class="hewa-container">
+    <div class="hewa-player-container">
         <div id="$id">$loading</div>
-        <script type="text/javascript">
-            jQuery( function( $ ) {
-                jwplayer.key = '$jwplayer_key';
-                jwplayer('$id').setup($player_json);
-            } );
-        </script>
+    </div>
+    <div class="hewa-listbar-container">
+        <ul id="$id-listbar" class="hewa-listbar"></ul>
+    </div>
+</div>
 EOF;
-
-    return $result;
-
 }
 add_shortcode( HEWA_SHORTCODE_PREFIX . 'player', 'hewa_shortcode_player' );
 
