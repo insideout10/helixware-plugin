@@ -90,22 +90,26 @@ function hewa_shortcode_player( $atts ) {
     if ( null !== $params['listbar'] && 'responsive' === $params['listbar'] ) {
         wp_enqueue_style( 'helixware-player-css', plugins_url( 'css/helixware.player.css', dirname( __FILE__ ) ) );
 
-        $listbar_id = uniqid( 'hewa-listbar-');;
-        $result     = '<div class="hewa-container">' .
-            "<div class=\"hewa-player-container\"><div id=\"$player_id\">$loading</div></div>" .
-            "<div class=\"hewa-listbar-container\"><ul id=\"$listbar_id\" class=\"hewa-listbar\"></ul></div>" .
+        $listbar_id = uniqid();
+        // Print the responsive listbar player DIV.
+        $result     = "<div class=\"hewa-container\" id=\"hewa-container-$listbar_id\">" .
+            "<div class=\"hewa-player-container\" id=\"hewa-player-container-$listbar_id\"><div id=\"$player_id\">$loading</div></div>" .
+            "<div class=\"hewa-listbar-container\"><ul id=\"hewa-listbar-$listbar_id\" class=\"hewa-listbar\"></ul></div>" .
             '</div>';
 
+    } else {
+        // Print the standard player DIV.
+        $result .= "<div id=\"$player_id\">$loading</div>";
     }
 
     // Build a standard listbar.
     if ( null !== $params['listbar'] && 'responsive' !== $params['listbar'] ) {
+
         $player['listbar'] = array(
             'position' => $params['listbar'],
             'size'     => $params['listbar_size']
         );
 
-        $result .= "<div id=\"$player_id\">$loading</div>";
     }
 
     // Set the GA setting.
@@ -150,16 +154,33 @@ EOF;
 
                         html += '</li>';
 
-                        $('#$listbar_id').html( html );
+                        $('#hewa-listbar-$listbar_id').html( html );
 
                     }
 
-                    $('#$listbar_id').css('height', player.getHeight() + 'px');
+
+                    setTimeout( function() {
+
+                        // Give the player some time to load.
+                        if ( 600 < $(document).width() ) {
+
+                            $( '#hewa-listbar-$listbar_id' ).height( 0 < $('#${player_id}_wrapper').length
+                                ? $('#${player_id}_wrapper').height()
+                                : $('#${player_id}').height()
+                            );
+
+                        } else {
+                            $( '#hewa-listbar-$listbar_id' ).height( 88 );
+                        }
+                    }, 2000);
 
                 })
                 .onResize(function (event) {
 
-                    $('#$listbar_id').css('height', event.height + 'px');
+                    if ( 600 < $(document).width() )
+                        $( '#hewa-listbar-$listbar_id' ).height( event.height );
+                    else
+                        $( '#hewa-listbar-$listbar_id' ).height( 88 );
 
                 });
 

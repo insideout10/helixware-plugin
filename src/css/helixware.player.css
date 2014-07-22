@@ -7,6 +7,7 @@
     padding: 4px;
     margin: 0;
     width: 240px;
+    height: 100px;
 }
 
 .hewa-listbar li {
@@ -68,7 +69,6 @@
 
     .hewa-listbar {
         width: 100%;
-        max-height: 140px !important;
         overflow-x: scroll;
         overflow-y: hidden;
         white-space: nowrap;
