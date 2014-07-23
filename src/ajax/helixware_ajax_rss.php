@@ -113,7 +113,8 @@ function hewa_echo_rss_item( $asset_id, $m3u8 = null, $title = null, $image_url 
     echo "   <jwplayer:source file=\"$ajax_url?action=hewa_m3u8&amp;id=$asset_id\" label=\"Auto\" default=\"true\" type=\"hls\" />\n";
 
     // TODO: make the following URL parametric and use the authenticated PHP call.
-    echo "   <jwplayer:track file=\"https://totalerg.insideout.io/api/4/users/assets/$asset_id/vtt?w=95&amp;i=5\" kind=\"thumbnails\" />\n";
+    $server_url = hewa_get_option( HEWA_SETTINGS_SERVER_URL, '' );
+    echo "   <jwplayer:track file=\"$server_url/4/users/assets/$asset_id/vtt?w=95&amp;i=5\" kind=\"thumbnails\" />\n";
 
     if ( null !== $m3u8 ) {
         for ( $i = 0; $i < sizeof( $m3u8->bitrates ); $i++ ) {
