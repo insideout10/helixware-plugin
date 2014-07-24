@@ -116,11 +116,9 @@ function hewa_echo_rss_item( $asset_id, $m3u8 = null, $title = null, $image_url 
     $server_url = hewa_get_option( HEWA_SETTINGS_SERVER_URL, '' );
     echo "   <jwplayer:track file=\"$server_url/4/users/assets/$asset_id/vtt?w=95&amp;i=5\" kind=\"thumbnails\" />\n";
 
-    // Is the request from an Android?
-    $ua = strtolower( $_SERVER['HTTP_USER_AGENT'] );
-    $is_android = stripos( $ua, 'android') !== false;
 
-    if ( null !== $m3u8  && !$is_android ) {
+    // Print if there are m3u8 files and the client is not an Android.
+    if ( null !== $m3u8  && false === stripos( $_SERVER['HTTP_USER_AGENT'], 'Android' ) ) {
         for ( $i = 0; $i < sizeof( $m3u8->bitrates ); $i++ ) {
 
             $bitrate    = $m3u8->bitrates[$i];
