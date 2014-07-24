@@ -119,9 +119,14 @@ function hewa_echo_rss_item( $asset_id, $m3u8 = null, $title = null, $image_url 
 
     // Print if there are m3u8 files and the client is not an Android.
     if ( null !== $m3u8  && false === stripos( $_SERVER['HTTP_USER_AGENT'], 'Android' ) ) {
-        for ( $i = 0; $i < sizeof( $m3u8->bitrates ); $i++ ) {
 
-            $bitrate    = $m3u8->bitrates[$i];
+        // Sort the bitrates.
+        $bitrates = $m3u8->bitrates;
+        usort( $bitrates, function( $a, $b ) { return $a->bitrate - $b->bitrate; } );
+
+        for ( $i = 0; $i < sizeof( $bitrates ); $i++ ) {
+
+            $bitrate    = $bitrates[$i];
             $width_p    = $bitrate->width . 'p';
             $url        = $bitrate->url;
 
