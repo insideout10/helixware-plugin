@@ -4,6 +4,7 @@
  * Sample test file.
  */
 
+require_once 'functions.php';
 
 class HelixWareTest extends WP_UnitTestCase
 {
@@ -14,6 +15,8 @@ class HelixWareTest extends WP_UnitTestCase
     function setUp()
     {
         parent::setUp();
+        
+        hewa_configure_wordpress_test();
     }
 
 

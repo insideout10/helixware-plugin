@@ -1,0 +1,12 @@
+export DB_NAME=<database-name>                                  # database must exist.
+export DB_USERID=<database-user-id>
+export DB_PASSWORD=<database-password>
+export DB_HOST=<database-host>
+export WP_VERSION=<wordpress-version>
+
+export WP_MULTISITE=<0|1>                                       # whether multisite, use 0 if unsure.
+
+export HEWA_SERVER_URL=<helixware-server-url>
+export HEWA_APPLICATION_KEY=<helixware-app-key>
+export HEWA_APPLICATION_SECRET=<helixware-app-secret>
+

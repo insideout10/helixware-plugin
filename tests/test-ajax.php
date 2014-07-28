@@ -1,8 +1,10 @@
 <?php
-
 /**
  * Testing ajax response class
  */
+
+require_once 'functions.php';
+
 class AjaxTest extends WP_UnitTestCase
 {
 
@@ -18,12 +20,13 @@ class AjaxTest extends WP_UnitTestCase
      */
     public function setUp()
     {
-
         if ( false === ( getenv( 'HEWA_SERVER_URL' ) ) || false === getenv( 'HEWA_APPLICATION_KEY' ) || false === getenv( 'HEWA_APPLICATION_SECRET' ) ) {
             $this->markTestSkipped('The required environment settings for this test are not set.');
         }
 
         parent::setUp();
+        
+        hewa_configure_wordpress_test();
 
         // Suppress warnings from "Cannot modify header information - headers already sent by"
         $this->_error_level = error_reporting();

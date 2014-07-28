@@ -4,6 +4,7 @@
  * This file tests the HelixServer related methods.
  */
 
+require_once 'functions.php';
 
 class ServerTest extends WP_UnitTestCase
 {
@@ -14,6 +15,8 @@ class ServerTest extends WP_UnitTestCase
     function setUp()
     {
         parent::setUp();
+        
+        hewa_configure_wordpress_test();
     }
 
 
