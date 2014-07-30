@@ -70,121 +70,11 @@ function helixware_admin_options_page() {
 function hewa_admin_settings() {
 
     // Register the settings.
-    register_setting( HEWA_OPTIONS_SETTINGS_SERVER, HEWA_OPTIONS_SETTINGS_SERVER );
-//    register_setting( HEWA_OPTIONS_SETTINGS_PLAYER, HEWA_OPTIONS_SETTINGS_PLAYER );
-//    register_setting( HEWA_OPTIONS_SETTINGS_LIVE, HEWA_OPTIONS_SETTINGS_LIVE );
+    hewa_admin_settings_server_section();
 
-    // Add the general section.
-    add_settings_section(
-        HEWA_OPTIONS_SETTINGS_SERVER,
-        'Server Settings',
-        'hewa_admin_settings_server_section_callback',
-        HEWA_OPTIONS_SETTINGS_SERVER
-    );
+    hewa_admin_settings_player_section();
 
-    // Add the general section.
-    add_settings_section(
-        HEWA_OPTIONS_PAGE,
-        'Player Settings',
-        'hewa_admin_settings_player_section_callback',
-        HEWA_OPTIONS_SETTINGS_PLAYER
-    );
-
-    hewa_admin_settings_add_field(
-        HEWA_SETTINGS_SERVER_URL, __( 'Server URL', HEWA_LANGUAGE_DOMAIN ), 'hewa_admin_settings_input_text'
-    );
-
-    hewa_admin_settings_add_field(
-        HEWA_SETTINGS_APPLICATION_KEY, __( 'Application Key', HEWA_LANGUAGE_DOMAIN ), 'hewa_admin_settings_input_text'
-    );
-
-    hewa_admin_settings_add_field(
-        HEWA_SETTINGS_APPLICATION_SECRET, __( 'Application Secret', HEWA_LANGUAGE_DOMAIN ), 'hewa_admin_settings_input_text'
-    );
-
-    
-//    // Add the field for the post template Id.
-//    add_settings_field(
-//        hewa_get_option_name( HEWA_SETTINGS_TEMPLATE_ID ),
-//        __( 'Template Id', HEWA_LANGUAGE_DOMAIN ),
-//        'hewa_admin_settings_select_page',
-//        HEWA_OPTIONS_SETTINGS_PLAYER,
-//        HEWA_OPTIONS_PAGE,
-//        array(
-//            'name'    => HEWA_SETTINGS_TEMPLATE_ID,
-//            'default' => hewa_get_option( HEWA_SETTINGS_TEMPLATE_ID )
-//        )
-//    );
-//
-//
-//    // Add the field for the post template Id.
-//    add_settings_field(
-//        hewa_get_option_name( HEWA_SETTINGS_JWPLAYER_ID ),
-//        __( 'JWPlayer Key', HEWA_LANGUAGE_DOMAIN ),
-//        'hewa_admin_settings_select_page',
-//        HEWA_OPTIONS_SETTINGS_PLAYER,
-//        HEWA_OPTIONS_PAGE,
-//        array(
-//            'name'    => HEWA_SETTINGS_JWPLAYER_ID,
-//            'default' => hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID )
-//        )
-//    );
-//
-//
-//    // Add the field for the post template Id.
-//    add_settings_field(
-//        hewa_get_option_name( HEWA_SETTINGS_JWPLAYER_DEFAULT_SKIN ),
-//        __( 'JWPlayer Default Skin', HEWA_LANGUAGE_DOMAIN ),
-//        'hewa_admin_settings_select_page',
-//        HEWA_OPTIONS_SETTINGS_PLAYER,
-//        HEWA_OPTIONS_PAGE,
-//        array(
-//            'name'    => HEWA_SETTINGS_JWPLAYER_DEFAULT_SKIN,
-//            'default' => ''
-//        )
-//    );
-//
-//
-//    // Add the field for the post template Id.
-//    add_settings_field(
-//        hewa_get_option_name( HEWA_SETTINGS_JWPLAYER_LOGO_URL ),
-//        __( 'JWPlayer Logo', HEWA_LANGUAGE_DOMAIN ),
-//        'hewa_admin_settings_select_page',
-//        HEWA_OPTIONS_SETTINGS_PLAYER,
-//        HEWA_OPTIONS_PAGE,
-//        array(
-//            'name'    => HEWA_SETTINGS_JWPLAYER_LOGO_URL,
-//            'default' => ''
-//        )
-//    );
-//
-//
-//    // Add the field for the post template Id.
-//    add_settings_field(
-//        hewa_get_option_name( HEWA_SETTINGS_JWPLAYER_LOGO_LINK ),
-//        __( 'JWPlayer Logo Link', HEWA_LANGUAGE_DOMAIN ),
-//        'hewa_admin_settings_select_page',
-//        HEWA_OPTIONS_SETTINGS_PLAYER,
-//        HEWA_OPTIONS_PAGE,
-//        array(
-//            'name'    => HEWA_SETTINGS_JWPLAYER_LOGO_LINK,
-//            'default' => ''
-//        )
-//    );
-//
-//
-//    // Add the field for Server URL.
-//    add_settings_field(
-//        hewa_get_option_name( HEWA_SETTINGS_SERVER_URL ),
-//        __( 'Server URL', HEWA_LANGUAGE_DOMAIN ),
-//        'hewa_admin_settings_input_text',
-//        HEWA_OPTIONS_SETTINGS_SERVER,
-//        HEWA_OPTIONS_SETTINGS_SERVER,
-//        array(
-//            'name'    => HEWA_SETTINGS_SERVER_URL,
-//            'default' => ''
-//        )
-//    );
+    hewa_admin_settings_live_section();
 
 }
 add_action( 'admin_init', 'hewa_admin_settings' );
@@ -240,4 +130,31 @@ function hewa_admin_settings_select_page( $args ) {
     $section_e = esc_attr( $args['section'] );
 
     echo "<input name='${section_e}[$name_e]' type='text' value='$value_e' size='40' />";
+}
+
+
+/**
+ * Prints the WP table using the specified stylesheet class.
+ *
+ * @param string $class The stylesheet class.
+ */
+function hewa_admin_table_nav( $class ) {
+
+    ?>
+    <div class="tablenav <?php echo $class; ?>">
+        <div class="tablenav-pages">
+            <span class="displaying-num"><span ng-bind="data.totalElements"></span> items</span>
+            <span class="pagination-links">
+                <a class="first-page" ng-click="goToPage(0)" ng-class="data.first ? 'disabled' : ''" title="Go to the first page">«</a>
+                <a class="prev-page"  ng-click="goToPage(data.number-1)" ng-class="data.first ? 'disabled' : ''" title="Go to the previous page">‹</a>
+                <span class="paging-input"><input class="current-page" title="Current page" type="text" name="paged" ng-model="currentPage" ng-pattern="/\d/" ng-change="goToPage(currentPage - 1)" size="2"> of <span class="total-pages" ng-bind="data.totalPages"></span></span>
+                <a class="next-page" ng-click="goToPage(data.number+1)" ng-class="data.last ? 'disabled' : ''"  title="Go to the next page">›</a>
+                <a class="last-page" ng-click="goToPage(data.totalPages-1)" ng-class="data.last ? 'disabled' : ''" title="Go to the last page">»</a>
+            </span>
+        </div>
+        <br class="clear">
+    </div>
+
+<?php
+
 }

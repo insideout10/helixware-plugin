@@ -9,12 +9,14 @@
  * @uses hewa_get_option to get the configuration settings.
  *
  * @param string $endpoint     The endpoint (will be appended to the server URL, must start with a trailing slash).
+ * @param string $method       The HTTP method.
+ * @param string $body         The request payload.
  * @param string $content_type The request body content type (default: 'application/json; charset=UTF-8').
  * @param string $accept       The accept header content type (default: 'application/json; charset=UTF-8').
  * @return string The response.
  */
 function hewa_server_request(
-    $endpoint, $content_type = 'application/json; charset=UTF-8', $accept = 'application/json; charset=UTF-8'
+    $endpoint, $method = 'GET', $body = '', $content_type = 'application/json; charset=UTF-8', $accept = 'application/json; charset=UTF-8'
 ) {
 
     // Get the configuration settings and die if not set.
@@ -31,7 +33,8 @@ function hewa_server_request(
 
     // Prepare the default arguments.
     $args = array_merge_recursive( unserialize( HEWA_API_HTTP_OPTIONS ), array(
-        'method'  => 'GET',
+        'method'  => $method,
+        'body'    => ( is_array( $body ) ? json_encode( $body ) : $body ),
         'headers' => array(
             'Content-Type'         => $content_type,
             'Accept'               => $accept,
@@ -81,7 +84,7 @@ function hewa_server_call(
     $endpoint, $content_type = 'application/json; charset=UTF-8', $accept = 'application/json; charset=UTF-8'
 ) {
 
-    $response = hewa_server_request( $endpoint, $content_type, $accept );
+    $response = hewa_server_request( $endpoint, 'GET', '', $content_type, $accept );
 
     // Return the response as a string.
     return $response['body'];

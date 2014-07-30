@@ -3,6 +3,9 @@
  * General functions bound to the admin screen.
  */
 
+// Add support for the *live asset* ajax method.
+require_once( 'ajax/helixware_admin_ajax_live_assets.php' );
+
 
 /**
  * Load scripts for the admin screen.
@@ -191,7 +194,7 @@ function hewa_admin_request_still_image( $asset_id, $width, $timecode_seconds ) 
 
     // Get the response instance.
     return hewa_server_request(
-        '/4/users/assets/' . $asset_id . '/images?tc=' . $timecode . '&w=' . $width, 'text/plain', 'image/png'
+        '/4/users/assets/' . $asset_id . '/images?tc=' . $timecode . '&w=' . $width, 'GET', '', 'text/plain', 'image/png'
     );
 
 }
