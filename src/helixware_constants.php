@@ -20,6 +20,7 @@ define( 'HEWA_OPTIONS_SETTINGS_LIVE', 'hewa_options_settings_live' );
 // define( 'HEWA_SETTINGS', 'helixware_settings' );
 
 // Define the configuration settings names.
+define( 'HEWA_SETTINGS_STREAMING_SERVER', HEWA_OPTIONS_SETTINGS_SERVER . '>hewa_streaming_server' );
 define( 'HEWA_SETTINGS_SERVER_URL', HEWA_OPTIONS_SETTINGS_SERVER . '>hewa_server_url' );
 define( 'HEWA_SETTINGS_APPLICATION_KEY', HEWA_OPTIONS_SETTINGS_SERVER . '>hewa_app_key' );
 define( 'HEWA_SETTINGS_APPLICATION_SECRET', HEWA_OPTIONS_SETTINGS_SERVER . '>hewa_app_secret' );

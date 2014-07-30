@@ -27,7 +27,11 @@ function hewa_admin_settings_server_section() {
 
 
     hewa_admin_settings_add_field(
-        HEWA_SETTINGS_SERVER_URL, __( 'Server URL', HEWA_LANGUAGE_DOMAIN ), 'hewa_admin_settings_input_text'
+        HEWA_SETTINGS_SERVER_URL, __( 'HelixWare Server URL', HEWA_LANGUAGE_DOMAIN ), 'hewa_admin_settings_input_text'
+    );
+
+    hewa_admin_settings_add_field(
+        HEWA_SETTINGS_STREAMING_SERVER, __( 'Streaming Server', HEWA_LANGUAGE_DOMAIN ), 'hewa_admin_settings_input_text'
     );
 
     hewa_admin_settings_add_field(

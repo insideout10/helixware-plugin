@@ -136,7 +136,10 @@ angular.module( 'hewa', [] )
          *
          * @param message
          */
-        $scope.update = function( asset ) { service.update( asset, function( data ) { $scope.refresh(); } ); };
+        $scope.update = function( asset ) {
+            delete asset.username;
+            service.update( asset, function( data ) { $scope.refresh(); } );
+        };
 
         /**
          * Go to the specified page.

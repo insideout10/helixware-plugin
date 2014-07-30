@@ -34,12 +34,13 @@ function hewa_admin_settings_live_section_callback() {
     echo '<p>Get here the encoder key and set the allowed IP sources (' . esc_html__( 'your IP address is : ', HEWA_LANGUAGE_DOMAIN ) . $client_ip . ')</p>';
 
     // Set the labels.
-    $label_path_h   = esc_html__( 'Path', HEWA_LANGUAGE_DOMAIN );
-    $label_source_h = esc_html__( 'Source', HEWA_LANGUAGE_DOMAIN );
+    $label_username_h = esc_html__( 'Username', HEWA_LANGUAGE_DOMAIN );
+    $label_path_h     = esc_html__( 'Path', HEWA_LANGUAGE_DOMAIN );
+    $label_source_h   = esc_html__( 'Source', HEWA_LANGUAGE_DOMAIN );
 
-    $label_create_h = esc_html__( 'Create', HEWA_LANGUAGE_DOMAIN );
-    $label_delete_h = esc_html__( 'Delete', HEWA_LANGUAGE_DOMAIN );
-    $label_save_h   = esc_html__( 'Save', HEWA_LANGUAGE_DOMAIN );
+    $label_create_h   = esc_html__( 'Create', HEWA_LANGUAGE_DOMAIN );
+    $label_delete_h   = esc_html__( 'Delete', HEWA_LANGUAGE_DOMAIN );
+    $label_save_h     = esc_html__( 'Save', HEWA_LANGUAGE_DOMAIN );
 
     ?>
 
@@ -49,12 +50,14 @@ function hewa_admin_settings_live_section_callback() {
 
         <table class="wp-list-table widefat fixed posts">
             <thead>
+            <th scope="col" class="manage-column"><?php echo $label_username_h; ?></th>
             <th scope="col" class="manage-column"><?php echo $label_path_h; ?></th>
             <th scope="col" class="manage-column"><?php echo $label_source_h; ?></th>
             <th></th>
             </thead>
 
             <tfoot>
+            <th scope="col" class="manage-column"><?php echo $label_username_h; ?></th>
             <th scope="col" class="manage-column"><?php echo $label_path_h; ?></th>
             <th scope="col" class="manage-column"><?php echo $label_source_h; ?></th>
             <th></th>
@@ -64,11 +67,13 @@ function hewa_admin_settings_live_section_callback() {
             <tr class="alternate">
                 <td></td>
                 <td></td>
+                <td></td>
                 <td>
                     <button type="button" ng-click="create({source:'127.0.0.1/32'});" class="button-primary save alignright"><?php echo $label_create_h; ?></button>
                 </td>
             </tr>
             <tr ng-class="$even ? 'alternate' : ''" ng-repeat="asset in data.content">
+                <td ng-bind="asset.username"></td>
                 <td ng-bind="asset.path"></td>
                 <td><input type="text" ng-model="asset.source" name="source" /></td>
                 <td>

@@ -19,7 +19,8 @@ function hewa_shortcode_player( $atts ) {
     // TODO: default width and height ratio should be calculated from the video.
     $params = shortcode_atts( array(
         'width'        => '100%', // by default we stretch the full width of the containing element.
-        'asset_id'     => 5,
+        'asset_id'     => null,
+        'live_id'      => null,
         'aspectratio'  => '5:3',
         'listbar'      => null,
         'listbar_size' => 240,
@@ -40,7 +41,8 @@ function hewa_shortcode_player( $atts ) {
 
     // Get the asset Id.
     $player_id = uniqid( 'hewa-player-');
-    $asset_id  = $params['asset_id'];
+    $is_live   = ! empty( $params['live_id'] );
+    $asset_id  = ( $is_live ? $params['live_id'] : $params['asset_id'] );
     $title_u   = urlencode( get_the_title() );
 
     // Get the thumbnail URL.
@@ -54,7 +56,7 @@ function hewa_shortcode_player( $atts ) {
     $player['autostart']   = ( $params['autostart'] ? 'true' : 'false' );
     $player['playlist']    = apply_filters(
         HEWA_FILTERS_PLAYER_PLAYLIST_URL,
-        admin_url( 'admin-ajax.php?action=hewa_rss&id=' . $asset_id .
+        admin_url( 'admin-ajax.php?action=hewa_rss' . ( $is_live ? '_live' : '' ) . '&id=' . $asset_id .
             '&t=' . $title_u . // set the title
             '&i=' . $image_u . // set the image
             '&max=' . $params['max'] . // set the maximum number of elements
