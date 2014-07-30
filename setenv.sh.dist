@@ -1,5 +1,3 @@
-#!/bin/sh
-
 export DB_NAME=<database-name>                                  # database must exist.
 export DB_USERID=<database-user-id>
 export DB_PASSWORD=<database-password>
