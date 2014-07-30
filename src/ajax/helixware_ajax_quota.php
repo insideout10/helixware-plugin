@@ -10,7 +10,14 @@ function hewa_ajax_quota() {
 
     ob_clean();
     header( 'Content-Type: application/json; charset=UTF-8' );
-    $quota      = json_decode( hewa_server_call( '/me' ) );
+    $response   = hewa_server_call( '/me' );
+    $quota      = json_decode( $response );
+
+    // Check that the response from the server is correct.
+    if ( ! isset( $quota->account ) || ! isset( $quota->account->maxQuota ) || ! isset( $quota->account->currentQuota ) ) {
+        echo json_encode( array( 'message' => __( 'An error occurred, check your settings', HEWA_LANGUAGE_DOMAIN ) ) );
+        wp_die();
+    }
 
     // Build the message.
     $max_quota  = $quota->account->maxQuota;

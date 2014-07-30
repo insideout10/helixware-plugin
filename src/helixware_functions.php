@@ -12,7 +12,7 @@
  */
 function hewa_plugins_url($url, $path, $plugin)
 {
-    hewa_write_log("hewa_plugins_url [ url :: $url ][ path :: $path ][ plugin :: $plugin ]");
+    // hewa_write_log("hewa_plugins_url [ url :: $url ][ path :: $path ][ plugin :: $plugin ]");
 
     // Check if it's our pages calling the plugins_url.
     if (1 !== preg_match('/\/helixware[^.]*.php$/i', $plugin)) {
@@ -22,7 +22,7 @@ function hewa_plugins_url($url, $path, $plugin)
     // Set the URL to plugins URL + helixware, in order to support the plugin being symbolic linked.
     $plugin_url = plugins_url() . '/helixware/' . $path;
 
-    hewa_write_log("hewa_plugins_url [ match :: yes ][ plugin url :: $plugin_url ][ url :: $url ][ path :: $path ][ plugin :: $plugin ]");
+    // hewa_write_log("hewa_plugins_url [ match :: yes ][ plugin url :: $plugin_url ][ url :: $url ][ path :: $path ][ plugin :: $plugin ]");
 
     return $plugin_url;
 }
@@ -55,8 +55,32 @@ function hewa_get_option( $name, $default = null ) {
         return 'mp4,mpg,mpeg,mov,avi,wmv,mp3,aac';
     }
 
-    $settings = (array) get_option( HEWA_SETTINGS );
-    return ( isset( $settings[$name] ) ? esc_attr( $settings[$name] ) : $default );
+    // Get the configuration setting group and name. The configuration setting name is formatted like this:
+    //  group-name>setting-name
+    $configuration = explode( '>', $name );
+    $group         = $configuration[0];
+    $key           = $configuration[1];
+
+    hewa_write_log( 'Getting option [ group :: {group} ][ key :: {key} ]', array( 'group' => $group, 'key' => $key ) );
+
+    $settings      = (array) get_option( $group );
+
+    return ( isset( $settings[$key] ) ? esc_attr( $settings[$key] ) : $default );
+
+}
+
+/**
+ * As an option is made of 2 parts, a group and a name, e.g. group-name>setting-name, this method will return the
+ * setting name (setting-name).
+ *
+ * @param string $option The full option name.
+ * @return string The setting name.
+ */
+function hewa_get_option_group_and_name( $option ) {
+
+    // Get the configuration setting group and name. The configuration setting name is formatted like this:
+    //  group-name>setting-name
+    return explode( '>', $option );
 
 }
 
@@ -69,14 +93,22 @@ function hewa_get_option( $name, $default = null ) {
  */
 function hewa_set_option( $name, $value ) {
 
+    // Get the configuration setting group and name. The configuration setting name is formatted like this:
+    //  group-name>setting-name
+    $configuration = explode( '>', $name );
+    $group         = $configuration[0];
+    $key           = $configuration[1];
+
+    hewa_write_log( 'Setting option [ group :: {group} ][ key :: {key} ][ value :: {value} ]', array( 'group' => $group, 'key' => $key, 'value' => $value ) );
+
     // If no settings are saved yet, create them.
-    if ( false === ( $settings = get_option( HEWA_SETTINGS ) ) ) {
-        return add_option( HEWA_SETTINGS, array( $name => $value ) );
+    if ( false === ( $settings = get_option( $group ) ) ) {
+        return add_option( $group, array( $key => $value ) );
     }
 
     // Else update the settings.
-    $settings[$name] = $value;
-    return update_option( HEWA_SETTINGS, $settings );
+    $settings[$key] = $value;
+    return update_option( $group, $settings );
 
 }
 
