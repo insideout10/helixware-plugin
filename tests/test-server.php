@@ -61,22 +61,12 @@ class ServerTest extends WP_UnitTestCase
             $this->markTestSkipped( 'HelixWare settings not provided.' );
         }
 
-        // Save the current options in order to restore them later.
-        $options = get_option( HEWA_SETTINGS );
-        delete_option( HEWA_SETTINGS );
-        add_option( HEWA_SETTINGS, array(
-            HEWA_SETTINGS_SERVER_URL         => $server_url,
-            HEWA_SETTINGS_APPLICATION_KEY    => $app_key,
-            HEWA_SETTINGS_APPLICATION_SECRET => $app_secret
-        ) );
-
         // Call the server and check the response.
         $response = hewa_server_call( '/me' );
         $object   = json_decode( $response );
+        
         $this->assertTrue( isset( $object->userName ) );
         $this->assertTrue( isset( $object->account ) );
-        $this->assertTrue( isset( $object->firstName ) );
-        $this->assertTrue( isset( $object->lastName ) );
         $this->assertTrue( isset( $object->email ) );
         $this->assertTrue( isset( $object->enabled ) );
         $this->assertTrue( $object->enabled );
@@ -85,13 +75,7 @@ class ServerTest extends WP_UnitTestCase
         $this->assertTrue( isset( $object->account->maxQuota ) );
         $this->assertTrue( isset( $object->account->currentQuota ) );
         $this->assertTrue( is_numeric( $object->account->maxQuota ) );
-        $this->assertTrue( is_numeric( $object->account->currentQuota ) );
-
-        // Restore the options if they were present.
-        if ( false !== $options ) {
-            add_option( HEWA_SETTINGS, $options );
-        }
-
+        $this->assertTrue( is_numeric( $object->account->currentQuota ) );  
     }
 
 }
