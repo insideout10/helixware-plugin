@@ -5,6 +5,10 @@ php:
   - 5.4
   - 5.5
 env:
+#  global:
+#    - secure: 
+#    - secure: 
+#    - secure: 
   matrix:
     - WP_VERSION=latest
     - WP_VERSION=3.9.1  WP_MULTISITE=0
