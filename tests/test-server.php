@@ -36,14 +36,14 @@ class ServerTest extends WP_UnitTestCase
     public function test_server_call_without_settings() {
 
         // Save the current options in order to restore them later.
-        $options = get_option( HEWA_SETTINGS );
-        delete_option( HEWA_SETTINGS );
+        $options = get_option( HEWA_OPTIONS_SETTINGS_SERVER );
+        delete_option( HEWA_OPTIONS_SETTINGS_SERVER );
 
         hewa_server_call( '/doesntmatter' );
 
         // Restore the options if they were present.
         if ( false !== $options ) {
-            add_option( HEWA_SETTINGS, $options );
+            add_option( HEWA_OPTIONS_SETTINGS_SERVER, $options );
         }
     }
 
