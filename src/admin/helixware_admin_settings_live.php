@@ -34,13 +34,14 @@ function hewa_admin_settings_live_section_callback() {
     echo '<p>Get here the encoder key and set the allowed IP sources (' . esc_html__( 'your IP address is : ', HEWA_LANGUAGE_DOMAIN ) . $client_ip . ')</p>';
 
     // Set the labels.
-    $label_username_h = esc_html__( 'Username', HEWA_LANGUAGE_DOMAIN );
-    $label_path_h     = esc_html__( 'Path', HEWA_LANGUAGE_DOMAIN );
-    $label_source_h   = esc_html__( 'Source', HEWA_LANGUAGE_DOMAIN );
+    $label_username_h  = esc_html__( 'Username', HEWA_LANGUAGE_DOMAIN );
+    $label_path_h      = esc_html__( 'Path', HEWA_LANGUAGE_DOMAIN );
+    $label_source_h    = esc_html__( 'Source', HEWA_LANGUAGE_DOMAIN );
+    $label_shortcode_h = esc_html__( 'Shortcode', HEWA_LANGUAGE_DOMAIN );
 
-    $label_create_h   = esc_html__( 'Create', HEWA_LANGUAGE_DOMAIN );
-    $label_delete_h   = esc_html__( 'Delete', HEWA_LANGUAGE_DOMAIN );
-    $label_save_h     = esc_html__( 'Save', HEWA_LANGUAGE_DOMAIN );
+    $label_create_h    = esc_html__( 'Create', HEWA_LANGUAGE_DOMAIN );
+    $label_delete_h    = esc_html__( 'Delete', HEWA_LANGUAGE_DOMAIN );
+    $label_save_h      = esc_html__( 'Save', HEWA_LANGUAGE_DOMAIN );
 
     ?>
 
@@ -53,6 +54,7 @@ function hewa_admin_settings_live_section_callback() {
             <th scope="col" class="manage-column"><?php echo $label_username_h; ?></th>
             <th scope="col" class="manage-column"><?php echo $label_path_h; ?></th>
             <th scope="col" class="manage-column"><?php echo $label_source_h; ?></th>
+            <th scope="col" class="manage-column"><?php echo $label_shortcode_h; ?></th>
             <th></th>
             </thead>
 
@@ -60,6 +62,7 @@ function hewa_admin_settings_live_section_callback() {
             <th scope="col" class="manage-column"><?php echo $label_username_h; ?></th>
             <th scope="col" class="manage-column"><?php echo $label_path_h; ?></th>
             <th scope="col" class="manage-column"><?php echo $label_source_h; ?></th>
+            <th scope="col" class="manage-column"><?php echo $label_shortcode_h; ?></th>
             <th></th>
             </tfoot>
 
@@ -68,14 +71,16 @@ function hewa_admin_settings_live_section_callback() {
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
                 <td>
                     <button type="button" ng-click="create({source:'127.0.0.1/32'});" class="button-primary save alignright"><?php echo $label_create_h; ?></button>
                 </td>
             </tr>
-            <tr ng-class="$even ? 'alternate' : ''" ng-repeat="asset in data.content">
+            <tr ng-class="$odd ? 'alternate' : ''" ng-repeat="asset in data.content">
                 <td ng-bind="asset.username"></td>
                 <td ng-bind="asset.path"></td>
                 <td><input type="text" ng-model="asset.source" name="source" /></td>
+                <td>[hewa_player live_id="<span ng-bind="asset.id"></span>"]</td>
                 <td>
                     <button type="button" ng-click="kill(asset);" class="button-primary delete alignright"><?php echo $label_delete_h; ?></button>
                     <button type="button" ng-click="update(asset);" class="button-primary save alignright"><?php echo $label_save_h; ?></button>
