@@ -26,19 +26,6 @@ jQuery(function ($) {
 
     }
 
-
-//    /**
-//     * Set the max file size according to the file type.
-//     *
-//     * @param up The uploaded instance.
-//     * @param file The file being uploaded.
-//     */
-//    var handleUploadFile = function(up, file) {
-//
-//        up.settings.filters.max_file_size = ( isVideo( file ) ? hewa_admin_options.max_file_size : maxFileSize );
-//
-//    }
-
     /**
      * Our handler for the *fileUploaded* method from the uploader. At the end of the process, the handler set back
      * again to the WordPress handler.

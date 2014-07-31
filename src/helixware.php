@@ -44,6 +44,7 @@ require_once( 'helixware_server.php' );
 require_once( 'ajax/helixware_ajax_m3u8.php' );
 require_once( 'ajax/helixware_ajax_smil.php' );
 require_once( 'ajax/helixware_ajax_rss.php' );
+require_once( 'ajax/helixware_ajax_rss_live.php' );
 
 // Provides the [hw-player ...] shortcode.
 require_once( 'shortcodes/helixware_shortcode_player.php' );

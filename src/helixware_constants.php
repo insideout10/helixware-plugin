@@ -9,19 +9,29 @@ define( 'HEWA_SHORTCODE_PREFIX', 'hewa_' );
 // Define the language domain for the plugin.
 define( 'HEWA_LANGUAGE_DOMAIN', 'helixware' );
 
+// Define the setting screen tabs.
+define( 'HEWA_OPTIONS_PAGE', 'hewa_options' );
+define( 'HEWA_OPTIONS_SETTINGS_SERVER', 'hewa_options_settings_server' );
+define( 'HEWA_OPTIONS_SETTINGS_PLAYER', 'hewa_options_settings_player' );
+define( 'HEWA_OPTIONS_SETTINGS_LIVE', 'hewa_options_settings_live' );
+
+
 // Define the settings name for get_option/set_option calls.
-define( 'HEWA_SETTINGS', 'helixware_settings' );
+// define( 'HEWA_SETTINGS', 'helixware_settings' );
 
 // Define the configuration settings names.
-define( 'HEWA_SETTINGS_SERVER_URL', 'hewa_server_url' );
-define( 'HEWA_SETTINGS_APPLICATION_KEY', 'hewa_app_key' );
-define( 'HEWA_SETTINGS_APPLICATION_SECRET', 'hewa_app_secret' );
+define( 'HEWA_SETTINGS_STREAMING_SERVER', HEWA_OPTIONS_SETTINGS_SERVER . '>hewa_streaming_server' );
+define( 'HEWA_SETTINGS_SERVER_URL', HEWA_OPTIONS_SETTINGS_SERVER . '>hewa_server_url' );
+define( 'HEWA_SETTINGS_APPLICATION_KEY', HEWA_OPTIONS_SETTINGS_SERVER . '>hewa_app_key' );
+define( 'HEWA_SETTINGS_APPLICATION_SECRET', HEWA_OPTIONS_SETTINGS_SERVER . '>hewa_app_secret' );
+define( 'HEWA_SETTINGS_TEMPLATE_ID', HEWA_OPTIONS_SETTINGS_PLAYER . '>hewa_template_id' );
+define( 'HEWA_SETTINGS_JWPLAYER_ID', HEWA_OPTIONS_SETTINGS_PLAYER . '>hewa_jwplayer_key' );
+define( 'HEWA_SETTINGS_JWPLAYER_LOGO_URL', HEWA_OPTIONS_SETTINGS_PLAYER . '>hewa_jwplayer_logo_url' );
+define( 'HEWA_SETTINGS_JWPLAYER_LOGO_LINK', HEWA_OPTIONS_SETTINGS_PLAYER . '>hewa_jwplayer_logo_link' );
+define( 'HEWA_SETTINGS_JWPLAYER_DEFAULT_SKIN', HEWA_OPTIONS_SETTINGS_PLAYER . '>hewa_jwplayer_default_skin' );
+
+// The value is handled in the code in *hewa_get_option*.
 define( 'HEWA_SETTINGS_FILE_EXTENSIONS', 'hewa_file_extensions' );
-define( 'HEWA_SETTINGS_TEMPLATE_ID', 'hewa_template_id' );
-define( 'HEWA_SETTINGS_JWPLAYER_ID', 'hewa_jwplayer_key' );
-define( 'HEWA_SETTINGS_JWPLAYER_LOGO_URL', 'hewa_jwplayer_logo_url' );
-define( 'HEWA_SETTINGS_JWPLAYER_LOGO_LINK', 'hewa_jwplayer_logo_link' );
-define( 'HEWA_SETTINGS_JWPLAYER_DEFAULT_SKIN', 'hewa_jwplayer_default_skin' );
 
 
 // Define the clip custom post name.
