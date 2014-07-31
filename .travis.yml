@@ -1,15 +1,23 @@
 language: php
 
 php:
-- 5.3
-- 5.4
-- 5.5
+  - 5.3
+  - 5.4
+  - 5.5
+  
+addons:
+  sauce_connect: true
 
 env:
   global:
+  # test server credentials
   - secure: "k4O+oyrF5x1nRqNkKFiCI4ICC7x9kTE19Rn6ESnX8rn3YWorUM16d0NLQU0NCJY/uC46BpOBtnRQaecPb0b0ScD+l9I+UTBbkYbYY+X4XZ62h7cup5e+EAldxRWFeaGE4WOnI4oxkW453Nwb+Os1FTt1xD3UkjF7N7o4+v6c1B8="
   - secure: "KJ2nPyOhhFO8+n2+P42XDdMvxMPhiqFx/R0MLFiHXvf2W+h3ADoWk1mpNaDI5sVDQTUMzcxVRmaNtI9+jjR0TsIAhXA4UV1gNSgr7RKJuSZqbCsXuDSV0vEs23g3KSKJ3XWqy9j8PBtmHe7H2gtppmqAbx/MNKbCVz5aub7dmrY="
   - secure: "b8fMQp3RLszf2libPDQOVCYTyOfVqvj2oWERf3DCZfaNdw6aUxQzW5Vyk5A7B45v9Nj9kznEqIstB7Awd0pw17gMNEZHKliATT5VrV2Sz0xvq6co2n2hEbc8x7haOtdRxOliXK3ggZkBpgD+sDM5MJoXsKWm7MdEAJox+EngPLg="
+  # sauce_labs credentials
+  - secure: "Hld917J5CADMf7ox/Q3k4TdVjfBbYGyXaswfFDRyWoR5GfS1wpBDEcB+XMCEJ8Y8g94LBb7JJLD6XrUTgPJEZTolLivMSeDfcIqITHOa4N3tJgArhY6ISB94wuckl54c2wtEucrmJJo/k3clgtP34iS86RgptRWwdXTN09C5H8Q="
+  - secure: "E1f7LdsnccUnfDuwE3STdzuKl9TknI5bQFUdhUUCM4F1C8qToneRegUW/dctkNf00Wa2U/SRT55CdYbf8Xh4JFl/CPRxdBb+0MVD9GGHSetuWaB5qmOwgLVfboE7F8mGFfgJKEiUkXeHj9c6StUuvKNRz732p1AAcSpypLnH5p0="
+  
   matrix:
   - WP_VERSION=latest
   - WP_VERSION=3.9.1  WP_MULTISITE=0
