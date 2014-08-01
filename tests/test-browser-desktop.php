@@ -15,29 +15,29 @@ class DesktopTest extends Sauce\Sausage\WebDriverTestCase
                 'version' => '15',
                 'platform' => 'Windows 2012',
             )
-        )
+        ),
         // run Chrome on Linux on Sauce
-        //array(
-        //    'browserName' => 'chrome',
-        //    'desiredCapabilities' => array(
-        //        'platform' => 'Linux'
-        //  )
-        //),
+        array(
+            'browserName' => 'chrome',
+            'desiredCapabilities' => array(
+                'platform' => 'Linux'
+          )
+        ),
         // run Mobile Safari on iOS
-        //array(
-            //'browserName' => '',
-            //'desiredCapabilities' => array(
-                //'app' => 'safari',
-                //'device' => 'iPhone Simulator',
-                //'version' => '6.1',
-                //'platform' => 'Mac 10.8',
-            //)
-        //)//,
+        array(
+            'browserName' => '',
+            'desiredCapabilities' => array(
+                'app' => 'safari',
+                'device' => 'iPhone Simulator',
+                'version' => '6.1',
+                'platform' => 'Mac 10.8',
+            )
+        )//,
         // run Chrome locally
         //array(
-            //'browserName' => 'chrome',
-            //'local' => true,
-            //'sessionStrategy' => 'shared'
+        //    'browserName' => 'chrome',
+        //    'local' => true,
+        //    'sessionStrategy' => 'shared'
         //)
     );
 
