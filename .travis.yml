@@ -4,18 +4,27 @@ php:
   - 5.3
   - 5.4
   - 5.5
-env:
-  matrix:
-    - WP_VERSION=latest
-    - WP_VERSION=3.9.1  WP_MULTISITE=0
-    - WP_VERSION=3.8.1  WP_MULTISITE=0
+  
+addons:
+  sauce_connect: true
 
-#before_install:
-#  - sudo apt-get -y -qq update
-#  - sudo apt-get -y -qq install curl libcurl3-gnutls libgnutls26
+env:
+  global:
+  # test server credentials
+  - secure: "k4O+oyrF5x1nRqNkKFiCI4ICC7x9kTE19Rn6ESnX8rn3YWorUM16d0NLQU0NCJY/uC46BpOBtnRQaecPb0b0ScD+l9I+UTBbkYbYY+X4XZ62h7cup5e+EAldxRWFeaGE4WOnI4oxkW453Nwb+Os1FTt1xD3UkjF7N7o4+v6c1B8="
+  - secure: "KJ2nPyOhhFO8+n2+P42XDdMvxMPhiqFx/R0MLFiHXvf2W+h3ADoWk1mpNaDI5sVDQTUMzcxVRmaNtI9+jjR0TsIAhXA4UV1gNSgr7RKJuSZqbCsXuDSV0vEs23g3KSKJ3XWqy9j8PBtmHe7H2gtppmqAbx/MNKbCVz5aub7dmrY="
+  - secure: "b8fMQp3RLszf2libPDQOVCYTyOfVqvj2oWERf3DCZfaNdw6aUxQzW5Vyk5A7B45v9Nj9kznEqIstB7Awd0pw17gMNEZHKliATT5VrV2Sz0xvq6co2n2hEbc8x7haOtdRxOliXK3ggZkBpgD+sDM5MJoXsKWm7MdEAJox+EngPLg="
+  # sauce_labs credentials
+  - secure: "O+8MuXhyWmk4tiwuLuSEcF63FKHRNOCYJkFuHW02956v4+mKcqXIZHCXmkwTo3XHcXEowBTtnUBqM7znKSzfAqstHRFptLlQU0iZBS185nyQLIRqREVbFDmMT3Aozwrcu53cmkHgHAZEggevgE71zhkE8n8QpYnvIZGz5OPV6wg="
+  - secure: "NWCjMkngd7v+/C6IooHATXUpTrc4cyXTkXkFfCQL+UCuJVrYldcWBhybjlbKjr+EbfSMzjWAtJ3aYRj1vFuQmhGTSxhMOSQ0vx1/aFOVF+VTzCnCwCt4h2YXzowF7HXxhZOGTWObO7TQIAo/IvaEs/TAJjMP2g0NzzS/hps8XTQ="
+  
+  matrix:
+  - WP_VERSION=latest
+  - WP_VERSION=3.9.1  WP_MULTISITE=0
+  - WP_VERSION=3.8.1  WP_MULTISITE=0
 
 before_script:
-  - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+- bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 
 script: phpunit
 

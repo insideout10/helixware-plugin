@@ -50,8 +50,7 @@ function hewa_server_request(
     $response = wp_remote_request( $url, $args );
 
     // If an error occurs, print the error and exit.
-    if ( is_wp_error( $response ) || 200 !== $response['response']['code'] ) {
-
+    if ( is_wp_error( $response ) || 200 !== (int)$response['response']['code'] ) {
         hewa_write_log(
             'An error occurred while calling the remote server ( ' .
             ( is_wp_error( $response ) ? $response->get_error_message() : $response['body'] ) . ' )'
