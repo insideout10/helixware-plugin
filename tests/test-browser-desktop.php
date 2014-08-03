@@ -5,7 +5,7 @@ require_once 'vendor/autoload.php';
 class DesktopTest extends Sauce\Sausage\WebDriverTestCase
 {
 
-    protected $start_url = 'http://pieroit.org/wordlift3/?p=19647';
+    protected $start_url = 'http://test.helixware.tv/video-001/';
 
     public static $browsers = array(
         // run FF15 on Windows 8 on Sauce
