@@ -1,8 +1,10 @@
 <?php
-
 /**
  * Testing ajax response class
  */
+
+require_once 'functions.php';
+
 class AjaxTest extends WP_UnitTestCase
 {
 
@@ -18,12 +20,13 @@ class AjaxTest extends WP_UnitTestCase
      */
     public function setUp()
     {
-
         if ( false === ( getenv( 'HEWA_SERVER_URL' ) ) || false === getenv( 'HEWA_APPLICATION_KEY' ) || false === getenv( 'HEWA_APPLICATION_SECRET' ) ) {
             $this->markTestSkipped('The required environment settings for this test are not set.');
         }
 
         parent::setUp();
+        
+        hewa_configure_wordpress_test();
 
         // Suppress warnings from "Cannot modify header information - headers already sent by"
         $this->_error_level = error_reporting();
@@ -95,31 +98,19 @@ class AjaxTest extends WP_UnitTestCase
             $this->markTestSkipped( 'HelixWare settings not provided.' );
         }
 
-        // Save the current options in order to restore them later.
-        $options = get_option( HEWA_SETTINGS );
-        delete_option( HEWA_SETTINGS );
-        add_option( HEWA_SETTINGS, array(
-            HEWA_SETTINGS_SERVER_URL         => $server_url,
-            HEWA_SETTINGS_APPLICATION_KEY    => $app_key,
-            HEWA_SETTINGS_APPLICATION_SECRET => $app_secret
-        ) );
-
         ob_start();
 
         // Call the server and check the response.
         hewa_ajax_quota();
 
         $headers  = xdebug_get_headers();
-
-        // TODO: re-enable the following line.
-//        $this->assertTrue( in_array('Content-Type: application/json; charset=UTF-8', $headers) );
+        $this->assertTrue( in_array('Content-Type: application/json; charset=UTF-8', $headers) );
 
         $response = ob_get_clean();
         $object   = json_decode( $response );
+        
         $this->assertTrue( isset( $object->userName ) );
         $this->assertTrue( isset( $object->account ) );
-        $this->assertTrue( isset( $object->firstName ) );
-        $this->assertTrue( isset( $object->lastName ) );
         $this->assertTrue( isset( $object->email ) );
         $this->assertTrue( isset( $object->enabled ) );
         $this->assertTrue( $object->enabled );
@@ -130,12 +121,6 @@ class AjaxTest extends WP_UnitTestCase
         $this->assertTrue( isset( $object->account->currentQuota ) );
         $this->assertTrue( is_numeric( $object->account->maxQuota ) );
         $this->assertTrue( is_numeric( $object->account->currentQuota ) );
-
-        // Restore the options if they were present.
-        if ( false !== $options ) {
-            add_option( HEWA_SETTINGS, $options );
-        }
-
     }
 
 }

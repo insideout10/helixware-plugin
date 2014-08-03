@@ -1,23 +1,22 @@
 language: php
-
 php:
-  - 5.3
-  - 5.4
-  - 5.5
+- 5.3
+- 5.4
+- 5.5
+addons:
+  sauce_connect: true
 env:
+  global:
+  - secure: Wnej6mqmSNFvpOGzE9lgZXm3dnXR9yVJK2yOQhG1VjkiF4lJdyUybL3/ih2vxOWShRSSzSFTyb0eCS9FwJTPZbCn4kUxupfT1J7iO+ka3oXJM4SH7ZU944p+jpQ1PwqVesbLY7BtVZ1bCBk9LaKJVvqumt1jx0mAxkICJlN+Xsk=
+  - secure: SrAdQ8UyohHOL3BMTcRHXAmN1J1VSF3PzOCrrJA+Zz3f5EUJdRqbTCIVLIrc4hV6L7jlRRTHSSRHIeMtQMnWual7d83uRTDe+SqrQBpywrKL3r0owaViUP/Bab/hcVMCsSjaIM9pUGSQI2FTB56t2ssCupzut1pibHPAHDT+sfk=
   matrix:
-    - WP_VERSION=latest
-    - WP_VERSION=3.9.1  WP_MULTISITE=0
-    - WP_VERSION=3.8.1  WP_MULTISITE=0
-
-#before_install:
-#  - sudo apt-get -y -qq update
-#  - sudo apt-get -y -qq install curl libcurl3-gnutls libgnutls26
-
+  - WP_VERSION=latest
+  - WP_VERSION=3.9.1  WP_MULTISITE=0
+  - WP_VERSION=3.8.1  WP_MULTISITE=0
 before_script:
-  - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-
+- bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+- composer selfupdate
+- composer install
 script: phpunit
-
 notifications:
   slack: insideout10:NcslbQWVmD4YPInDq8TpBIno#helixware

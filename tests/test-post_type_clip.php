@@ -3,6 +3,7 @@
  * This file tests the video custom post type.
  */
 
+require_once 'functions.php';
 
 class PostTypeVideoTest extends WP_UnitTestCase
 {
@@ -13,6 +14,8 @@ class PostTypeVideoTest extends WP_UnitTestCase
     function setUp()
     {
         parent::setUp();
+        
+        hewa_configure_wordpress_test();
     }
 
 

@@ -3,6 +3,8 @@
  * Test the *admin/settings* functions.
  */
 
+require_once 'functions.php';
+
 class AdminSettingsTest extends WP_UnitTestCase
 {
 
@@ -12,6 +14,8 @@ class AdminSettingsTest extends WP_UnitTestCase
     function setUp()
     {
         parent::setUp();
+        
+        hewa_configure_wordpress_test();
     }
 
 
