@@ -24,13 +24,6 @@ class DesktopTest extends Sauce\Sausage\WebDriverTestCase
                 'platform' => 'Windows 2012',
             )
         ),
-        // run Chrome on Linux on Sauce
-        /*array(
-            'browserName' => 'chrome',
-            'desiredCapabilities' => array(
-                'platform' => 'Linux'
-          )
-        ),*/
         // run Mobile Safari on iOS
         array(
             'browserName' => '',
@@ -93,20 +86,25 @@ class DesktopTest extends Sauce\Sausage\WebDriverTestCase
         $this->assertEquals('PLAYING', $result);
     }
     
-    // Link navigation
+    // Link navigation, go to previous post and back to starting page
     public function testNavigation() {
         
+        $page1title = 'Video 001 | HelixWare';
+        $page1link = 'Video 001';
+        $page2title = 'Hello world! | HelixWare';
+        $page2link = 'Hello world!';
+        
         // Verify we are on test video page
-        $this->assertEquals( 'Video 001 | HelixWare', $this->title() );
+        $this->assertEquals( $page1title, $this->title() );
         
         // Click to see the previous post
-        $element = $this->byLinkText('Hello world!');
+        $element = $this->byLinkText( $page2link );
         $element->click();
-        $this->assertEquals('Hello world! | HelixWare', $this->title() );
+        $this->assertEquals( $page2title, $this->title() );
         
         // Click to go back
-        $element = $this->byLinkText('Video 001');
+        $element = $this->byLinkText( $page1link );
         $element->click();
-        $this->assertEquals('Video 001 | HelixWare', $this->title() );
+        $this->assertEquals( $page1title, $this->title() );
     }
 }
