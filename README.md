@@ -1,5 +1,5 @@
-<a href="https://travis-ci.org/insideout10/helixware-plugin"><img align="right" src="https://travis-ci.org/insideout10/helixware-plugin.png?branch=master" /></a><br/>
-<a href="https://codeclimate.com/github/insideout10/helixware-plugin"><img align="right" src="https://codeclimate.com/github/insideout10/helixware-plugin.png" /></a>
+[![Build Status](https://secure.travis-ci.org/insideout10/helixware-plugin.svg?branch=master)](https://travis-ci.org/insideout10/helixware-plugin)
+[![Code Rewview](https://codeclimate.com/github/insideout10/helixware-plugin.png)](https://codeclimate.com/github/insideout10/helixware-plugin)
 
 
 HelixWare plugin
