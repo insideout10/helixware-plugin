@@ -10,6 +10,18 @@ A plugin to turn WordPress into a video site.
 Unit Tests
 ----------
 
+Install required libraries:
+
+    composer install
+
+
+If you encounter issues installing `phpunit/selenium` try running this command:
+
+    composer update --prefer-source phpunit/phpunit-selenium
+
+(for more information see https://github.com/giorgiosironi/phpunit-selenium/issues/321#issuecomment-53419629)
+
+
 Drop any existing test database:
 
     mysqladmin -u root drop wordpress_test
