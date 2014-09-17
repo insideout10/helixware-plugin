@@ -34,7 +34,7 @@ function hewa_ajax_load_smil() {
 	$base = $flash->streamer;
 
 	// If set, force to another protocol (rtmpt or rtmps).
-	if ( $protocol = hewa_get_option( HEWA_SETTINGS_STREAMING_PROTOCOL, null ) ) {
+	if ( 'default' !== ( $protocol = hewa_get_option( HEWA_SETTINGS_STREAMING_PROTOCOL, 'default' ) ) ) {
 		$base = $protocol . substr( $base, strpos( $base, '://' ) );
 	}
 
