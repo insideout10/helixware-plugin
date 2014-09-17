@@ -6,3 +6,16 @@ HelixWare plugin
 ================
 
 A plugin to turn WordPress into a video site.
+
+Unit Tests
+----------
+
+Drop any existing test database:
+
+    mysqladmin -u root drop wordpress_test
+
+
+Install the WordPress test suite running the following command.
+
+    ./bin/install-wp-tests.sh wordpress_test root '' localhost latest
+
