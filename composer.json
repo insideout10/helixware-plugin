@@ -1,5 +1,6 @@
 {
     "require": {
-        "sauce/sausage": ">=0.14.0"
+        "sauce/sausage": ">=0.14.0",
+        "phpunit/phpunit-selenium": "1.4.1"
     }
 }

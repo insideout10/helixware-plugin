@@ -61,7 +61,7 @@ function hewa_get_option( $name, $default = null ) {
     $group         = $configuration[0];
     $key           = $configuration[1];
 
-    hewa_write_log( 'Getting option [ group :: {group} ][ key :: {key} ]', array( 'group' => $group, 'key' => $key ) );
+    // hewa_write_log( 'Getting option [ group :: {group} ][ key :: {key} ]', array( 'group' => $group, 'key' => $key ) );
 
     $settings      = (array) get_option( $group );
 
@@ -99,7 +99,7 @@ function hewa_set_option( $name, $value ) {
     $group         = $configuration[0];
     $key           = $configuration[1];
 
-    hewa_write_log( 'Setting option [ group :: {group} ][ key :: {key} ][ value :: {value} ]', array( 'group' => $group, 'key' => $key, 'value' => $value ) );
+    // hewa_write_log( 'Setting option [ group :: {group} ][ key :: {key} ][ value :: {value} ]', array( 'group' => $group, 'key' => $key, 'value' => $value ) );
 
     // If no settings are saved yet, create them.
     if ( false === ( $settings = get_option( $group ) ) ) {

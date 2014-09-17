@@ -60,6 +60,10 @@ jQuery(function ($) {
 
 
         $( '#' + divId + ' .hewa-submit-button').click( function( event ) {
+            
+            // After the button is clicked, disable it and notify user that saving is in progress.
+            $( event.target ).prop('disabled', true)
+                .text('Saving...');
 
             var div = $( event.target).parent();
 
