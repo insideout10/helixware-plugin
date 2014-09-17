@@ -16,53 +16,64 @@
  */
 function hewa_ajax_load_smil() {
 
-    // Check if the asset id has been provided.
-    if ( ! isset( $_GET['id'] ) || empty( $_GET['id'] ) ) {
-        wp_die( __( 'The id parameter is required.', HEWA_LANGUAGE_DOMAIN ) );
-    }
+	// Check if the asset id has been provided.
+	if ( ! isset( $_GET['id'] ) || empty( $_GET['id'] ) ) {
+		wp_die( __( 'The id parameter is required.', HEWA_LANGUAGE_DOMAIN ) );
+	}
 
-    $asset_id = $_GET['id'];
-    $streams  = hewa_get_clip_urls( $asset_id );
+	$asset_id = $_GET['id'];
+	$streams  = hewa_get_clip_urls( $asset_id );
 
-    $ratio    = $streams->ratio;
-    $flash    = $streams->formats->{'flash-direct'};
+	$ratio = $streams->ratio;
+	$flash = $streams->formats->{'flash-direct'};
 
-    ob_start();
-    header( "Content-Type: application/smil" );
+	ob_start();
+	header( 'Content-Type: application/smil' );
 
-    echo <<<EOF
+	// Get the base address, e.g. rtmp://example.org
+	$base = $flash->streamer;
+
+	// If set, force to another protocol (rtmpt or rtmps).
+	if ( $protocol = hewa_get_option( HEWA_SETTINGS_STREAMING_PROTOCOL, null ) ) {
+		$base = $protocol . substr( $base, strpos( $base, '://' ) );
+	}
+
+	echo <<<EOF
 <smil>
 	<head>
-		<meta base="$flash->streamer"/>
+		<meta base="$base"/>
 	</head>
 	<body>
 		<switch>
 EOF;
 
-    // Sort the bitrates.
-    $bitrates = $flash->bitrates;
-    usort( $bitrates, function( $a, $b ) { return $a->bitrate - $b->bitrate; } );
+	// Sort the bitrates.
+	$bitrates = $flash->bitrates;
+	usort( $bitrates, function ( $a, $b ) {
+			return $a->bitrate - $b->bitrate;
+		} );
 
-    for ( $i = 0; $i < sizeof( $bitrates ); $i++ ) {
+	for ( $i = 0; $i < sizeof( $bitrates ); $i ++ ) {
 
-        $bitrate    = $bitrates[$i];
-        $width      = $bitrate->width;
-        $bandwidth  = $bitrate->bitrate;
-        $height     = intval( $width / $ratio );
-        $file       = $bitrate->file;
+		$bitrate   = $bitrates[ $i ];
+		$width     = $bitrate->width;
+		$bandwidth = $bitrate->bitrate;
+		$height    = intval( $width / $ratio );
+		$file      = $bitrate->file;
 
-        echo "<video src=\"$file\" system-bitrate=\"$bandwidth\" width=\"$width\" height=\"$height\" />\n";
+		echo "<video src=\"$file\" system-bitrate=\"$bandwidth\" width=\"$width\" height=\"$height\" />\n";
 
-    }
+	}
 
-    echo <<<EOF
+	echo <<<EOF
         </switch>
     </body>
 </smil>
 EOF;
 
-    wp_die();
+	wp_die();
 
 }
+
 add_action( 'wp_ajax_hewa_smil', 'hewa_ajax_load_smil' );
 add_action( 'wp_ajax_nopriv_hewa_smil', 'hewa_ajax_load_smil' );
