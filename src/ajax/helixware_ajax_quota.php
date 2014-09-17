@@ -22,10 +22,6 @@ function hewa_ajax_quota() {
 		wp_die();
 	}
 
-
-	echo 'response: ' . $response;
-	ob_flush();
-
 	// Build the message.
 	$max_quota      = $quota->account->maxQuota;
 	$used_quota     = $quota->account->currentQuota;
