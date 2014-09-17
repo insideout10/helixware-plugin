@@ -37,10 +37,15 @@ function hewa_ajax_rss_live() {
 
 EOF;
 
-    $streaming_server = hewa_get_option( HEWA_SETTINGS_STREAMING_SERVER );
-    $path = $live_asset->username . '/' . $live_asset->path;
-    $rtmp = 'rtmp://' . $streaming_server . '/rtmplive/' . $path;
-    $hls  = 'http://' . $streaming_server . '/m3ugen/rtmplive/' . $path;
+	$streaming_server = hewa_get_option( HEWA_SETTINGS_STREAMING_SERVER );
+	$path = $live_asset->username . '/' . $live_asset->path;
+
+	// Get the protocol configuration.
+	$protocol = hewa_get_option( HEWA_SETTINGS_STREAMING_PROTOCOL, 'default' );
+	$protocol = ( $protocol === 'default' ? 'rtmp' : $protocol );
+
+    $rtmp = $protocol . '://' . $streaming_server . '/rtmplive/' . $path;
+    $hls  = 'http://' . $streaming_server . '/m3ugen/rtmplive/' . $path . '?ext.m3u8';
 
     hewa_echo_rss_live_item( $rtmp, $hls, $title, $image_url );
 
