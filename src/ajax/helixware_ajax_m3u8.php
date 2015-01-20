@@ -42,9 +42,10 @@ function hewa_ajax_load_m3u8() {
         $width_p    = $bitrate->width . 'p';
         $resolution = $bitrate->width . 'x' . intval( $bitrate->width / $ratio );
         $url        = $bitrate->url;
+        $chunklist_url = hewa_get_chunklist_url( $url );
 
         echo "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=$bandwidth,RESOLUTION=$resolution,NAME=\"$width_p\"\n";
-        echo "$url\n";
+        echo "$chunklist_url\n";
 
     }
 
@@ -53,3 +54,27 @@ function hewa_ajax_load_m3u8() {
 }
 add_action( 'wp_ajax_hewa_m3u8', 'hewa_ajax_load_m3u8' );
 add_action( 'wp_ajax_nopriv_hewa_m3u8', 'hewa_ajax_load_m3u8' );
+
+
+/**
+ * Get the chunklist URL from a playlist file. The URL is determined as the first line without the pound.
+ *
+ * @since 3.0.0
+ *
+ * @param $url The playlist file URL.
+ * @return string|null The chunklist URL or null if not found.
+ */
+function hewa_get_chunklist_url( $url ) {
+
+    $response = wp_remote_get( $url );
+
+    $lines    = explode( "\n", $response['body'] );
+
+    foreach ( $lines as $line ) {
+        if ( '#' !== substr( $line, 0, 1 ) )
+            return $line;
+    }
+
+    return null;
+
+}

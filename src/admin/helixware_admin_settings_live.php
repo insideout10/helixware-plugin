@@ -38,6 +38,7 @@ function hewa_admin_settings_live_section_callback() {
     $label_path_h      = esc_html__( 'Path', HEWA_LANGUAGE_DOMAIN );
     $label_source_h    = esc_html__( 'Source', HEWA_LANGUAGE_DOMAIN );
     $label_shortcode_h = esc_html__( 'Shortcode', HEWA_LANGUAGE_DOMAIN );
+    $label_token_h     = esc_html__( 'Token', HEWA_LANGUAGE_DOMAIN );
 
     $label_create_h    = esc_html__( 'Create', HEWA_LANGUAGE_DOMAIN );
     $label_delete_h    = esc_html__( 'Delete', HEWA_LANGUAGE_DOMAIN );
@@ -51,40 +52,48 @@ function hewa_admin_settings_live_section_callback() {
 
         <table class="wp-list-table widefat fixed posts">
             <thead>
+            <th scope="col" class="manage-column"><?php echo $label_shortcode_h; ?></th>
             <th scope="col" class="manage-column"><?php echo $label_username_h; ?></th>
             <th scope="col" class="manage-column"><?php echo $label_path_h; ?></th>
             <th scope="col" class="manage-column"><?php echo $label_source_h; ?></th>
-            <th scope="col" class="manage-column"><?php echo $label_shortcode_h; ?></th>
-            <th></th>
+            <th scope="col" class="manage-column"><?php echo $label_token_h; ?></th>
+<!--            <th></th>-->
             </thead>
 
             <tfoot>
+            <th scope="col" class="manage-column"><?php echo $label_shortcode_h; ?></th>
             <th scope="col" class="manage-column"><?php echo $label_username_h; ?></th>
             <th scope="col" class="manage-column"><?php echo $label_path_h; ?></th>
             <th scope="col" class="manage-column"><?php echo $label_source_h; ?></th>
-            <th scope="col" class="manage-column"><?php echo $label_shortcode_h; ?></th>
-            <th></th>
+            <th scope="col" class="manage-column"><?php echo $label_token_h; ?></th>
+<!--            <th></th>-->
             </tfoot>
 
             <tbody id="the-list">
-            <tr class="alternate">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <button type="button" ng-click="create({source:'127.0.0.1/32'});" class="button-primary save alignright"><?php echo $label_create_h; ?></button>
-                </td>
-            </tr>
+<!--            <tr class="alternate">-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td>-->
+<!--                    <button style="display:none;" type="button" ng-click="create({source:'127.0.0.1/32'});" class="button-primary save alignright">--><?php //echo $label_create_h; ?><!--</button>-->
+<!--                </td>-->
+<!--            </tr>-->
             <tr ng-class="$odd ? 'alternate' : ''" ng-repeat="asset in data.content">
-                <td ng-bind="asset.username"></td>
-                <td ng-bind="asset.path"></td>
-                <td><input type="text" ng-model="asset.source" name="source" /></td>
                 <td>[hewa_player live_id="<span ng-bind="asset.id"></span>"]</td>
+                <td ng-bind="asset.username"></td>
+                <td ng-bind="asset.relativePath"></td>
+                <td ng-bind="asset.source"></td>
                 <td>
-                    <button type="button" ng-click="kill(asset);" class="button-primary delete alignright"><?php echo $label_delete_h; ?></button>
-                    <button type="button" ng-click="update(asset);" class="button-primary save alignright"><?php echo $label_save_h; ?></button>
+                    <div ng-show="asset._show_token" ng-bind="asset.token"></div>
+                    <button ng-hide="asset._show_token" type="button" ng-click="asset._show_token = true" class="button">Show Token</button>
+                    <button ng-show="asset._show_token" type="button" ng-click="asset._show_token = false" class="button">Hide Token</button>
                 </td>
+<!--                <td>-->
+<!--                    <button style="display:none;" type="button" ng-click="kill(asset);" class="button-primary delete alignright">--><?php //echo $label_delete_h; ?><!--</button>-->
+<!--                    <button style="display:none;" type="button" ng-click="update(asset);" class="button-primary save alignright">--><?php //echo $label_save_h; ?><!--</button>-->
+<!--                </td>-->
             </tr>
             </tbody>
         </table>

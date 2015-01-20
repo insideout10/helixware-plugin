@@ -37,7 +37,7 @@ add_filter('plugins_url', 'hewa_plugins_url', 10, 3);
  */
 function hewa_get_clip_urls( $asset_id ) {
 
-    return json_decode( hewa_server_call( '/4/users/streams/' . $asset_id ) );
+    return json_decode( hewa_server_call( '/4/pub/asset/' . $asset_id  . '/streams' ) );
 
 }
 

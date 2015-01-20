@@ -14,7 +14,7 @@ function hewa_admin_scripts() {
 
     // Get the configuration options.
     $options = array(
-        'url'         => hewa_get_option( HEWA_SETTINGS_SERVER_URL ) . '/4/users/assets',
+        'url'         => hewa_get_option( HEWA_SETTINGS_SERVER_URL ) . '/4/user/ondemand',
         'key'         => hewa_get_option( HEWA_SETTINGS_APPLICATION_KEY ),
         'secret'      => hewa_get_option( HEWA_SETTINGS_APPLICATION_SECRET ),
         'extensions'  => hewa_get_option( HEWA_SETTINGS_FILE_EXTENSIONS ),
@@ -194,7 +194,7 @@ function hewa_admin_request_still_image( $asset_id, $width, $timecode_seconds ) 
 
     // Get the response instance.
     return hewa_server_request(
-        '/4/users/assets/' . $asset_id . '/images?tc=' . $timecode . '&w=' . $width, 'GET', '', 'text/plain', 'image/png'
+        '/4/pub/asset/' . $asset_id . '/image?tc=' . $timecode . '&w=' . $width, 'GET', '', 'text/plain', 'image/png'
     );
 
 }

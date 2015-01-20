@@ -24,9 +24,10 @@ function hewa_ajax_load_rss() {
     $asset_id  = $_GET['id'];
     $title     = ( isset( $_GET['t'] ) ? $_GET['t'] : '' );
     $image_url = ( isset( $_GET['i'] ) ? $_GET['i'] : '' );
+    $order_by  = ( isset( $_GET['ob'] ) ? $_GET['ob'] : 'date' );
+    $order     = ( isset( $_GET['o'] ) ? $_GET['o'] : 'desc' );
     $streams   = hewa_get_clip_urls( $asset_id );
 
-//    $ratio    = $streams->ratio;
     $m3u8      = $streams->formats->{'m3u8-redirector'};
 
 
@@ -52,7 +53,9 @@ EOF;
         $posts       = get_posts( array(
             'category'       => $category_id,
             'posts_per_page' => $posts_count,
-            'numberposts'    => $posts_count
+            'numberposts'    => $posts_count,
+            'order_by'       => $order_by,
+            'order'          => $order
         ) );
 
         foreach ( $posts as $post ) {
@@ -110,7 +113,7 @@ function hewa_echo_rss_item( $asset_id, $m3u8 = null, $title = null, $image_url 
     }
 
     echo "   <jwplayer:source file=\"$ajax_url?action=hewa_smil&amp;id=$asset_id\" label=\"Auto\" type=\"rtmp\" />\n";
-    echo "   <jwplayer:source file=\"$ajax_url?action=hewa_m3u8&amp;id=$asset_id\" label=\"Auto\" default=\"true\" type=\"hls\" />\n";
+    echo "   <jwplayer:source file=\"$ajax_url?action=hewa_m3u8&amp;id=$asset_id&amp;ext=file.m3u8\" label=\"Auto\" default=\"true\" type=\"hls\" />\n";
 
     // TODO: make the following URL parametric and use the authenticated PHP call.
     $server_url = hewa_get_option( HEWA_SETTINGS_SERVER_URL, '' );
