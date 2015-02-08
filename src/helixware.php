@@ -77,3 +77,5 @@ require_once( 'admin/helixware_admin_notices.php' );
 
 // Add custom meta-boxes to the admin screens.
 require_once( 'admin/helixware_admin_metaboxes.php' );
+
+require_once( 'modules/seo/seo.php' );

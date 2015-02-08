@@ -87,9 +87,6 @@ function hewa_shortcode_player( $atts ) {
 	// The loading string.
 	$loading = esc_html__( 'Loading player...', HEWA_LANGUAGE_DOMAIN );
 
-	// Prepare an empty result variable.
-	$result = '';
-
 	// Build the *responsive* listbar.
 	if ( null !== $params['listbar'] && 'responsive' === $params['listbar'] ) {
 		wp_enqueue_style( 'helixware-player-css', plugins_url( 'css/helixware.player.css', dirname( __FILE__ ) ) );
@@ -102,8 +99,11 @@ function hewa_shortcode_player( $atts ) {
 		          '</div>';
 
 	} else {
-		// Print the standard player DIV.
-		$result .= "<div id=\"$player_id\">$loading</div>";
+
+		$result = "<div id='$player_id' " . apply_filters( 'hewa_player_start_element', $asset_id ) . '>' .
+		        apply_filters( 'hewa_player_in_element', $asset_id ) .
+		        $loading . '</div>';
+
 	}
 
 	// Build a standard listbar.
