@@ -69,10 +69,10 @@ function hewa_shortcode_player( $atts ) {
 	$player['aspectratio'] = $params['aspectratio'];
 	$player['ga']          = array(
 		// playlist title or mediaid
-		'idstring'       => ( null != $params['ga_id_string'] ? $params['ga_id_string'] : 'mediaid' ),
-		'trackingobject' => ( null != $params['ga_tracking_object'] ? $params['ga_tracking_object'] : '__gaTracker' ),
+		'idstring'    => ( null != $params['ga_id_string'] ? $params['ga_id_string'] : 'mediaid' ),
+		'universalga' => ( null != $params['ga_tracking_object'] ? $params['ga_tracking_object'] : '__gaTracker' ),
 		// mediaid or title
-		'label'          => ( null != $params['ga_media_id'] ? $params['ga_media_id'] : 'title' )
+		'label'       => ( null != $params['ga_media_id'] ? $params['ga_media_id'] : 'title' )
 	);
 
 	// Add the logo and the link if provided.
@@ -129,16 +129,6 @@ function hewa_shortcode_player( $atts ) {
 	// Start printing out the player javascript.
 	$jwplayer_url = plugins_url( 'js/jwplayer-6.11/jwplayer.js', __FILE__ );
 	$result .= <<<EOF
-		<script>
-		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-		  ga('create', 'UA-59716363-1', 'auto');
-		  ga('send', 'pageview');
-
-		</script>
         <script type="text/javascript">
             jQuery( function( $ ) {
 				$.getScript('$jwplayer_url', function() {
