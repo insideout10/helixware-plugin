@@ -30,12 +30,11 @@ function hewa_shortcode_player( $atts ) {
 		'max'          => 5,
 		'skin'         => hewa_get_option( HEWA_SETTINGS_JWPLAYER_DEFAULT_SKIN, '' ),
 		'logo_url'     => hewa_get_option( HEWA_SETTINGS_JWPLAYER_LOGO_URL, '' ),
-		'logo_link'    => hewa_get_option( HEWA_SETTINGS_JWPLAYER_LOGO_LINK, '' ),
-		'ga_idstring'  => 'title'
+		'logo_link'    => hewa_get_option( HEWA_SETTINGS_JWPLAYER_LOGO_LINK, '' )
 	), $atts );
 
 	// Queue the scripts.
-	wp_enqueue_script( 'jwplayer', plugins_url( 'js/jwplayer-6.10/jwplayer.js', __FILE__ ) );
+	// wp_enqueue_script( 'jwplayer', plugins_url( 'js/jwplayer-6.11/jwplayer.js', __FILE__ ) );
 
 	// Get the player key.
 	$jwplayer_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' );
@@ -53,9 +52,10 @@ function hewa_shortcode_player( $atts ) {
 
 	// Build the player array which will then be translated to JavaScript for JWPlayer initialization.
 	$player                = array();
+	$player['flashplayer'] = plugins_url( 'js/jwplayer-6.11/jwplayer.flash.swf', __FILE__ );
 	$player['androidhls']  = true;
 	$player['autostart']   = ( $params['autostart'] ? 'true' : 'false' );
-	$player['playlist']    = ( $is_live
+	$player['playlist']    = ( $is_live || null === $params['listbar']
 		? hewa_get_option( HEWA_SETTINGS_SERVER_URL, false ) . "/4/pub/asset/$asset_id/streams.xml"
 		: apply_filters( HEWA_FILTERS_PLAYER_PLAYLIST_URL,
 			admin_url( 'admin-ajax.php?action=hewa_rss&id=' . $asset_id .
@@ -67,6 +67,13 @@ function hewa_shortcode_player( $atts ) {
 		) );
 	$player['width']       = $params['width'];
 	$player['aspectratio'] = $params['aspectratio'];
+	$player['ga']          = array(
+		// playlist title or mediaid
+		'idstring'       => ( null != $params['ga_id_string'] ? $params['ga_id_string'] : 'mediaid' ),
+		'trackingobject' => ( null != $params['ga_tracking_object'] ? $params['ga_tracking_object'] : '__gaTracker' ),
+		// mediaid or title
+		'label'          => ( null != $params['ga_media_id'] ? $params['ga_media_id'] : 'title' )
+	);
 
 	// Add the logo and the link if provided.
 	if ( ! empty( $params['logo_url'] ) ) {
@@ -101,8 +108,8 @@ function hewa_shortcode_player( $atts ) {
 	} else {
 
 		$result = "<div id='$player_id' " . apply_filters( 'hewa_player_start_element', $asset_id ) . '>' .
-		        apply_filters( 'hewa_player_in_element', $asset_id ) .
-		        $loading . '</div>';
+		          apply_filters( 'hewa_player_in_element', $asset_id ) .
+		          $loading . '</div>';
 
 	}
 
@@ -116,16 +123,26 @@ function hewa_shortcode_player( $atts ) {
 
 	}
 
-	// Set the GA setting.
-	$player['ga'] = array( 'idstring' => $params['ga_idstring'] );
-
 	// Create the JSON version of the player.
-	$player_json = json_encode( $player );
+	$player_json = json_encode( $player, JSON_PRETTY_PRINT );
 
 	// Start printing out the player javascript.
+	$jwplayer_url = plugins_url( 'js/jwplayer-6.11/jwplayer.js', __FILE__ );
 	$result .= <<<EOF
+		<script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		  ga('create', 'UA-59716363-1', 'auto');
+		  ga('send', 'pageview');
+
+		</script>
         <script type="text/javascript">
             jQuery( function( $ ) {
+				$.getScript('$jwplayer_url', function() {
+
                 jwplayer.key = '$jwplayer_key';
                 jwplayer('$player_id')
                     .setup($player_json);
@@ -192,7 +209,7 @@ EOF;
 	}
 
 	// Close the script and return the results.
-	return $result . '});</script>';
+	return $result . '}); });</script>';
 
 }
 
