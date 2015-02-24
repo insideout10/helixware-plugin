@@ -117,7 +117,7 @@ function hewa_echo_rss_item( $asset_id, $m3u8 = null, $title = null, $image_url 
 
     // TODO: make the following URL parametric and use the authenticated PHP call.
     $server_url = hewa_get_option( HEWA_SETTINGS_SERVER_URL, '' );
-    echo "   <jwplayer:track file=\"$server_url/4/users/assets/$asset_id/vtt?w=95&amp;i=5\" kind=\"thumbnails\" />\n";
+    echo "   <jwplayer:track file=\"$server_url/4/pub/asset/$asset_id/vtt?w=95&amp;i=5\" kind=\"thumbnails\" />\n";
 
 
     // Print if there are m3u8 files and the client is not an Android.

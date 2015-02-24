@@ -25,7 +25,7 @@ function hewa_ajax_load_smil() {
 	$streams  = hewa_get_clip_urls( $asset_id );
 
 	$ratio = $streams->ratio;
-	$flash = $streams->formats->{'flash-direct'};
+	$flash = $streams->formats->{'application/x-fcs'};
 
 	ob_start();
 	header( 'Content-Type: application/smil' );
