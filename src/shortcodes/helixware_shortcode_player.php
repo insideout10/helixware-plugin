@@ -53,6 +53,7 @@ function hewa_shortcode_player( $atts ) {
 	// Build the player array which will then be translated to JavaScript for JWPlayer initialization.
 	$player                = array();
 	$player['flashplayer'] = plugins_url( 'js/jwplayer-6.11/jwplayer.flash.swf', __FILE__ );
+	$player['html5player'] = plugins_url( 'js/jwplayer-6.11/jwplayer.html5.js', __FILE__ );
 	$player['androidhls']  = true;
 	$player['autostart']   = ( $params['autostart'] ? 'true' : 'false' );
 	$player['playlist']    = ( $is_live || null === $params['listbar']
