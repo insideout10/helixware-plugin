@@ -143,6 +143,13 @@ function hewa_set_option( $name, $value ) {
  */
 function hewa_format_bytes( $size, $precision = 2 ) {
 
+	hewa_write_log(
+		'Formatting bytes [ size :: {size} ][ precision :: {precision} ]',
+		array(
+			'size' => $size,
+			'precision' => $precision
+		) );
+
 	$base     = log( $size ) / log( 1024 );
 	$suffixes = array( '', 'kb', 'Mb', 'Gb', 'Tb' );
 
