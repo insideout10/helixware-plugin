@@ -89,8 +89,9 @@ add_action( 'admin_init', 'hewa_admin_settings' );
  * @param string $label The label name.
  * @param string $input_callback The name of the function to call to display the input.
  * @param array $select A key/value array of options used when displaying the options as a select.
+ * @param string $default The default value.
  */
-function hewa_admin_settings_add_field( $option, $label, $input_callback, $select = null ) {
+function hewa_admin_settings_add_field( $option, $label, $input_callback, $select = null, $default = '' ) {
 
 	$configuration = hewa_get_option_group_and_name( $option );
 	$section       = $configuration[0];
@@ -106,7 +107,7 @@ function hewa_admin_settings_add_field( $option, $label, $input_callback, $selec
 		'option'  => $option,
 		'section' => $section,
 		'name'    => $key,
-		'default' => '',
+		'default' => $default,
 		'select'  => $select
 	) );
 
@@ -147,7 +148,7 @@ function hewa_admin_settings_select( $args ) {
 	$section_e    = esc_attr( $args['section'] );
 
 	echo "<select name='${section_e}[$name_e]'>";
-	foreach ( $args['select'] as $value => $label) {
+	foreach ( $args['select'] as $value => $label ) {
 		$value_e = esc_attr( $value );
 		$label_e = esc_html__( $label, HEWA_LANGUAGE_DOMAIN );
 		echo "<option value='$value_e'";

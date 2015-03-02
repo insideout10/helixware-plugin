@@ -25,24 +25,27 @@ function hewa_admin_settings_server_section() {
 		HEWA_OPTIONS_SETTINGS_SERVER
 	);
 
-
 	hewa_admin_settings_add_field(
-		HEWA_SETTINGS_SERVER_URL, __( 'HelixWare Server URL', HEWA_LANGUAGE_DOMAIN ), 'hewa_admin_settings_input_text'
+		HEWA_SETTINGS_SERVER_URL,
+		__( 'HelixWare Server URL', HEWA_LANGUAGE_DOMAIN ),
+		'hewa_admin_settings_input_text',
+		null,
+		'https://cloud.helixware.tv'
 	);
 
-	hewa_admin_settings_add_field(
-		HEWA_SETTINGS_STREAMING_SERVER, __( 'Streaming Server', HEWA_LANGUAGE_DOMAIN ), 'hewa_admin_settings_input_text'
-	);
+//	hewa_admin_settings_add_field(
+//		HEWA_SETTINGS_STREAMING_SERVER, __( 'Streaming Server', HEWA_LANGUAGE_DOMAIN ), 'hewa_admin_settings_input_text'
+//	);
 
-	// Add the option for the Streaming Protocol.
-	hewa_admin_settings_add_field(
-		HEWA_SETTINGS_STREAMING_PROTOCOL, __( 'Streaming Protocol', HEWA_LANGUAGE_DOMAIN ), 'hewa_admin_settings_select',
-		array(
-			'default' => 'Use default',
-			'rtmpt'   => 'Force rtmpt (http)',
-			'rtmps'   => 'Force rtmps (https)'
-		)
-	);
+//	// Add the option for the Streaming Protocol.
+//	hewa_admin_settings_add_field(
+//		HEWA_SETTINGS_STREAMING_PROTOCOL, __( 'Streaming Protocol', HEWA_LANGUAGE_DOMAIN ), 'hewa_admin_settings_select',
+//		array(
+//			'default' => 'Use default',
+//			'rtmpt'   => 'Force rtmpt (http)',
+//			'rtmps'   => 'Force rtmps (https)'
+//		)
+//	);
 
 	hewa_admin_settings_add_field(
 		HEWA_SETTINGS_APPLICATION_KEY, __( 'Application Key', HEWA_LANGUAGE_DOMAIN ), 'hewa_admin_settings_input_text'
