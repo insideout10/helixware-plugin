@@ -128,7 +128,8 @@ function hewa_shortcode_player( $atts ) {
 	$player_json = json_encode( $player, JSON_PRETTY_PRINT );
 
 	// Start printing out the player javascript.
-	$jwplayer_url = plugins_url( 'js/jwplayer-6.11/jwplayer.js', __FILE__ );
+//	$jwplayer_url = plugins_url( 'js/jwplayer-6.11/jwplayer.js', __FILE__ );
+	$jwplayer_url = '//jwpsrv.com/library/YOUR_JW_PLAYER_ACCOUNT_TOKEN.js';
 	$result .= <<<EOF
         <script type="text/javascript">
             jQuery( function( $ ) {
