@@ -55,7 +55,7 @@ function hewa_shortcode_player( $atts ) {
 	$player['flashplayer'] = plugins_url( 'js/jwplayer-6.11/jwplayer.flash.swf', __FILE__ );
 	$player['html5player'] = plugins_url( 'js/jwplayer-6.11/jwplayer.html5.js', __FILE__ );
 	$player['androidhls']  = true;
-	$player['autostart']   = ( $params['autostart'] ? 'true' : 'false' );
+	$player['autostart']   = ( $params['autostart'] && is_singular() ? 'true' : 'false' );
 	$player['playlist']    = ( $is_live || null === $params['listbar']
 		? hewa_get_option( HEWA_SETTINGS_SERVER_URL, false ) . "/4/pub/asset/$asset_id/streams.xml"
 		: apply_filters( HEWA_FILTERS_PLAYER_PLAYLIST_URL,
