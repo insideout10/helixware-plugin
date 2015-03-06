@@ -112,11 +112,11 @@ function hewa_echo_rss_item( $asset_id, $m3u8 = null, $title = null, $image_url 
         echo "   <jwplayer:image>$image_url</jwplayer:image>\n";
     }
 
-    echo "   <jwplayer:source file=\"$ajax_url?action=hewa_smil&amp;id=$asset_id\" label=\"Auto\" type=\"rtmp\" />\n";
-    echo "   <jwplayer:source file=\"$ajax_url?action=hewa_m3u8&amp;id=$asset_id&amp;ext=file.m3u8\" label=\"Auto\" default=\"true\" type=\"hls\" />\n";
+	// TODO: make the following URL parametric and use the authenticated PHP call.
+	$server_url = hewa_get_option( HEWA_SETTINGS_SERVER_URL, '' );
 
-    // TODO: make the following URL parametric and use the authenticated PHP call.
-    $server_url = hewa_get_option( HEWA_SETTINGS_SERVER_URL, '' );
+	echo "   <jwplayer:source file=\"$server_url/4/pub/asset/$asset_id/streams.smil\" label=\"Auto\" type=\"rtmp\" />\n";
+    echo "   <jwplayer:source file=\"$server_url/4/pub/asset/$asset_id/streams.m3u8\" label=\"Auto\" default=\"true\" type=\"hls\" />\n";
     echo "   <jwplayer:track file=\"$server_url/4/pub/asset/$asset_id/vtt?w=95&amp;i=5\" kind=\"thumbnails\" />\n";
 
 
