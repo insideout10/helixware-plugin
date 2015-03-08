@@ -22,13 +22,18 @@ function hewa_ajax_quota() {
 		wp_die();
 	}
 
+	hewa_write_log( 'Response received [ response :: {response} ]', array( 'response' => $response ) );
+
 	// Build the message.
-	$max_quota      = $quota->account->maxQuota;
-	$used_quota     = $quota->account->currentQuota;
-	$free_quota     = $max_quota - $used_quota;
-	$percent_free   = round( ( $free_quota / $max_quota ) * 100, 0 );
-	$message        = __( 'You have %s%% of free space (%s out of %s total).', HEWA_LANGUAGE_DOMAIN );
-	$quota->message = sprintf( $message, $percent_free, hewa_format_bytes( $free_quota ), hewa_format_bytes( $max_quota ) );
+	$max_quota    = $quota->account->maxQuota;
+	$used_quota   = $quota->account->currentQuota;
+	$free_quota   = $max_quota - $used_quota;
+	$percent_free = round( ( $free_quota / $max_quota ) * 100, 0 );
+
+	$message        = ( $free_quota >= 0
+		? __( 'You have %s%% of free space (%s out of %s total).', HEWA_LANGUAGE_DOMAIN )
+		: __( 'You are using %2$s over quota (%3$s total).', HEWA_LANGUAGE_DOMAIN ) );
+	$quota->message = sprintf( $message, $percent_free, hewa_format_bytes( abs( $free_quota ) ), hewa_format_bytes( $max_quota ) );
 
 	echo json_encode( $quota );
 
