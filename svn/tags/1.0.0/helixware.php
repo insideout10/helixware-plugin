@@ -17,11 +17,11 @@
 
 /**
  * Plugin Name: HelixWare
- * Plugin URI: http://insideout.io
+ * Plugin URI: http://helixware.tv
  * Description: HelixWare turns WordPress in a Video web site
- * Version: 1.0.0-SNAPSHOT
+ * Version: 1.0.0
  * Author: InsideOut10
- * Author URI: http://twitter.com/ziodave
+ * Author URI: http://helixware.tv
  * License: GPL2
  */
 
@@ -52,7 +52,7 @@ require_once( 'shortcodes/helixware_shortcode_player.php' );
 // Files related to the admin screen.
 
 // Load general functions: scripts.
-require_once( 'admin/helixware_admin.php');
+require_once( 'admin/helixware_admin.php' );
 
 // Provide the still image AJAX call.
 require_once( 'ajax/helixware_ajax_still_image.php' );
