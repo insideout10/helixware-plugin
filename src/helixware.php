@@ -19,7 +19,7 @@
  * Plugin Name: HelixWare
  * Plugin URI: http://helixware.tv
  * Description: HelixWare turns WordPress in a Video web site
- * Version: 1.0.0
+ * Version: 1.1.0-dev
  * Author: InsideOut10
  * Author URI: http://helixware.tv
  * License: GPL2
