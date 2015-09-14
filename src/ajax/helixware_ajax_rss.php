@@ -95,9 +95,6 @@ add_action( 'wp_ajax_nopriv_hewa_rss', 'hewa_ajax_load_rss' );
 
 function hewa_echo_rss_item( $asset_id, $m3u8 = null, $title = null, $image_url = null ) {
 
-    // Get the ajax URL.
-    $ajax_url = admin_url( 'admin-ajax.php' );
-
     echo "  <item>\n";
 
     if ( null !== $title ) {

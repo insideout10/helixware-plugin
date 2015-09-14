@@ -71,7 +71,7 @@ function hewa_shortcode_player( $atts ) {
 	$player['ga']          = array(
 		// playlist title or mediaid
 		'idstring'    => ( null != $params['ga_id_string'] ? $params['ga_id_string'] : 'mediaid' ),
-		'universalga' => ( null != $params['ga_tracking_object'] ? $params['ga_tracking_object'] : '__gaTracker' ),
+		'universalga' => ( null != $params['ga_tracking_object'] ? $params['ga_tracking_object'] : 'ga' ),
 		// mediaid or title
 		'label'       => ( null != $params['ga_media_id'] ? $params['ga_media_id'] : 'title' )
 	);

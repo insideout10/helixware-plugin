@@ -79,3 +79,4 @@ require_once( 'admin/helixware_admin_notices.php' );
 require_once( 'admin/helixware_admin_metaboxes.php' );
 
 require_once( 'modules/seo/seo.php' );
+require_once( 'modules/videojs/videojs.php' );
