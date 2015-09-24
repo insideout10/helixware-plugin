@@ -127,6 +127,16 @@ class HelixWare {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-i18n.php';
 
 		/**
+		 * The class responsible for making HTTP requests.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client.php';
+
+		/**
+		 * The class responsible for accessing remote assets.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-remote-assets.php';
+
+		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-helixware-admin.php';
@@ -137,15 +147,6 @@ class HelixWare {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-helixware-public.php';
 
-		/**
-		 * The class responsible for making HTTP requests.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-helixware-http-client.php';
-
-		/**
-		 * The class responsible for accessing remote assets.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-helixware-remote-assets.php';
 
 		$this->loader = new HelixWare_Loader();
 
