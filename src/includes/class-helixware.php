@@ -35,7 +35,7 @@ class HelixWare {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      HelixWare_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      HelixWare_Loader $loader Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -44,7 +44,7 @@ class HelixWare {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
+	 * @var      string $plugin_name The string used to uniquely identify this plugin.
 	 */
 	protected $plugin_name;
 
@@ -53,7 +53,7 @@ class HelixWare {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
+	 * @var      string $version The current version of the plugin.
 	 */
 	protected $version;
 
@@ -69,7 +69,7 @@ class HelixWare {
 	public function __construct() {
 
 		$this->plugin_name = 'helixware';
-		$this->version = '1.0.0';
+		$this->version     = '1.1.0-dev';
 
 		$this->load_dependencies();
 		$this->set_locale();
