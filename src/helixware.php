@@ -94,6 +94,9 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+// Get the HelixWare server URL.
+defined( 'HELIXWARE_SERVER_URL' ) || define( 'HELIXWARE_SERVER_URL', 'https://cloud.helixware.tv' );
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-helixware-activator.php

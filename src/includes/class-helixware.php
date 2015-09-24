@@ -58,6 +58,24 @@ class HelixWare {
 	protected $version;
 
 	/**
+	 * The HTTP client to perform remote requests.
+	 *
+	 * @since    1.1.0
+	 * @access   private
+	 * @var      HelixWare_Http_Client $http_client The HTTP client.
+	 */
+	private $http_client;
+
+	/**
+	 * Access to the remote assets.
+	 *
+	 * @since    1.1.0
+	 * @access   private
+	 * @var      HelixWare_Remote_Assets $remote_assets The remote assets.
+	 */
+	private $remote_assets;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -119,7 +137,20 @@ class HelixWare {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-helixware-public.php';
 
+		/**
+		 * The class responsible for making HTTP requests.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-helixware-http-client.php';
+
+		/**
+		 * The class responsible for accessing remote assets.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-helixware-remote-assets.php';
+
 		$this->loader = new HelixWare_Loader();
+
+		$this->http_client   = new HelixWare_Http_Client();
+		$this->remote_assets = new HelixWare_Remote_Assets( $this->http_client );
 
 	}
 

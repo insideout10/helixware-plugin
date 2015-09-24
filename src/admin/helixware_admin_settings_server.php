@@ -25,13 +25,13 @@ function hewa_admin_settings_server_section() {
 		HEWA_OPTIONS_SETTINGS_SERVER
 	);
 
-	hewa_admin_settings_add_field(
-		HEWA_SETTINGS_SERVER_URL,
-		__( 'HelixWare Server URL', HEWA_LANGUAGE_DOMAIN ),
-		'hewa_admin_settings_input_text',
-		null,
-		'https://cloud.helixware.tv'
-	);
+//	hewa_admin_settings_add_field(
+//		HEWA_SETTINGS_SERVER_URL,
+//		__( 'HelixWare Server URL', HEWA_LANGUAGE_DOMAIN ),
+//		'hewa_admin_settings_input_text',
+//		null,
+//		'https://cloud.helixware.tv'
+//	);
 
 //	hewa_admin_settings_add_field(
 //		HEWA_SETTINGS_STREAMING_SERVER, __( 'Streaming Server', HEWA_LANGUAGE_DOMAIN ), 'hewa_admin_settings_input_text'
