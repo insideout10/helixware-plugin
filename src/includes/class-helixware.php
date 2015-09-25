@@ -58,22 +58,13 @@ class HelixWare {
 	protected $version;
 
 	/**
-	 * The HTTP client to perform remote requests.
+	 * The Asset Service.
 	 *
-	 * @since    1.1.0
-	 * @access   private
-	 * @var      HelixWare_Http_Client $http_client The HTTP client.
+	 * @since 1.1.0
+	 * @access private
+	 * @var HelixWare_Asset_Service $asset_service The Asset Service.
 	 */
-	private $http_client;
-
-	/**
-	 * Access to the remote assets.
-	 *
-	 * @since    1.1.0
-	 * @access   private
-	 * @var      HelixWare_Remote_Assets $remote_assets The remote assets.
-	 */
-	private $remote_assets;
+	private $asset_service;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -129,12 +120,11 @@ class HelixWare {
 		/**
 		 * The class responsible for making HTTP requests.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client.php';
-
-		/**
-		 * The class responsible for accessing remote assets.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-remote-assets.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-hal-response.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-hal-request.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-hal-client.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-syncer.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-asset-service.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
@@ -150,8 +140,12 @@ class HelixWare {
 
 		$this->loader = new HelixWare_Loader();
 
-		$this->http_client   = new HelixWare_Http_Client();
-		$this->remote_assets = new HelixWare_Remote_Assets( $this->http_client );
+		// Create an Asset Service.
+		$this->asset_service = new HelixWare_Asset_Service();
+
+		$sync = new HelixWare_Syncer();
+
+		$sync->sync();
 
 	}
 
@@ -186,6 +180,7 @@ class HelixWare {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_filter( 'wp_get_attachment_url', $this->asset_service, 'get_attachment_url' );
 
 	}
 

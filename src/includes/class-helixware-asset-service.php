@@ -1,13 +1,13 @@
 <?php
 
 /**
- * An HTTP client to perform remote requests.
+ * An asset.
  *
  * @package    HelixWare
  * @subpackage HelixWare/includes
  * @author     David Riccitelli <david@insideout.io>
  */
-class HelixWare_Http_Client {
+class HelixWare_Asset_Service {
 
 	/**
 	 * Initialize the class and set its properties.
@@ -16,6 +16,11 @@ class HelixWare_Http_Client {
 	 */
 	public function __construct() {
 
+	}
+
+	public function get_attachment_url( $url, $post_id ) {
+
+		return 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png';
 	}
 
 }
