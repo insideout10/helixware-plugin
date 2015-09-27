@@ -73,4 +73,13 @@ class HelixWare_Asset_Image_Service {
 
 	}
 
+	public function wp_prepare_attachment_for_js( $response, $attachment, $meta ) {
+
+		$guid              = get_the_guid( $attachment );
+		$path              = substr( $guid, strlen( $this->server_url ) ) . urlencode( '/images/0/0/5?width=200' );
+		$response['image'] = array( 'src' => admin_url( "admin-ajax.php?action=hw_asset_image&path=$path" ) );
+
+		return $response;
+	}
+
 }

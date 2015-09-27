@@ -12,19 +12,29 @@ class HelixWare_Syncer {
 	const MIME_TYPE = 'application/x-helixware';
 
 	/**
+	 * A HAL client.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @var HelixWare_HAL_Client $hal_client A HAL client.
+	 */
+	private $hal_client;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.1.0
 	 */
-	public function __construct() {
+	public function __construct( $hal_client ) {
+
+		$this->hal_client = $hal_client;
 
 	}
 
 	public function sync() {
 
-		$hal_client = new HelixWare_HAL_Client();
-		$request    = new HelixWare_HAL_Request( 'GET', hewa_get_server_url() . '/api/assets' );
-		$response   = $hal_client->execute( $request );
+		$request  = new HelixWare_HAL_Request( 'GET', hewa_get_server_url() . '/api/assets' );
+		$response = $this->hal_client->execute( $request );
 
 		do {
 			foreach ( $response->get_embedded( 'assets' ) as $asset ) {
@@ -32,15 +42,6 @@ class HelixWare_Syncer {
 				$this->_sync( $asset );
 			}
 		} while ( $response->has_next() && $response = $response->get_next() );
-
-//		$this->http_client   = new HelixWare_Http_Client();
-//		$this->remote_assets = new HelixWare_Remote_Assets( $this->http_client );
-//
-//		$response = $this->remote_assets->get_all();
-//		$json = json_decode( $response['body'] );
-//		var_dump( $json->_embedded->assets );
-//		wp_die();
-
 
 	}
 
@@ -67,8 +68,6 @@ class HelixWare_Syncer {
 
 //			echo( "[ existing id :: $attachment_id ]\n" );
 		}
-
-		wp_get_attachment_url();
 
 		if ( 0 === ( $attachment_id = wp_insert_attachment( $attachment, $filename ) ) ) {
 //			echo( "error\n" );
