@@ -24,6 +24,8 @@ class HelixWare_Syncer {
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.1.0
+	 *
+	 * @param HelixWare_HAL_Client $hal_client
 	 */
 	public function __construct( $hal_client ) {
 
@@ -48,8 +50,6 @@ class HelixWare_Syncer {
 	private function _sync( $asset ) {
 		global $wpdb;
 
-//		var_dump( $asset );
-
 		$self     = $asset->_links->self->href;
 		$filename = ( isset( $asset->relativePath ) ? $asset->relativePath : '' );
 
@@ -65,17 +65,16 @@ class HelixWare_Syncer {
 
 		if ( NULL !== $attachment_id ) {
 			$attachment['ID'] = $attachment_id;
-
-//			echo( "[ existing id :: $attachment_id ]\n" );
 		}
 
 		if ( 0 === ( $attachment_id = wp_insert_attachment( $attachment, $filename ) ) ) {
-//			echo( "error\n" );
-
 			return;
 		};
 
-//		echo( "attachment id :: $attachment_id\n" );
+
+		wp_update_attachment_metadata( $attachment_id, array() );
+		update_post_meta( $attachment_id, '_hw_thumbnail_url', $asset->_links->thumbnail->href );
+
 	}
 
 }
