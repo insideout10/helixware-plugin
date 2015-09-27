@@ -58,6 +58,24 @@ class HelixWare {
 	protected $version;
 
 	/**
+	 * An HTTP client to perform requests towards HelixWare.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @var HelixWare_HTTP_Client $http_client An HTTP client.
+	 */
+	private $http_client;
+
+	/**
+	 * A HAL client to perform requests towards HelixWare.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @var HelixWare_HAL_Client $hal_client A HAL client.
+	 */
+	private $hal_client;
+
+	/**
 	 * The Asset Service.
 	 *
 	 * @since 1.1.0
@@ -65,6 +83,15 @@ class HelixWare {
 	 * @var HelixWare_Asset_Service $asset_service The Asset Service.
 	 */
 	private $asset_service;
+
+	/**
+	 * The Asset Image Service.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @var HelixWare_Asset_Image_Service $asset_image_service The Asset Image Service.
+	 */
+	private $asset_image_service;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -120,11 +147,13 @@ class HelixWare {
 		/**
 		 * The class responsible for making HTTP requests.
 		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-hal-response.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-hal-request.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-hal-client.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-syncer.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-asset-service.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-asset-image-service.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
@@ -141,11 +170,14 @@ class HelixWare {
 		$this->loader = new HelixWare_Loader();
 
 		// Create an Asset Service.
-		$this->asset_service = new HelixWare_Asset_Service();
+		$this->http_client         = new HelixWare_HTTP_Client();
+		$this->hal_client          = new HelixWare_HAL_Client( $this->http_client );
+		$this->asset_service       = new HelixWare_Asset_Service();
+		$this->asset_image_service = new HelixWare_Asset_Image_Service( $this->http_client, hewa_get_server_url() );
 
-		$sync = new HelixWare_Syncer();
-
-		$sync->sync();
+//		$sync = new HelixWare_Syncer();
+//
+//		$sync->sync();
 
 	}
 
@@ -178,9 +210,11 @@ class HelixWare {
 
 		$plugin_admin = new HelixWare_Admin( $this->get_helixware(), $this->get_version() );
 
+		$this->loader->add_filter( 'wp_get_attachment_url', $this->asset_service, 'get_attachment_url' );
+
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-		$this->loader->add_filter( 'wp_get_attachment_url', $this->asset_service, 'get_attachment_url' );
+		$this->loader->add_action( 'wp_ajax_hw_asset_image', $this->asset_image_service, 'wp_ajax_get_image' );
 
 	}
 
@@ -197,6 +231,7 @@ class HelixWare {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action( 'wp_ajax_nopriv_hw_asset_image', $this->asset_image_service, 'wp_ajax_get_image' );
 
 	}
 
