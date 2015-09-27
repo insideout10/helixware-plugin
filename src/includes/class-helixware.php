@@ -211,7 +211,8 @@ class HelixWare {
 		$plugin_admin = new HelixWare_Admin( $this->get_helixware(), $this->get_version() );
 
 		$this->loader->add_filter( 'wp_get_attachment_url', $this->asset_service, 'get_attachment_url' );
-		$this->loader->add_filter( 'wp_prepare_attachment_for_js', $this->asset_image_service, 'wp_prepare_attachment_for_js', 900, 3 );
+		$this->loader->add_filter( 'wp_prepare_attachment_for_js', $this->asset_image_service, 'wp_prepare_attachment_for_js', 1000, 3 );
+		$this->loader->add_filter( 'media_send_to_editor', $this->asset_image_service, 'media_send_to_editor', 1000, 3 );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );

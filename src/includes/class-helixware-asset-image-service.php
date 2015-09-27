@@ -75,12 +75,37 @@ class HelixWare_Asset_Image_Service {
 
 	public function wp_prepare_attachment_for_js( $response, $attachment, $meta ) {
 
+		// Only process HelixWare assets.
+		if ( HelixWare_Syncer::MIME_TYPE !== $response['mime'] ) {
+			return $response;
+		}
+
 		$thumbnail_url     = get_post_meta( $attachment->ID, '_hw_thumbnail_url', TRUE );
 		$thumbnail_path    = substr( $thumbnail_url, strlen( $this->server_url ) );
 		$response['image'] = array( 'src' => admin_url( "admin-ajax.php?action=hw_asset_image&path=$thumbnail_path" ) );
 
-
 		return $response;
+	}
+
+	/**
+	 * Creates the _hw_embed_ shortcode to embed an asset from HelixWare.
+	 * @since 1.1.0
+	 *
+	 * @param string $html
+	 * @param int $id
+	 * @param string $attachment
+	 *
+	 * @return string A _hw_embed_ shortcode.
+	 */
+	public function media_send_to_editor( $html, $id, $attachment ) {
+
+		$post = get_post( $id );
+
+		if ( HelixWare_Syncer::MIME_TYPE !== $post->post_mime_type ) {
+			return $html;
+		}
+
+		return "[hw_embed id='$post->guid']";
 	}
 
 }
