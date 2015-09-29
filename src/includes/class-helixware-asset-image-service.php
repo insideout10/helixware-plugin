@@ -80,9 +80,14 @@ class HelixWare_Asset_Image_Service {
 			return $response;
 		}
 
-		$thumbnail_url     = get_post_meta( $attachment->ID, '_hw_thumbnail_url', TRUE );
-		$thumbnail_path    = substr( $thumbnail_url, strlen( $this->server_url ) );
-		$response['image'] = array( 'src' => admin_url( "admin-ajax.php?action=hw_asset_image&path=$thumbnail_path" ) );
+		// Get the thumbnail URL.
+		$thumbnail_url = get_post_meta( $attachment->ID, HelixWare_Asset_Service::META_THUMBNAIL_URL, TRUE );
+
+		// Add a thumbnail URL if available.
+		if ( ! empty( $thumbnail_url ) ) {
+			$thumbnail_path    = substr( $thumbnail_url, strlen( $this->server_url ) );
+			$response['image'] = array( 'src' => admin_url( "admin-ajax.php?action=hw_asset_image&path=$thumbnail_path" ) );
+		}
 
 		return $response;
 	}

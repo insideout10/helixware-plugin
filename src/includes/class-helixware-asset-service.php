@@ -9,6 +9,10 @@
  */
 class HelixWare_Asset_Service {
 
+	// Meta Keys for attachment posts.
+	const META_THUMBNAIL_URL = '_hw_thumbnail_url';
+	const META_TYPE = '_hw_type';
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -16,11 +20,6 @@ class HelixWare_Asset_Service {
 	 */
 	public function __construct() {
 
-	}
-
-	public function get_attachment_url( $url, $post_id ) {
-
-		return 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png';
 	}
 
 }

@@ -33,6 +33,11 @@ class HelixWare_Syncer {
 
 	}
 
+	/**
+	 * Synchronize the assets with the remote HelixWare.
+	 *
+	 * @since 1.1.0
+	 */
 	public function sync() {
 
 		$request  = new HelixWare_HAL_Request( 'GET', hewa_get_server_url() . '/api/assets' );
@@ -47,6 +52,13 @@ class HelixWare_Syncer {
 
 	}
 
+	/**
+	 * Internal function to perform the actual synchronization.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param $asset
+	 */
 	private function _sync( $asset ) {
 		global $wpdb;
 
@@ -71,9 +83,15 @@ class HelixWare_Syncer {
 			return;
 		};
 
+		// Save a reference to the thumbnail if it exists.
+		if ( isset( $asset->_links->thumbnail ) ) {
+			update_post_meta( $attachment_id, HelixWare_Asset_Service::META_THUMBNAIL_URL, $asset->_links->thumbnail->href );
+		} else {
+			delete_post_meta( $attachment_id, HelixWare_Asset_Service::META_THUMBNAIL_URL );
+		}
 
-		wp_update_attachment_metadata( $attachment_id, array() );
-		update_post_meta( $attachment_id, '_hw_thumbnail_url', $asset->_links->thumbnail->href );
+		// Save the type (Live, OnDemand, Broadcast, Channel).
+		update_post_meta( $attachment_id, HelixWare_Asset_Service::META_TYPE, $asset->type );
 
 	}
 

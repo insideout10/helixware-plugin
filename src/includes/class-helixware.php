@@ -94,6 +94,12 @@ class HelixWare {
 	private $asset_image_service;
 
 	/**
+	 * @since 1.1.0
+	 * @var HelixWare_Embed_Shortcode $embed_shortcode
+	 */
+	private $embed_shortcode;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -166,6 +172,8 @@ class HelixWare {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-helixware-public.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-helixware-embed-shortcode.php';
+
 
 		$this->loader = new HelixWare_Loader();
 
@@ -178,6 +186,8 @@ class HelixWare {
 		$sync = new HelixWare_Syncer( $this->hal_client );
 
 		$sync->sync();
+
+		$this->embed_shortcode = new HelixWare_Embed_Shortcode();
 
 	}
 
@@ -209,8 +219,7 @@ class HelixWare {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new HelixWare_Admin( $this->get_helixware(), $this->get_version() );
-
-		$this->loader->add_filter( 'wp_get_attachment_url', $this->asset_service, 'get_attachment_url' );
+		
 		$this->loader->add_filter( 'wp_prepare_attachment_for_js', $this->asset_image_service, 'wp_prepare_attachment_for_js', 1000, 3 );
 		$this->loader->add_filter( 'media_send_to_editor', $this->asset_image_service, 'media_send_to_editor', 1000, 3 );
 
