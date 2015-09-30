@@ -76,7 +76,7 @@ class HelixWare_Asset_Image_Service {
 	public function wp_prepare_attachment_for_js( $response, $attachment, $meta ) {
 
 		// Only process HelixWare assets.
-		if ( HelixWare_Syncer::MIME_TYPE !== $response['mime'] ) {
+		if ( ! HelixWare_Asset_Service::is_helixware_mime_type( $response['mime'] ) ) {
 			return $response;
 		}
 
@@ -94,6 +94,7 @@ class HelixWare_Asset_Image_Service {
 
 	/**
 	 * Creates the _hw_embed_ shortcode to embed an asset from HelixWare.
+	 *
 	 * @since 1.1.0
 	 *
 	 * @param string $html
@@ -106,7 +107,7 @@ class HelixWare_Asset_Image_Service {
 
 		$post = get_post( $id );
 
-		if ( HelixWare_Syncer::MIME_TYPE !== $post->post_mime_type ) {
+		if ( ! HelixWare_Asset_Service::is_helixware_mime_type( $post->post_mime_type ) ) {
 			return $html;
 		}
 

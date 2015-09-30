@@ -4,7 +4,11 @@
  */
 
 /* Display the HelixWare in the WordPress media library on HelixWare assets */
-li.attachment .attachment-preview.type-application.subtype-x-helixware:after {
+li.attachment .attachment-preview.type-application.subtype-x-helixware:after,
+li.attachment .attachment-preview.type-application.subtype-x-helixware-ondemand:after,
+li.attachment .attachment-preview.type-application.subtype-x-helixware-live:after,
+li.attachment .attachment-preview.type-application.subtype-x-helixware-broadcast:after,
+li.attachment .attachment-preview.type-application.subtype-x-helixware-channel:after {
     background-image: url("../images/helixware.png");
     width: 20px;
     height: 20px;

@@ -9,8 +9,6 @@
  */
 class HelixWare_Syncer {
 
-	const MIME_TYPE = 'application/x-helixware';
-
 	const ASSETS_PATH = '/api/assets';
 	const FIND_BY_LAST_MODIFIED_DATE_GREATER_THAN_PATH = '/search/findByLastModifiedDateGreaterThan?date=%s';
 
@@ -100,6 +98,9 @@ class HelixWare_Syncer {
 		$self     = $asset->_links->self->href;
 		$filename = ( isset( $asset->relativePath ) ? $asset->relativePath : '' );
 
+		// Get the mime type according to the asset type.
+		$mime_type = HelixWare_Asset_Service::get_mime_type( $asset->type );
+
 		$attachment_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid=%s", $self ) );
 
 		$attachment = array(
@@ -107,7 +108,7 @@ class HelixWare_Syncer {
 			'post_title'     => $asset->title,
 			'post_content'   => '', // must be an empty string.
 			'post_status'    => 'inherit',
-			'post_mime_type' => self::MIME_TYPE
+			'post_mime_type' => $mime_type
 		);
 
 		if ( NULL !== $attachment_id ) {

@@ -9,6 +9,18 @@
  */
 class HelixWare_Asset_Service {
 
+	// The mime types for the HelixWare attachments.
+	const MIME_TYPE_ONDEMAND = 'application/x-helixware-ondemand';
+	const MIME_TYPE_LIVE = 'application/x-helixware-live';
+	const MIME_TYPE_BROADCAST = 'application/x-helixware-broadcast';
+	const MIME_TYPE_CHANNEL = 'application/x-helixware-channel';
+	const MIME_TYPE_UNKNOWN = 'application/x-helixware';
+
+	const TYPE_ONDEMAND = 'ondemand';
+	const TYPE_LIVE = 'live';
+	const TYPE_BROADCAST = 'broadcast';
+	const TYPE_CHANNEL = 'channel';
+
 	// Meta Keys for attachment posts.
 	const META_THUMBNAIL_URL = '_hw_thumbnail_url';
 	const META_TYPE = '_hw_type';
@@ -23,6 +35,56 @@ class HelixWare_Asset_Service {
 	 * @since    1.1.0
 	 */
 	public function __construct() {
+
+	}
+
+	/**
+	 * Get the mime-type for the specified HelixWare type.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param string $type A HelixWare type (ondemand, live, broadcast, channel).
+	 *
+	 * @return string The related mime-type or a default mime type if the type is not recognized.
+	 */
+	public static function get_mime_type( $type ) {
+
+		switch ( strtolower( $type ) ) {
+
+			case self::TYPE_ONDEMAND:
+				return self::MIME_TYPE_ONDEMAND;
+
+			case self::TYPE_LIVE:
+				return self::MIME_TYPE_LIVE;
+
+			case self::TYPE_BROADCAST:
+				return self::MIME_TYPE_BROADCAST;
+
+			case self::TYPE_CHANNEL:
+				return self::MIME_TYPE_CHANNEL;
+
+			default:
+				return self::MIME_TYPE_UNKNOWN;
+		}
+
+	}
+
+	/**
+	 * Check whether the provided mime-type belongs to HelixWare.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param string $mime_type The mime type.
+	 *
+	 * @return bool True if it belongs to HelixWare otherwise false.
+	 */
+	public static function is_helixware_mime_type( $mime_type ) {
+
+		return ( self::MIME_TYPE_ONDEMAND === $mime_type
+		         || self::MIME_TYPE_LIVE === $mime_type
+		         || self::MIME_TYPE_BROADCAST === $mime_type
+		         || self::MIME_TYPE_CHANNEL === $mime_type
+		         || self::MIME_TYPE_UNKNOWN );
 
 	}
 
