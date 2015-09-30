@@ -85,7 +85,7 @@ class HelixWare_Asset_Image_Service {
 
 		// Add a thumbnail URL if available.
 		if ( ! empty( $thumbnail_url ) ) {
-			$thumbnail_path    = substr( $thumbnail_url, strlen( $this->server_url ) );
+			$thumbnail_path    = urlencode( substr( $thumbnail_url, strlen( $this->server_url ) ) );
 			$response['image'] = array( 'src' => admin_url( "admin-ajax.php?action=hw_asset_image&path=$thumbnail_path" ) );
 		}
 
