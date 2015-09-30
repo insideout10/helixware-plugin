@@ -2,3 +2,16 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+/* Display the HelixWare in the WordPress media library on HelixWare assets */
+li.attachment .attachment-preview.type-application.subtype-x-helixware:after {
+    background-image: url("../images/helixware.png");
+    width: 20px;
+    height: 20px;
+    display: block;
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    content: "";
+    background-size: 20px;
+}
