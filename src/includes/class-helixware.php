@@ -183,7 +183,7 @@ class HelixWare {
 		$this->asset_service       = new HelixWare_Asset_Service();
 		$this->asset_image_service = new HelixWare_Asset_Image_Service( $this->http_client, hewa_get_server_url() );
 
-		$sync = new HelixWare_Syncer( $this->hal_client );
+		$sync = new HelixWare_Syncer( $this->hal_client, hewa_get_server_url(), $this->asset_service );
 
 		$sync->sync();
 
@@ -219,7 +219,7 @@ class HelixWare {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new HelixWare_Admin( $this->get_helixware(), $this->get_version() );
-		
+
 		$this->loader->add_filter( 'wp_prepare_attachment_for_js', $this->asset_image_service, 'wp_prepare_attachment_for_js', 1000, 3 );
 		$this->loader->add_filter( 'media_send_to_editor', $this->asset_image_service, 'media_send_to_editor', 1000, 3 );
 
