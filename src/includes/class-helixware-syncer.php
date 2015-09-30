@@ -11,7 +11,8 @@ class HelixWare_Syncer {
 
 	const MIME_TYPE = 'application/x-helixware';
 
-	const FIND_BY_LAST_MODIFIED_DATE_GREATER_THAN_PATH = '/api/assets/search/findByLastModifiedDateGreaterThan?date=%s';
+	const ASSETS_PATH = '/api/assets';
+	const FIND_BY_LAST_MODIFIED_DATE_GREATER_THAN_PATH = '/search/findByLastModifiedDateGreaterThan?date=%s';
 
 	/**
 	 * A HAL client.
@@ -60,13 +61,20 @@ class HelixWare_Syncer {
 	 * Synchronize the assets with the remote HelixWare.
 	 *
 	 * @since 1.1.0
+	 *
+	 * @param bool $incremental Whether to do incremental sync, by default yes.
 	 */
-	public function sync() {
+	public function sync( $incremental = TRUE ) {
 
-		// We ask to HelixWare only assets changed after the most recent last modified date.
-		$last_modified_date = $this->asset_service->get_most_recent_last_modified_date();
+		// Set the path to the /api/assets.
+		$path = self::ASSETS_PATH;
 
-		$path     = sprintf( self::FIND_BY_LAST_MODIFIED_DATE_GREATER_THAN_PATH, $last_modified_date );
+		// If incremental, we ask to HelixWare only assets changed after the most recent last modified date.
+		if ( $incremental ) {
+			$last_modified_date = $this->asset_service->get_most_recent_last_modified_date();
+			$path .= sprintf( self::FIND_BY_LAST_MODIFIED_DATE_GREATER_THAN_PATH, $last_modified_date );
+		}
+
 		$request  = new HelixWare_HAL_Request( 'GET', $this->server_url . $path );
 		$response = $this->hal_client->execute( $request );
 
@@ -110,17 +118,10 @@ class HelixWare_Syncer {
 			return;
 		};
 
-		// Save a reference to the thumbnail if it exists.
-		if ( isset( $asset->_links->thumbnail ) ) {
-			update_post_meta( $attachment_id, HelixWare_Asset_Service::META_THUMBNAIL_URL, $asset->_links->thumbnail->href );
-		} else {
-			delete_post_meta( $attachment_id, HelixWare_Asset_Service::META_THUMBNAIL_URL );
-		}
-
-		// Save the type (Live, OnDemand, Broadcast, Channel).
-		update_post_meta( $attachment_id, HelixWare_Asset_Service::META_TYPE, $asset->type );
-
-		update_post_meta( $attachment_id, HelixWare_Asset_Service::META_LAST_MODIFIED_DATE, $asset->lastModifiedDate );
+		// Set the additional fields.
+		$this->asset_service->set_thumbnail_url( $attachment_id, isset( $asset->_links->thumbnail->href ) ? $asset->_links->thumbnail->href : NULL );
+		$this->asset_service->set_type( $attachment_id, $asset->type );
+		$this->asset_service->set_last_modified_date( $attachment_id, $asset->lastModifiedDate );
 
 	}
 
