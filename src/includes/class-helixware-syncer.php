@@ -11,6 +11,8 @@ class HelixWare_Syncer {
 
 	const MIME_TYPE = 'application/x-helixware';
 
+	const FIND_BY_LAST_MODIFIED_DATE_GREATER_THAN_PATH = '/api/assets/search/findByLastModifiedDateGreaterThan?date=%s';
+
 	/**
 	 * A HAL client.
 	 *
@@ -21,16 +23,37 @@ class HelixWare_Syncer {
 	private $hal_client;
 
 	/**
+	 * The HelixWare server URL.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @var string $server_url The server URL.
+	 */
+	private $server_url;
+
+	/**
+	 * The Asset service.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @var HelixWare_Asset_Service $asset_service The Asset service.
+	 */
+	private $asset_service;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.1.0
 	 *
-	 * @param HelixWare_HAL_Client $hal_client
+	 * @param HelixWare_HAL_Client $hal_client A HAL client.
+	 * @param string $server_url The server URL.
+	 * @param HelixWare_Asset_Service $asset_service The Asset Service.
 	 */
-	public function __construct( $hal_client ) {
+	public function __construct( $hal_client, $server_url, $asset_service ) {
 
-		$this->hal_client = $hal_client;
-
+		$this->hal_client    = $hal_client;
+		$this->server_url    = $server_url;
+		$this->asset_service = $asset_service;
 	}
 
 	/**
@@ -40,7 +63,11 @@ class HelixWare_Syncer {
 	 */
 	public function sync() {
 
-		$request  = new HelixWare_HAL_Request( 'GET', hewa_get_server_url() . '/api/assets' );
+		// We ask to HelixWare only assets changed after the most recent last modified date.
+		$last_modified_date = $this->asset_service->get_most_recent_last_modified_date();
+
+		$path     = sprintf( self::FIND_BY_LAST_MODIFIED_DATE_GREATER_THAN_PATH, $last_modified_date );
+		$request  = new HelixWare_HAL_Request( 'GET', $this->server_url . $path );
 		$response = $this->hal_client->execute( $request );
 
 		do {
@@ -92,6 +119,8 @@ class HelixWare_Syncer {
 
 		// Save the type (Live, OnDemand, Broadcast, Channel).
 		update_post_meta( $attachment_id, HelixWare_Asset_Service::META_TYPE, $asset->type );
+
+		update_post_meta( $attachment_id, HelixWare_Asset_Service::META_LAST_MODIFIED_DATE, $asset->lastModifiedDate );
 
 	}
 
