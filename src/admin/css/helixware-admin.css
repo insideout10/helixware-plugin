@@ -9,13 +9,31 @@ li.attachment .attachment-preview.type-application.subtype-x-helixware-ondemand:
 li.attachment .attachment-preview.type-application.subtype-x-helixware-live:after,
 li.attachment .attachment-preview.type-application.subtype-x-helixware-broadcast:after,
 li.attachment .attachment-preview.type-application.subtype-x-helixware-channel:after {
-    background-image: url("../images/helixware.png");
-    width: 20px;
-    height: 20px;
     display: block;
     position: absolute;
     top: 1px;
-    right: 1px;
-    content: "";
+    left: 1px;
+    background: white url("../images/helixware.png") no-repeat center right;
     background-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+li.attachment .attachment-preview.type-application.subtype-x-helixware-ondemand:after,
+li.attachment .attachment-preview.type-application.subtype-x-helixware-live:after {
+    width: 40px;
+    height: 20px;
+    font-family: 'dashicons';
+    text-align: left;
+    font-size: 18px;
+    line-height: 22px;
+    text-indent: 2px;
+}
+
+li.attachment .attachment-preview.type-application.subtype-x-helixware-ondemand:after {
+    content: "\f126";
+}
+
+li.attachment .attachment-preview.type-application.subtype-x-helixware-live:after {
+    content: "\f235";
 }
