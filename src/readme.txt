@@ -1,9 +1,9 @@
 === Plugin Name ===
-Contributors: insideout10
-Tags: video, streaming, SEO, audio, HLS, Flash
-Requires at least: 4.0
-Tested up to: 4.1.1
-Stable tag: 1.0.0
+Contributors: insideout10, ziodave
+Tags: video, streaming, ondemand, SEO, audio, HLS, Flash, OTT, DASH, rtsp
+Requires at least: 4.3
+Tested up to: 4.3.1
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,5 +38,11 @@ If you have any question, send us an e-mail to info@helixware.tv
 
 == Changelog ==
 
+= 1.1.0 (2015-10-04) =
+
+* WordPress Media Library integration [#10](https://github.com/insideout10/helixware-plugin/issues/10)
+* Media Library synchronization happens only when WP requests the list of attachments [#18](https://github.com/insideout10/helixware-plugin/issues/18)
+
 = 1.0.0 =
+
 * First release.

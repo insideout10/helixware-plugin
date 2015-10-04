@@ -130,7 +130,7 @@ class HelixWare {
 	public function __construct() {
 
 		$this->plugin_name = 'helixware';
-		$this->version     = '1.1.0-dev';
+		$this->version     = '1.1.0';
 
 		$this->load_dependencies();
 		$this->set_locale();
