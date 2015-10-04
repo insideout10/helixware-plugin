@@ -94,6 +94,25 @@ class HelixWare {
 	private $asset_image_service;
 
 	/**
+	 * An instance of the syncer which synchronizes the local library with the remote one.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @var HelixWare_Syncer $syncer The syncer instance.
+	 */
+	private $syncer;
+
+	/**
+	 * The Admin Attachments class handles requests for attachments from WordPress
+	 * Media Library.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @var HelixWare_Admin_Attachments $admin_attachments
+	 */
+	private $admin_attachments;
+
+	/**
 	 * @since 1.1.0
 	 * @var HelixWare_Embed_Shortcode $embed_shortcode
 	 */
@@ -165,6 +184,7 @@ class HelixWare {
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-helixware-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-helixware-admin-attachments.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
@@ -177,17 +197,14 @@ class HelixWare {
 
 		$this->loader = new HelixWare_Loader();
 
-		// Create an Asset Service.
+		// Instantiate all the classes.
 		$this->http_client         = new HelixWare_HTTP_Client();
 		$this->hal_client          = new HelixWare_HAL_Client( $this->http_client );
 		$this->asset_service       = new HelixWare_Asset_Service();
 		$this->asset_image_service = new HelixWare_Asset_Image_Service( $this->http_client, hewa_get_server_url() );
-
-		$sync = new HelixWare_Syncer( $this->hal_client, hewa_get_server_url(), $this->asset_service );
-
-		$sync->sync();
-
-		$this->embed_shortcode = new HelixWare_Embed_Shortcode();
+		$this->syncer              = new HelixWare_Syncer( $this->hal_client, hewa_get_server_url(), $this->asset_service );
+		$this->admin_attachments   = new HelixWare_Admin_Attachments( $this->syncer );
+		$this->embed_shortcode     = new HelixWare_Embed_Shortcode();
 
 	}
 
@@ -222,7 +239,9 @@ class HelixWare {
 
 		$this->loader->add_filter( 'wp_prepare_attachment_for_js', $this->asset_image_service, 'wp_prepare_attachment_for_js', 1000, 3 );
 		$this->loader->add_filter( 'media_send_to_editor', $this->asset_image_service, 'media_send_to_editor', 1000, 3 );
-		$this->loader->add_filter( 'ajax_query_attachments_args', $this->asset_service, 'ajax_query_attachments_args', 1000, 1 );
+
+		// When the media library requests attachments, we filter the query arguments to include also HelixWare assets.
+		$this->loader->add_filter( 'ajax_query_attachments_args', $this->admin_attachments, 'ajax_query_attachments_args', 1000, 1 );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );

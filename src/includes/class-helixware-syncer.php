@@ -64,6 +64,8 @@ class HelixWare_Syncer {
 	 */
 	public function sync( $incremental = TRUE ) {
 
+		hewa_write_log( 'Syncing [ incremental :: {incremental} ]', array( 'incremental' => $incremental ) );
+
 		// Set the path to the /api/assets.
 		$path = self::ASSETS_PATH;
 

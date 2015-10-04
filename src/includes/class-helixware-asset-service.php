@@ -169,31 +169,6 @@ class HelixWare_Asset_Service {
 	}
 
 	/**
-	 * A filter (ajax_query_attachments_args) that intercepts the AJAX calls to
-	 * display the list of media items in WordPress. In case the request filters
-	 * by videos, we add the HelixWare mimetypes.
-	 *
-	 * @since 1.1.0
-	 *
-	 * @param array $query An array with query parameters.
-	 *
-	 * @return array The original query or the updated one if it is filtered by videos.
-	 */
-	public function ajax_query_attachments_args( $query ) {
-
-		// If it has been requested to filter by video, add the HelixWare mime types.
-		if ( 'video' === $query['post_mime_type'] ) {
-			$query['post_mime_type'] .= ',' . self::MIME_TYPE_ONDEMAND .
-			                            ',' . self::MIME_TYPE_LIVE .
-			                            ',' . self::MIME_TYPE_BROADCAST .
-			                            ',' . self::MIME_TYPE_CHANNEL .
-			                            ',' . self::MIME_TYPE_UNKNOWN;
-		}
-
-		return $query;
-	}
-
-	/**
 	 * Convenience method called by the set methods.
 	 *
 	 * @since 1.1.0
