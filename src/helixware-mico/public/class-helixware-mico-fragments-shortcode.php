@@ -74,10 +74,14 @@ class HelixWare_Mico_Fragments_Shortcode {
 			return '';
 		}
 
-		$guid = $this->asset_service->get_guid( $atts['id'] );
+		// The attachment ID.
+		$id = $atts['id'];
+
+		// The attachment GUID (http://cloud.helixware...).
+		$guid = $this->asset_service->get_guid( $id );
 
 		$html = "<ul>";
-		foreach ( $this->fragments_service->get_fragments( $guid ) as $fragment ) {
+		foreach ( $this->fragments_service->get_fragments_by_id( $id ) as $fragment ) {
 			$html .= '<li style="float:left;"><img width="200" src="' . $this->asset_image_service->get_image_url( $guid, $fragment->start / 1000 ) . '" />' . $fragment->start . '</li>';
 		}
 		$html .= "</ul>";

@@ -74,7 +74,8 @@ class HelixWare_Embed_Shortcode {
 		}
 
 		// Get the guid to pass to the render function.
-		$atts['id'] = $this->asset_service->get_guid( $atts['id'] );
+		$id         = $atts['id'];
+		$atts['id'] = $this->asset_service->get_guid( $id );
 
 		return $this->_render( $atts );
 
@@ -109,7 +110,7 @@ class HelixWare_Embed_Shortcode {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param args $atts
+	 * @param array $atts
 	 *
 	 * @return string The player HTML code.
 	 */

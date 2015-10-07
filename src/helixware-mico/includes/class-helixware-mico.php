@@ -176,9 +176,8 @@ class Helixware_Mico {
 		$this->http_client   = new HelixWare_HTTP_Client( $http_authentication );
 		$this->hal_client    = new HelixWare_HAL_Client( $this->http_client );
 
-		$this->fragment_service = new Helixware_Mico_Fragment_Service( $this->hal_client, HELIXWARE_MICO_GW_URL );
-
 		$helixware                 = HelixWare::get_instance();
+		$this->fragment_service    = new Helixware_Mico_Fragment_Service( $this->hal_client, HELIXWARE_MICO_GW_URL, $helixware->get_asset_service() );
 		$this->fragments_shortcode = new HelixWare_Mico_Fragments_Shortcode( $this->fragment_service, $helixware->get_asset_service(), $helixware->get_asset_image_service() );
 
 	}
@@ -215,6 +214,8 @@ class Helixware_Mico {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
+		$this->loader->add_action( 'wp_ajax_hw_vtt_chapters', $this->fragment_service, 'ajax_vtt_chapters' );
+
 	}
 
 	/**
@@ -230,6 +231,8 @@ class Helixware_Mico {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
+		$this->loader->add_action( 'wp_ajax_nopriv_hw_vtt_chapters', $this->fragment_service, 'ajax_vtt_chapters' );
 
 	}
 

@@ -60,7 +60,7 @@ class HelixWare_Player_JWPlayer7 implements HelixWare_Player {
 	 *
 	 * @return string The HTML code for the player.
 	 */
-	public function render( $url, $width = 640, $height = 360, $thumbnail_url = NULL, $title = NULL, $description = NULL ) {
+	public function render( $url, $width = 640, $height = 360, $thumbnail_url = NULL, $title = NULL, $description = NULL, $chapters_url = NULL ) {
 
 		// Queue the required scripts.
 		$this->queue_scripts();
@@ -86,6 +86,17 @@ class HelixWare_Player_JWPlayer7 implements HelixWare_Player {
 
 		if ( isset( $description ) ) {
 			$args['description'] = $description;
+		}
+
+		if ( isset( $chapters_url ) ) {
+
+			$args['tracks'] = array(
+				array(
+					'file' => $chapters_url,
+					'kind' => 'chapters'
+				)
+			);
+
 		}
 
 		// Encode the arguments in JSON format.

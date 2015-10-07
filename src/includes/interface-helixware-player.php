@@ -18,9 +18,10 @@ interface HelixWare_Player {
 	 * @param string $thumbnail_url The URL of the thumbnail.
 	 * @param string $title The asset's title.
 	 * @param string $description The asset's description.
+	 * @param string $chapters_url The URL pointing to the video's chapters.
 	 *
 	 * @return string The HTML code for the player.
 	 */
-	public function render( $url, $width = 640, $height = 360, $thumbnail_url = NULL, $title = NULL, $description = NULL );
+	public function render( $url, $width = 640, $height = 360, $thumbnail_url = NULL, $title = NULL, $description = NULL, $chapters_url = NULL );
 
 }
