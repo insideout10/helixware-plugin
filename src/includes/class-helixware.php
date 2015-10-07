@@ -174,6 +174,7 @@ class HelixWare {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/interface-helixware-http-client-authentication.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client-application-authentication.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client-basic-authentication.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-hal-response.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-hal-request.php';

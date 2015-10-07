@@ -1,7 +1,7 @@
 <?php
 
 /**
- * An HTTP client to perform remote requests.
+ * An HTTP client strategy to authenticate remote requests using X-Application-Key and X-Application-Secret headers.
  *
  * @package    HelixWare
  * @subpackage HelixWare/includes
