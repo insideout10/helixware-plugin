@@ -64,10 +64,15 @@ class HelixWare_Mico_Fragments_Shortcode {
 		}
 
 		$guid = $this->asset_service->get_guid( $atts['id'] );
+		
+		$html = "<ul>";
+		foreach ( $this->fragments_service->get_fragments( $guid ) as $fragment ) {
+			$html .= "<li>$fragment->start</li>";
+		}
+		$html .= "</ul>";
 
-		return var_export( $this->fragments_service->get_fragments( $guid ), TRUE );
+		return $html;
 
-//		return $guid;
 	}
 
 }

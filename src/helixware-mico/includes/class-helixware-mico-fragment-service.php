@@ -51,6 +51,8 @@ class Helixware_Mico_Fragment_Service {
 	 * @since 1.0.0
 	 *
 	 * @param string $guid The asset GUID.
+	 *
+	 * @return array An array of fragments.
 	 */
 	public function get_fragments( $guid ) {
 
@@ -59,16 +61,12 @@ class Helixware_Mico_Fragment_Service {
 
 		$response = $this->hal_client->execute( $request );
 
-		var_dump($response);
-
+		$fragments = array();
 		do {
-			foreach ( $response->get_embedded( 'fragments' ) as $fragment ) {
-
-				var_dump( $fragment );
-			}
+			$fragments = array_merge( $fragments, $response->get_embedded( 'fragments' ) );
 		} while ( $response->has_next() && $response = $response->get_next() );
 
-		wp_die();
+		return $fragments;
 
 	}
 
