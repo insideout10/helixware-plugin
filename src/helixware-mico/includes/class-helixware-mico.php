@@ -35,7 +35,7 @@ class Helixware_Mico {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Helixware_Mico_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Helixware_Mico_Loader $loader Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -44,7 +44,7 @@ class Helixware_Mico {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
+	 * @var      string $plugin_name The string used to uniquely identify this plugin.
 	 */
 	protected $plugin_name;
 
@@ -53,9 +53,36 @@ class Helixware_Mico {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
+	 * @var      string $version The current version of the plugin.
 	 */
 	protected $version;
+
+	/**
+	 * An HTTP Client to perform remote requests.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 * @var \HelixWare_HTTP_Client $http_client An HTTP Client.
+	 */
+	private $http_client;
+
+	/**
+	 * A HAL Client.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 * @var \HelixWare_HAL_Client $hal_client An HAL Client.
+	 */
+	private $hal_client;
+
+	/**
+	 * The MICO Fragment service.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 * @var \Helixware_Mico_Fragment_Service $fragment_service The MICO Fragment service.
+	 */
+	private $fragment_service;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -69,7 +96,7 @@ class Helixware_Mico {
 	public function __construct() {
 
 		$this->plugin_name = 'helixware-mico';
-		$this->version = '1.0.0-dev';
+		$this->version     = '1.2.0-dev';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -109,6 +136,11 @@ class Helixware_Mico {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-mico-i18n.php';
 
 		/**
+		 * Load fragments from MICO.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-mico-fragment-service.php';
+
+		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-helixware-mico-admin.php';
@@ -120,6 +152,17 @@ class Helixware_Mico {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-helixware-mico-public.php';
 
 		$this->loader = new Helixware_Mico_Loader();
+
+		// Instantiate all the classes.
+		// Create the Basic authentication strategy.
+		// Pass the strategy to the HTTP Client.
+		// The HTTP Client is needed by the HAL Client.
+
+		$http_authentication = new HelixWare_HTTP_Client_Basic_Authentication( HELIXWARE_MICO_GW_USERNAME, HELIXWARE_MICO_GW_PASSWORD );
+		$this->http_client   = new HelixWare_HTTP_Client( $http_authentication );
+		$this->hal_client    = new HelixWare_HAL_Client( $this->http_client );
+
+		$this->fragment_service = new Helixware_Mico_Fragment_Service( $this->hal_client, HELIXWARE_MICO_GW_URL );
 
 	}
 
