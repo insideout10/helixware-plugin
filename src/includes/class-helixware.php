@@ -351,4 +351,16 @@ class HelixWare {
 
 	}
 
+	/**
+	 * Get an instance of the HelixWare_Asset_Image_Service.
+	 *
+	 * @since 1.2.0
+	 * @return \HelixWare_Asset_Image_Service An instance of the HelixWare_Asset_Image_Service.
+	 */
+	public function get_asset_image_service() {
+
+		return $this->asset_image_service;
+
+	}
+
 }

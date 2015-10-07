@@ -178,8 +178,8 @@ class Helixware_Mico {
 
 		$this->fragment_service = new Helixware_Mico_Fragment_Service( $this->hal_client, HELIXWARE_MICO_GW_URL );
 
-		$this->fragments_shortcode = new HelixWare_Mico_Fragments_Shortcode( $this->fragment_service, HelixWare::get_instance()
-		                                                                                                       ->get_asset_service() );
+		$helixware                 = HelixWare::get_instance();
+		$this->fragments_shortcode = new HelixWare_Mico_Fragments_Shortcode( $this->fragment_service, $helixware->get_asset_service(), $helixware->get_asset_image_service() );
 
 	}
 

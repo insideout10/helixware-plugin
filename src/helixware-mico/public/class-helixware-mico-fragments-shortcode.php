@@ -30,17 +30,28 @@ class HelixWare_Mico_Fragments_Shortcode {
 	private $asset_service;
 
 	/**
+	 * The Asset Image service.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 * @var \HelixWare_Asset_Image_Service $asset_image_service The Asset Image service.
+	 */
+	private $asset_image_service;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.1.0
 	 *
 	 * @param \Helixware_Mico_Fragment_Service $fragments_service The Fragments service.
-	 * @param $asset_service
+	 * @param \HelixWare_Asset_Service $asset_service The Asset service.
+	 * @param \HelixWare_Asset_Image_Service $asset_image_service The Asset Image service.
 	 */
-	public function __construct( $fragments_service, $asset_service ) {
+	public function __construct( $fragments_service, $asset_service, $asset_image_service ) {
 
-		$this->fragments_service = $fragments_service;
-		$this->asset_service     = $asset_service;
+		$this->fragments_service   = $fragments_service;
+		$this->asset_service       = $asset_service;
+		$this->asset_image_service = $asset_image_service;
 
 		// Register itself as handler for the hw_fragments shortcode.
 		add_shortcode( self::HANDLE_NAME, array( $this, 'render' ) );
@@ -64,10 +75,10 @@ class HelixWare_Mico_Fragments_Shortcode {
 		}
 
 		$guid = $this->asset_service->get_guid( $atts['id'] );
-		
+
 		$html = "<ul>";
 		foreach ( $this->fragments_service->get_fragments( $guid ) as $fragment ) {
-			$html .= "<li>$fragment->start</li>";
+			$html .= '<li style="float:left;"><img width="200" src="' . $this->asset_image_service->get_image_url( $guid, $fragment->start / 1000 ) . '" />' . $fragment->start . '</li>';
 		}
 		$html .= "</ul>";
 

@@ -33,7 +33,7 @@ class HelixWare_Asset_Image_Service {
 	}
 
 	/**
-	 * Get the image at the specified path. The server URL is prepended to the path.
+	 * Print the image at the specified path to the response output. The server URL is prepended to the path.
 	 *
 	 * @since 1.1.0
 	 *
@@ -55,6 +55,20 @@ class HelixWare_Asset_Image_Service {
 
 		wp_die();
 
+	}
+
+	public function get_image_path( $guid, $seconds ) {
+
+		$url = $guid . '/images/' . date( 'H/i/s', $seconds );
+
+		return substr( $url, strlen( $this->server_url ) );
+	}
+
+	public function get_image_url( $guid, $seconds ) {
+
+		$path = urlencode( $this->get_image_path( $guid, $seconds ) );
+
+		return admin_url( "admin-ajax.php?action=hw_asset_image&path=$path" );
 	}
 
 	/**
