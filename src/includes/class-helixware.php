@@ -237,7 +237,7 @@ class HelixWare {
 		$this->asset_image_service = new HelixWare_Asset_Image_Service( $this->http_client, hewa_get_server_url() );
 		$this->syncer              = new HelixWare_Syncer( $this->hal_client, hewa_get_server_url(), $this->asset_service );
 		$this->admin_attachments   = new HelixWare_Admin_Attachments( $this->syncer );
-		$this->embed_shortcode     = new HelixWare_Embed_Shortcode();
+		$this->embed_shortcode     = new HelixWare_Embed_Shortcode( $this->asset_service );
 
 	}
 

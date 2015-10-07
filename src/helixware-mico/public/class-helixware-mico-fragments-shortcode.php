@@ -65,7 +65,9 @@ class HelixWare_Mico_Fragments_Shortcode {
 
 		$guid = $this->asset_service->get_guid( $atts['id'] );
 
-		return $guid;
+		return var_export( $this->fragments_service->get_fragments( $guid ), TRUE );
+
+//		return $guid;
 	}
 
 }
