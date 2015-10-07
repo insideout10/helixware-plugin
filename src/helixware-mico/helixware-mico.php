@@ -16,7 +16,7 @@
  * Plugin Name:       HelixWare MICO Extensions
  * Plugin URI:        http://helixware.tv
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.0.0
+ * Version:           1.0.0-dev
  * Author:            David Riccitelli
  * Author URI:        http://insideout.io
  * License:           GPL-2.0+
@@ -29,6 +29,11 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
+
+// Define constants.
+defined( 'HELIXWARE_MICO_GW_URL' ) || define( 'HELIXWARE_MICO_GW_URL', 'http://mico-gateway.insideout.io' );
+defined( 'HELIXWARE_MICO_GW_USERNAME' ) || define( 'HELIXWARE_MICO_GW_USERNAME', '' );
+defined( 'HELIXWARE_MICO_GW_PASSWORD' ) || define( 'HELIXWARE_MICO_GW_PASSWORD', '' );
 
 /**
  * The code that runs during plugin activation.
@@ -72,4 +77,5 @@ function run_helixware_mico() {
 	$plugin->run();
 
 }
+
 run_helixware_mico();

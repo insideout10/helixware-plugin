@@ -9,18 +9,25 @@
  */
 class HelixWare_HTTP_Client {
 
-	private $application_key;
-	private $application_secret;
+	/**
+	 * The authentication strategy.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @var \HelixWare_HTTP_Client_Authentication $authentication
+	 */
+	private $authentication;
 
 	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.1.0
+	 *
+	 * @param \HelixWare_HTTP_Client_Authentication $authentication The
 	 */
-	public function __construct() {
+	public function __construct( $authentication ) {
 
-		$this->application_key    = hewa_get_option( HEWA_SETTINGS_APPLICATION_KEY, FALSE );
-		$this->application_secret = hewa_get_option( HEWA_SETTINGS_APPLICATION_SECRET, FALSE );
+		$this->authentication = $authentication;
 
 	}
 
@@ -38,15 +45,8 @@ class HelixWare_HTTP_Client {
 	 */
 	public function execute( $method, $url, $body = NULL, $content_type = NULL, $accept = NULL ) {
 
-		if ( FALSE === $url || FALSE === $this->application_key || FALSE === $this->application_secret ) {
-			wp_die( __( 'The plugin is not configured.', HEWA_LANGUAGE_DOMAIN ) );
-		}
-
 		// Set the headers.
-		$headers = array(
-			'X-Application-Key'    => $this->application_key,
-			'X-Application-Secret' => $this->application_secret
-		);
+		$headers = array();
 
 		if ( ! empty( $content_type ) ) {
 			$headers['Content-Type'] = $content_type;
@@ -57,11 +57,11 @@ class HelixWare_HTTP_Client {
 		}
 
 		// Prepare the default arguments.
-		$args = array_merge_recursive( unserialize( HEWA_API_HTTP_OPTIONS ), array(
+		$args = $this->authentication->get_args( array_merge_recursive( unserialize( HEWA_API_HTTP_OPTIONS ), array(
 			'method'  => $method,
 			'body'    => ( is_array( $body ) ? json_encode( $body ) : $body ),
 			'headers' => $headers
-		) );
+		) ) );
 
 		//
 		hewa_write_log( "Performing a request [ method :: $method ][ url :: $url ]" );

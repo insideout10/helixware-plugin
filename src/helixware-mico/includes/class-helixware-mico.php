@@ -69,7 +69,7 @@ class Helixware_Mico {
 	public function __construct() {
 
 		$this->plugin_name = 'helixware-mico';
-		$this->version = '1.0.0';
+		$this->version = '1.0.0-dev';
 
 		$this->load_dependencies();
 		$this->set_locale();

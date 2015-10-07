@@ -40,6 +40,7 @@ class HelixWare_HAL_Response {
 		$this->body_json  = json_decode( $response['body'] );
 		$this->links      = ( isset( $this->body_json->_links ) ? $this->body_json->_links : NULL );
 		$this->embedded   = ( isset( $this->body_json->_embedded ) ? $this->body_json->_embedded : NULL );
+
 	}
 
 	/**
@@ -49,6 +50,7 @@ class HelixWare_HAL_Response {
 	public function has_next() {
 
 		return isset( $this->links->next ) && isset( $this->links->next->href );
+
 	}
 
 	/**
@@ -58,11 +60,13 @@ class HelixWare_HAL_Response {
 	public function get_next() {
 
 		return $this->hal_client->execute( new HelixWare_HAL_Request( 'GET', $this->links->next->href ) );
+
 	}
 
 	public function has_embedded() {
 
 		return ( isset( $this->embedded ) );
+
 	}
 
 	public function get_embedded( $key = NULL ) {
@@ -72,6 +76,7 @@ class HelixWare_HAL_Response {
 		}
 
 		return $this->embedded->{$key};
+
 	}
 
 }

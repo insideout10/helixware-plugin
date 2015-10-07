@@ -172,6 +172,8 @@ class HelixWare {
 		/**
 		 * The class responsible for making HTTP requests.
 		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/interface-helixware-http-client-authentication.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client-application-authentication.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-hal-response.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-hal-request.php';
@@ -198,8 +200,14 @@ class HelixWare {
 		$this->loader = new HelixWare_Loader();
 
 		// Instantiate all the classes.
-		$this->http_client         = new HelixWare_HTTP_Client();
-		$this->hal_client          = new HelixWare_HAL_Client( $this->http_client );
+		// Create the application headers authentication strategy.
+		// Pass the strategy to the HTTP Client.
+		// The HTTP Client is needed by the HAL Client.
+
+		$http_authentication = new HelixWare_HTTP_Client_Application_Authentication( hewa_get_option( HEWA_SETTINGS_APPLICATION_KEY, FALSE ), hewa_get_option( HEWA_SETTINGS_APPLICATION_SECRET, FALSE ) );
+		$this->http_client   = new HelixWare_HTTP_Client( $http_authentication );
+		$this->hal_client    = new HelixWare_HAL_Client( $this->http_client );
+
 		$this->asset_service       = new HelixWare_Asset_Service();
 		$this->asset_image_service = new HelixWare_Asset_Image_Service( $this->http_client, hewa_get_server_url() );
 		$this->syncer              = new HelixWare_Syncer( $this->hal_client, hewa_get_server_url(), $this->asset_service );
