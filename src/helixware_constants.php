@@ -30,6 +30,7 @@ define( 'HEWA_SETTINGS_JWPLAYER_ID', HEWA_OPTIONS_SETTINGS_PLAYER . '>hewa_jwpla
 define( 'HEWA_SETTINGS_JWPLAYER_LOGO_URL', HEWA_OPTIONS_SETTINGS_PLAYER . '>hewa_jwplayer_logo_url' );
 define( 'HEWA_SETTINGS_JWPLAYER_LOGO_LINK', HEWA_OPTIONS_SETTINGS_PLAYER . '>hewa_jwplayer_logo_link' );
 define( 'HEWA_SETTINGS_JWPLAYER_DEFAULT_SKIN', HEWA_OPTIONS_SETTINGS_PLAYER . '>hewa_jwplayer_default_skin' );
+define( 'HEWA_SETTINGS_JWPLAYER_7_KEY', HEWA_OPTIONS_SETTINGS_PLAYER . '>hewa_jwplayer_7_key' );
 
 // The value is handled in the code in *hewa_get_option*.
 define( 'HEWA_SETTINGS_FILE_EXTENSIONS', 'hewa_file_extensions' );
@@ -39,12 +40,12 @@ define( 'HEWA_SETTINGS_FILE_EXTENSIONS', 'hewa_file_extensions' );
 define( 'HEWA_POST_TYPE_CLIP', 'hewa_clip' );
 
 define( 'HEWA_API_HTTP_OPTIONS', serialize( array(
-    'timeout' => 300,
-    'redirection' => 5,
-    'httpversion' => '1.0',
-    'blocking' => true,
-    'cookies' => array(),
-    'sslverify' => false
+	'timeout'     => 300,
+	'redirection' => 5,
+	'httpversion' => '1.0',
+	'blocking'    => TRUE,
+	'cookies'     => array(),
+	'sslverify'   => FALSE
 ) ) );
 
 // The max file size for HelixWare-related uploads. This information is used with the uploader as well as for display

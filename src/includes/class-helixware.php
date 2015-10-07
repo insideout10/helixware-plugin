@@ -107,7 +107,7 @@ class HelixWare {
 	 *
 	 * @since 1.1.0
 	 * @access private
-	 * @var HelixWare_Syncer $syncer The syncer instance.
+	 * @var \HelixWare_Syncer $syncer The syncer instance.
 	 */
 	private $syncer;
 
@@ -117,13 +117,13 @@ class HelixWare {
 	 *
 	 * @since 1.1.0
 	 * @access private
-	 * @var HelixWare_Admin_Attachments $admin_attachments
+	 * @var \HelixWare_Admin_Attachments $admin_attachments
 	 */
 	private $admin_attachments;
 
 	/**
 	 * @since 1.1.0
-	 * @var HelixWare_Embed_Shortcode $embed_shortcode
+	 * @var \HelixWare_Embed_Shortcode $embed_shortcode
 	 */
 	private $embed_shortcode;
 
@@ -197,6 +197,8 @@ class HelixWare {
 		 * The class responsible for making HTTP requests.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/interface-helixware-http-client-authentication.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/interface-helixware-player.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client-application-authentication.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client-basic-authentication.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client.php';
@@ -206,6 +208,7 @@ class HelixWare {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-syncer.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-asset-service.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-asset-image-service.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-player-jwplayer7.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
@@ -237,7 +240,9 @@ class HelixWare {
 		$this->asset_image_service = new HelixWare_Asset_Image_Service( $this->http_client, hewa_get_server_url() );
 		$this->syncer              = new HelixWare_Syncer( $this->hal_client, hewa_get_server_url(), $this->asset_service );
 		$this->admin_attachments   = new HelixWare_Admin_Attachments( $this->syncer );
-		$this->embed_shortcode     = new HelixWare_Embed_Shortcode( $this->asset_service );
+
+		$jwplayer7             = new HelixWare_Player_JWPlayer7( hewa_get_option( HEWA_SETTINGS_JWPLAYER_7_KEY, FALSE ) );
+		$this->embed_shortcode = new HelixWare_Embed_Shortcode( $this->asset_service, $this->asset_image_service, $jwplayer7 );
 
 	}
 

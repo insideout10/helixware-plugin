@@ -21,15 +21,36 @@ class HelixWare_Embed_Shortcode {
 	private $asset_service;
 
 	/**
+	 * The Asset Image service.
+	 * @since 1.2.0
+	 * @access private
+	 * @var \HelixWare_Asset_Image_Service The Asset Image service.
+	 */
+	private $asset_image_service;
+
+	/**
+	 * A player rendering class.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 * @var \HelixWare_Player $player A player rendering class
+	 */
+	private $player;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.1.0
 	 *
 	 * @param \HelixWare_Asset_Service $asset_service The Asset service.
+	 * @param \HelixWare_Asset_Image_Service $asset_image_service The Asset Image service.
+	 * @param \HelixWare_Player $player A player.
 	 */
-	public function __construct( $asset_service ) {
+	public function __construct( $asset_service, $asset_image_service, $player ) {
 
-		$this->asset_service = $asset_service;
+		$this->asset_service       = $asset_service;
+		$this->asset_image_service = $asset_image_service;
+		$this->player              = $player;
 
 		add_shortcode( self::HANDLE_NAME, array( $this, 'render' ) );
 
@@ -55,7 +76,9 @@ class HelixWare_Embed_Shortcode {
 		// Get the guid to pass to the render function.
 		$atts['id'] = $this->asset_service->get_guid( $atts['id'] );
 
-		return $this->_render_compat( $atts );
+		return $this->_render( $atts );
+
+//		return $this->_render_compat( $atts );
 	}
 
 	/**
@@ -79,6 +102,28 @@ class HelixWare_Embed_Shortcode {
 		$atts['asset_id'] = $asset_id;
 
 		return hewa_shortcode_player( $atts );
+	}
+
+	/**
+	 * Render the player.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param args $atts
+	 *
+	 * @return string The player HTML code.
+	 */
+	private function _render( $atts ) {
+
+		$guid  = $atts['id'];
+		$parts = explode( '/', $guid );
+		// TODO: this ID can be either an on-demand or a live, check by reading the metadata.
+		$asset_id = $parts[ sizeof( $parts ) - 1 ];
+
+		$url = hewa_get_server_url() . "/4/pub/asset/$asset_id/streams.xml";
+
+		return $this->player->render( $url, 640, 360, $this->asset_image_service->get_image_url( $guid, 5 ) );
+
 	}
 
 	/**
