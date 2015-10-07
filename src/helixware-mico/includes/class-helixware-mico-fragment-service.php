@@ -110,7 +110,7 @@ class Helixware_Mico_Fragment_Service {
 		echo( "WEBVTT\n\n" );
 
 		$chapter_no = 0;
-		array_walk( $this->get_fragments_by_id( $_GET['id'] ), function ( $fragment ) use ( &$chapter_no ) {
+		array_walk( $this->get_fragments_by_id( $_GET['id'] ), function ( $fragment ) use ( $chapter_no ) {
 
 			echo( 'chapter_' . ( ++ $chapter_no ) . "\n" );
 			echo( $this->_milliseconds_to_timecode( $fragment->start ) . " --> " . $this->_milliseconds_to_timecode( $fragment->end ) . "\n" );

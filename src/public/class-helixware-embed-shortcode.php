@@ -73,10 +73,6 @@ class HelixWare_Embed_Shortcode {
 			return '';
 		}
 
-		// Get the guid to pass to the render function.
-		$id         = $atts['id'];
-		$atts['id'] = $this->asset_service->get_guid( $id );
-
 		return $this->_render( $atts );
 
 //		return $this->_render_compat( $atts );
@@ -93,9 +89,8 @@ class HelixWare_Embed_Shortcode {
 	 */
 	private function _render_compat( $atts ) {
 
-		$parts = explode( '/', $atts['id'] );
 		// TODO: this ID can be either an on-demand or a live, check by reading the metadata.
-		$asset_id = $parts[ sizeof( $parts ) - 1 ];
+		$asset_id = $this->asset_service->get_asset_id( $atts['id'] );
 
 		// Unset the *id* and set the *asset_id*. We pass through other attributes
 		// the use may have set.
@@ -116,12 +111,11 @@ class HelixWare_Embed_Shortcode {
 	 */
 	private function _render( $atts ) {
 
-		$guid  = $atts['id'];
-		$parts = explode( '/', $guid );
-		// TODO: this ID can be either an on-demand or a live, check by reading the metadata.
-		$asset_id = $parts[ sizeof( $parts ) - 1 ];
+		$id   = $atts['id'];
+		$guid = $this->asset_service->get_guid( $atts['id'] );
 
-		$url = hewa_get_server_url() . "/4/pub/asset/$asset_id/streams.xml";
+//		$url = hewa_get_server_url() . "/4/pub/asset/$asset_id/streams.xml";
+		$url = admin_url( "admin-ajax.php?action=hw_rss_jwplayer&id=$id" );
 
 		return $this->player->render( $url, 640, 360, $this->asset_image_service->get_image_url( $guid, 5 ) );
 

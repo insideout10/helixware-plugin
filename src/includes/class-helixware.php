@@ -122,10 +122,31 @@ class HelixWare {
 	private $admin_attachments;
 
 	/**
+	 * The hw_embed shortcode.
+	 *
 	 * @since 1.1.0
-	 * @var \HelixWare_Embed_Shortcode $embed_shortcode
+	 * @access private
+	 * @var \HelixWare_Embed_Shortcode $embed_shortcode The hw_embed shortcode.
 	 */
 	private $embed_shortcode;
+
+	/**
+	 * Output RSS-JWPlayer playlists.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 * @var \HelixWare_Playlist_RSS_JWPlayer $playlist_rss_jwplayer Output RSS-JWPlayer playlists.
+	 */
+	private $playlist_rss_jwplayer;
+
+	/**
+	 * The Stream service.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 * @var \HelixWare_Stream_Service $stream_service The Stream service.
+	 */
+	private $stream_service;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -208,6 +229,8 @@ class HelixWare {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-syncer.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-asset-service.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-asset-image-service.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-stream-service.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-playlist-rss-jwplayer.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-player-jwplayer7.php';
 
 		/**
@@ -240,6 +263,10 @@ class HelixWare {
 		$this->asset_image_service = new HelixWare_Asset_Image_Service( $this->http_client, hewa_get_server_url() );
 		$this->syncer              = new HelixWare_Syncer( $this->hal_client, hewa_get_server_url(), $this->asset_service );
 		$this->admin_attachments   = new HelixWare_Admin_Attachments( $this->syncer );
+
+		$this->stream_service = new HelixWare_Stream_Service( $this->http_client, hewa_get_server_url(), $this->asset_service );
+
+		$this->playlist_rss_jwplayer = new HelixWare_Playlist_RSS_JWPlayer( $this->stream_service );
 
 		$jwplayer7             = new HelixWare_Player_JWPlayer7( hewa_get_option( HEWA_SETTINGS_JWPLAYER_7_KEY, FALSE ) );
 		$this->embed_shortcode = new HelixWare_Embed_Shortcode( $this->asset_service, $this->asset_image_service, $jwplayer7 );
@@ -284,6 +311,7 @@ class HelixWare {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'wp_ajax_hw_asset_image', $this->asset_image_service, 'wp_ajax_get_image' );
+		$this->loader->add_action( 'wp_ajax_hw_rss_jwplayer', $this->playlist_rss_jwplayer, 'ajax_rss_jwplayer' );
 
 	}
 
@@ -301,6 +329,7 @@ class HelixWare {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		$this->loader->add_action( 'wp_ajax_nopriv_hw_asset_image', $this->asset_image_service, 'wp_ajax_get_image' );
+		$this->loader->add_action( 'wp_ajax_nopriv_hw_rss_jwplayer', $this->playlist_rss_jwplayer, 'ajax_rss_jwplayer' );
 
 	}
 
