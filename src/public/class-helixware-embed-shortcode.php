@@ -12,13 +12,26 @@ class HelixWare_Embed_Shortcode {
 	const HANDLE_NAME = 'hw_embed';
 
 	/**
+	 * The Asset service.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 * @var \HelixWare_Asset_Service $asset_service The Asset service.
+	 */
+	private $asset_service;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.1.0
+	 *
+	 * @param \HelixWare_Asset_Service $asset_service The Asset service.
 	 */
-	public function __construct() {
+	public function __construct( $asset_service ) {
 
-		add_shortcode( 'hw_embed', array( $this, 'render' ) );
+		$this->asset_service = $asset_service;
+
+		add_shortcode( self::HANDLE_NAME, array( $this, 'render' ) );
 
 	}
 
@@ -33,6 +46,14 @@ class HelixWare_Embed_Shortcode {
 	 * @return string The HTML code.
 	 */
 	public function render( $atts ) {
+
+		// We need a post ID.
+		if ( ! isset( $atts['id'] ) || ! is_numeric( $atts['id'] ) ) {
+			return '';
+		}
+
+		// Get the guid to pass to the render function.
+		$atts['id'] = $this->asset_service->get_guid( $atts['id'] );
 
 		return $this->_render_compat( $atts );
 	}

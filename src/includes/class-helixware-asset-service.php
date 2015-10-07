@@ -89,6 +89,26 @@ class HelixWare_Asset_Service {
 	}
 
 	/**
+	 * Return the GUID for the specified post ID.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param int $id The post ID.
+	 *
+	 * @return null|string NULL if post not found or the guid.
+	 */
+	public function get_guid( $id ) {
+
+		if ( NULL === ( $post = get_post( $id ) ) ) {
+			return NULL;
+		};
+
+		// Return the GUID.
+		return $post->guid;
+
+	}
+
+	/**
 	 * Get the most recent last modified date.
 	 *
 	 * @since 1.1.0

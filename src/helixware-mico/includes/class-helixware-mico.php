@@ -85,6 +85,15 @@ class Helixware_Mico {
 	private $fragment_service;
 
 	/**
+	 * The hw_fragments shortcode handler.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 * @var \HelixWare_Mico_Fragments_Shortcode $fragments_shortcode The hw_fragments shortcode handler.
+	 */
+	private $fragments_shortcode;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -151,6 +160,11 @@ class Helixware_Mico {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-helixware-mico-public.php';
 
+		/**
+		 * The hw_fragments shortcode.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-helixware-mico-fragments-shortcode.php';
+
 		$this->loader = new Helixware_Mico_Loader();
 
 		// Instantiate all the classes.
@@ -163,6 +177,9 @@ class Helixware_Mico {
 		$this->hal_client    = new HelixWare_HAL_Client( $this->http_client );
 
 		$this->fragment_service = new Helixware_Mico_Fragment_Service( $this->hal_client, HELIXWARE_MICO_GW_URL );
+
+		$this->fragments_shortcode = new HelixWare_Mico_Fragments_Shortcode( $this->fragment_service, HelixWare::get_instance()
+		                                                                                                       ->get_asset_service() );
 
 	}
 

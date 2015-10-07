@@ -111,7 +111,7 @@ class HelixWare_Asset_Image_Service {
 			return $html;
 		}
 
-		return "[hw_embed id='$post->guid']";
+		return "[hw_embed id='$post->ID']";
 	}
 
 }

@@ -58,6 +58,15 @@ class HelixWare {
 	protected $version;
 
 	/**
+	 * A singleton instance.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 * @var \HelixWare $instance A singleton instance.
+	 */
+	private static $instance;
+
+	/**
 	 * An HTTP client to perform requests towards HelixWare.
 	 *
 	 * @since 1.1.0
@@ -136,6 +145,21 @@ class HelixWare {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+
+		// Set the singleton instance.
+		self::$instance = $this;
+
+	}
+
+	/**
+	 * The HelixWare singleton instance.
+	 *
+	 * @since 1.2.0
+	 * @return \HelixWare The HelixWare singleton instance.
+	 */
+	public static function get_instance() {
+
+		return self::$instance;
 
 	}
 
@@ -313,6 +337,18 @@ class HelixWare {
 	 */
 	public function get_version() {
 		return $this->version;
+	}
+
+	/**
+	 * Get an instance of the HelixWare_Asset_Service.
+	 *
+	 * @since 1.2.0
+	 * @return \HelixWare_Asset_Service An instance of the HelixWare_Asset_Service.
+	 */
+	public function get_asset_service() {
+
+		return $this->asset_service;
+
 	}
 
 }
