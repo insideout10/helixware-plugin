@@ -68,7 +68,7 @@ class HelixWare_Player_JWPlayer7 implements HelixWare_Player {
 		// Generate a unique player id to avoid clashes with other potentially instantiated players.
 		$element_id = uniqid( 'jwplayer' );
 
-		// Preset the intial configuration.
+		// Preset the initial configuration.
 		$args = array(
 			'playlist' => $url,
 			'width'    => $width,
@@ -76,6 +76,7 @@ class HelixWare_Player_JWPlayer7 implements HelixWare_Player {
 		);
 
 		// The other configuration parameters if provided.
+		// The thumbnail URL is also set in the playlist.
 		if ( isset( $thumbnail_url ) ) {
 			$args['image'] = $thumbnail_url;
 		}

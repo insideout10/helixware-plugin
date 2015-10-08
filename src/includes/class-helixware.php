@@ -260,13 +260,13 @@ class HelixWare {
 		$this->hal_client    = new HelixWare_HAL_Client( $this->http_client );
 
 		$this->asset_service       = new HelixWare_Asset_Service();
-		$this->asset_image_service = new HelixWare_Asset_Image_Service( $this->http_client, hewa_get_server_url() );
+		$this->asset_image_service = new HelixWare_Asset_Image_Service( $this->http_client, hewa_get_server_url(), $this->asset_service );
 		$this->syncer              = new HelixWare_Syncer( $this->hal_client, hewa_get_server_url(), $this->asset_service );
 		$this->admin_attachments   = new HelixWare_Admin_Attachments( $this->syncer );
 
 		$this->stream_service = new HelixWare_Stream_Service( $this->http_client, hewa_get_server_url(), $this->asset_service );
 
-		$this->playlist_rss_jwplayer = new HelixWare_Playlist_RSS_JWPlayer( $this->stream_service );
+		$this->playlist_rss_jwplayer = new HelixWare_Playlist_RSS_JWPlayer( $this->stream_service, $this->asset_image_service );
 
 		$jwplayer7             = new HelixWare_Player_JWPlayer7( hewa_get_option( HEWA_SETTINGS_JWPLAYER_7_KEY, FALSE ) );
 		$this->embed_shortcode = new HelixWare_Embed_Shortcode( $this->asset_service, $this->asset_image_service, $jwplayer7 );

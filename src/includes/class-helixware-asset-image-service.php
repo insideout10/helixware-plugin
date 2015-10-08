@@ -16,32 +16,53 @@ class HelixWare_Asset_Image_Service {
 	 */
 	private $http_client;
 
+	/**
+	 * The HelixWare server URL.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @var string $server_url The HelixWare server URL.
+	 */
 	private $server_url;
+
+	/**
+	 * The Asset service.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 * @var \HelixWare_Asset_Service $asset_service The Asset service.
+	 */
+	private $asset_service;
 
 	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.1.0
 	 *
-	 * @param HelixWare_HTTP_Client $http_client An HTTP client.
+	 * @param \HelixWare_HTTP_Client $http_client An HTTP client.
 	 * @param string $server_url The HelixWare server URL.
+	 * @param \HelixWare_Asset_Service $asset_service The Asset service.
 	 */
-	public function __construct( $http_client, $server_url ) {
+	public function __construct( $http_client, $server_url, $asset_service ) {
 
-		$this->http_client = $http_client;
-		$this->server_url  = $server_url;
+		$this->http_client   = $http_client;
+		$this->server_url    = $server_url;
+		$this->asset_service = $asset_service;
+
 	}
 
 	/**
-	 * Print the image at the specified path to the response output. The server URL is prepended to the path.
+	 * Print the image at the specified path to the response output.
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param $path
+	 * @param int $id The attachment id.
+	 * @param int $seconds The timecode of the image.
+	 * @param int $width The width of the image (default 640).
 	 */
-	public function get_image( $path ) {
+	public function send_image( $id, $seconds, $width = 640 ) {
 
-		$url      = $this->server_url . $path;
+		$url      = $this->get_remote_image_url_by_id( $id, $seconds, $width );
 		$response = $this->http_client->execute( 'GET', $url, NULL, NULL, self::ACCEPT );
 
 		if ( is_wp_error( $response ) ) {
@@ -57,18 +78,40 @@ class HelixWare_Asset_Image_Service {
 
 	}
 
-	public function get_image_path( $guid, $seconds ) {
+	/**
+	 * Get the image URL on HelixWare.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param int $id The post id.
+	 * @param int $seconds The timecode of the image.
+	 * @param int $width The width of the image (default 640).
+	 *
+	 * @return string A relative path to the image.
+	 */
+	public function get_remote_image_url_by_id( $id, $seconds, $width = 640 ) {
 
-		$url = $guid . '/images/' . date( 'H/i/s', $seconds );
+		$guid = $this->asset_service->get_guid( $id );
+		$url  = $guid . '/images/' . date( 'H/i/s', $seconds ) . '?width=' . $width;
 
-		return substr( $url, strlen( $this->server_url ) );
+		return $url;
 	}
 
-	public function get_image_url( $guid, $seconds ) {
+	/**
+	 * Get the WordPress URL to the image.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param int $id The post id.
+	 * @param int $seconds The timecode of the image (default 5).
+	 * @param int $width The width of the image (default 640).
+	 *
+	 * @return string The local URL to the image.
+	 */
+	public function get_local_image_url_by_id( $id, $seconds = 5, $width = 640 ) {
 
-		$path = urlencode( $this->get_image_path( $guid, $seconds ) );
+		return admin_url( "admin-ajax.php?action=hw_asset_image&id=$id&seconds=$seconds&width=$width" );
 
-		return admin_url( "admin-ajax.php?action=hw_asset_image&path=$path" );
 	}
 
 	/**
@@ -79,11 +122,21 @@ class HelixWare_Asset_Image_Service {
 	 */
 	public function wp_ajax_get_image() {
 
-		if ( ! isset( $_GET['path'] ) ) {
-			wp_die( 'The path parameter is required.' );
+		// The post ID is required.
+		if ( ! isset( $_GET['id'] ) && ! is_numeric( $_GET['id'] ) ) {
+			wp_die( 'The path id parameter are required.' );
 		}
 
-		$this->get_image( $_GET['path'] );
+		// The attachment id.
+		$id = $_GET['id'];
+
+		// Get the seconds or use 5 as default.
+		$seconds = ( isset( $_GET['seconds'] ) && is_numeric( $_GET['seconds'] ) ? $_GET['seconds'] : 5 );
+
+		// Get the width or use 640 as default.
+		$width = ( isset( $_GET['width'] ) && is_numeric( $_GET['width'] ) ? $_GET['width'] : 640 );
+
+		$this->send_image( $id, $seconds, $width );
 
 	}
 
