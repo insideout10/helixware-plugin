@@ -96,6 +96,33 @@ class Helixware_Mico_Fragment_Service {
 	}
 
 	/**
+	 * Get the VTT chapters URL.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param int $id The post ID.
+	 *
+	 * @return string The local URL to the VTT chapters URL.
+	 */
+	public function get_vtt_chapters_url( $id ) {
+
+		return admin_url( "admin-ajax.php?action=hw_vtt_chapters&id=$id" );
+	}
+
+	/**
+	 * Echo a jwplayer:track line linking to the chapters file.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param WP_Post $post A post instance.
+	 */
+	public function playlist_rss_jwplayer_header( $post ) {
+
+		echo( '<jwplayer:track file="' . htmlentities( $this->get_vtt_chapters_url( $post->ID ) ) . '" kind="chapters" />' . "\n" );
+
+	}
+
+	/**
 	 * Outputs a VTT file defining the chapters for the attachment with the provided id.
 	 *
 	 * @since 1.2.0

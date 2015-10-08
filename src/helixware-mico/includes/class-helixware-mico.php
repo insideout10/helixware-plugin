@@ -232,7 +232,12 @@ class Helixware_Mico {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
+		// Provide an AJAX end-point to load the video chapters.
 		$this->loader->add_action( 'wp_ajax_nopriv_hw_vtt_chapters', $this->fragment_service, 'ajax_vtt_chapters' );
+
+		// Hook to the hewa_playlist_rss_jwplayer_header action, which is triggered when the RSS/JWPlayer
+		// playlist is generated. We add the chapters track.
+		$this->loader->add_action( 'hewa_playlist_rss_jwplayer_header', $this->fragment_service, 'playlist_rss_jwplayer_header' );
 
 	}
 

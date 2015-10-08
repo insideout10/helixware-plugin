@@ -10,6 +10,9 @@
 class HelixWare_Asset_Image_Service {
 
 	const ACCEPT = 'image/png';
+	const MEDIA_LIBRARY_THUMBNAIL_WIDTH = 230;
+	const DEFAULT_TIMECODE = 5;
+	const DEFAULT_WIDTH = 640;
 
 	/**
 	 * @var HelixWare_HTTP_Client $http_clent An HTTP client.
@@ -60,7 +63,7 @@ class HelixWare_Asset_Image_Service {
 	 * @param int $seconds The timecode of the image.
 	 * @param int $width The width of the image (default 640).
 	 */
-	public function send_image( $id, $seconds, $width = 640 ) {
+	public function send_image( $id, $seconds, $width = self::DEFAULT_WIDTH ) {
 
 		$url      = $this->get_remote_image_url_by_id( $id, $seconds, $width );
 		$response = $this->http_client->execute( 'GET', $url, NULL, NULL, self::ACCEPT );
@@ -89,7 +92,7 @@ class HelixWare_Asset_Image_Service {
 	 *
 	 * @return string A relative path to the image.
 	 */
-	public function get_remote_image_url_by_id( $id, $seconds, $width = 640 ) {
+	public function get_remote_image_url_by_id( $id, $seconds, $width = self::DEFAULT_WIDTH ) {
 
 		$guid = $this->asset_service->get_guid( $id );
 		$url  = $guid . '/images/' . date( 'H/i/s', $seconds ) . '?width=' . $width;
@@ -108,7 +111,7 @@ class HelixWare_Asset_Image_Service {
 	 *
 	 * @return string The local URL to the image.
 	 */
-	public function get_local_image_url_by_id( $id, $seconds = 5, $width = 640 ) {
+	public function get_local_image_url_by_id( $id, $seconds = self::DEFAULT_TIMECODE, $width = self::DEFAULT_WIDTH ) {
 
 		return admin_url( "admin-ajax.php?action=hw_asset_image&id=$id&seconds=$seconds&width=$width" );
 
@@ -131,30 +134,35 @@ class HelixWare_Asset_Image_Service {
 		$id = $_GET['id'];
 
 		// Get the seconds or use 5 as default.
-		$seconds = ( isset( $_GET['seconds'] ) && is_numeric( $_GET['seconds'] ) ? $_GET['seconds'] : 5 );
+		$seconds = ( isset( $_GET['seconds'] ) && is_numeric( $_GET['seconds'] ) ? $_GET['seconds'] : self::DEFAULT_TIMECODE );
 
 		// Get the width or use 640 as default.
-		$width = ( isset( $_GET['width'] ) && is_numeric( $_GET['width'] ) ? $_GET['width'] : 640 );
+		$width = ( isset( $_GET['width'] ) && is_numeric( $_GET['width'] ) ? $_GET['width'] : self::DEFAULT_WIDTH );
 
 		$this->send_image( $id, $seconds, $width );
 
 	}
 
+	/**
+	 * Intercept the filter to prepare attachments for the JavaScript function (WP Media Library)
+	 * and add thumbnail images for HelixWare assets.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param array $response A response which will be serialized to JSON.
+	 * @param WP_Post $attachment A post instance.
+	 * @param array $meta An array of meta for the attachment.
+	 *
+	 * @return array The enriched response array.
+	 */
 	public function wp_prepare_attachment_for_js( $response, $attachment, $meta ) {
 
-		// Only process HelixWare assets.
-		if ( ! HelixWare_Asset_Service::is_helixware_mime_type( $response['mime'] ) ) {
+		// Only process HelixWare on-demand assets.
+		if ( HelixWare_Asset_Service::MIME_TYPE_ONDEMAND !== $response['mime'] ) {
 			return $response;
 		}
 
-		// Get the thumbnail URL.
-		$thumbnail_url = get_post_meta( $attachment->ID, HelixWare_Asset_Service::META_THUMBNAIL_URL, TRUE );
-
-		// Add a thumbnail URL if available.
-		if ( ! empty( $thumbnail_url ) ) {
-			$thumbnail_path    = urlencode( substr( $thumbnail_url, strlen( $this->server_url ) ) );
-			$response['image'] = array( 'src' => admin_url( "admin-ajax.php?action=hw_asset_image&path=$thumbnail_path" ) );
-		}
+		$response['image'] = array( 'src' => $this->get_local_image_url_by_id( $attachment->ID, self::DEFAULT_TIMECODE, self::MEDIA_LIBRARY_THUMBNAIL_WIDTH ) );
 
 		return $response;
 	}
@@ -179,6 +187,34 @@ class HelixWare_Asset_Image_Service {
 		}
 
 		return "[hw_embed id='$post->ID']";
+	}
+
+	/**
+	 * Outputs a VTT file defining the images for the attachment with the provided id.
+	 *
+	 * @since 1.2.0
+	 */
+	public function ajax_vtt_images() {
+
+		// Check that a post ID has been provided.
+		if ( ! isset( $_GET['id'] ) || ! is_numeric( $_GET['id'] ) ) {
+			wp_die( 'A numeric id is required.' );
+		}
+
+		echo( "WEBVTT\n\n" );
+
+		// TODO: implement
+//		array_walk( $fragments, function ( $fragment ) ) {
+//
+//			echo( 'chapter_' . ( ++ $chapter_no ) . "\n" );
+//			echo( $this->_milliseconds_to_timecode( $fragment->start ) . " --> " . $this->_milliseconds_to_timecode( $fragment->end ) . "\n" );
+//			echo( 'Chapter ' . $chapter_no . "\n" );
+//			echo( "\n" );
+//
+//		} );
+//
+		wp_die();
+
 	}
 
 }

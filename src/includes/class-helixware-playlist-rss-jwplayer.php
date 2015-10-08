@@ -54,7 +54,7 @@ class HelixWare_Playlist_RSS_JWPlayer {
 
 		$thumbnail_url = $this->asset_image_service->get_local_image_url_by_id( $post->ID );
 
-		$this->_print_header( $post->post_title, $post->post_content, $thumbnail_url, admin_url( "admin-ajax.php?action=hw_vtt_chapters&id=$post->ID" ) );
+		$this->_print_header( $post, $post->post_title, $post->post_content, $thumbnail_url );
 		array_walk( $this->stream_service->get_streams( $post->ID ), function ( $stream ) {
 			echo( "<jwplayer:source file=\"$stream->url\" label=\"$stream->label\" />\n" );
 		} );
@@ -64,7 +64,7 @@ class HelixWare_Playlist_RSS_JWPlayer {
 
 	}
 
-	private function _print_header( $title = NULL, $description = NULL, $thumbnail_url = NULL, $chapters_url = NULL ) {
+	private function _print_header( $post, $title = NULL, $description = NULL, $thumbnail_url = NULL ) {
 
 		echo( "<rss version=\"2.0\" xmlns:jwplayer=\"http://rss.jwpcdn.com/\">\n" );
 		echo( "<channel>\n" );
@@ -82,9 +82,9 @@ class HelixWare_Playlist_RSS_JWPlayer {
 			echo( sprintf( "<jwplayer:image>%s</jwplayer:image>\n", htmlentities( $thumbnail_url ) ) );
 		}
 
-		if ( isset( $chapters_url ) ) {
-			echo( '<jwplayer:track file="' . htmlentities( $chapters_url ) . '" kind="chapters" />' . "\n" );
-		}
+		// We delegate adding other information here, e.g. chapters are added by the MICO
+		// extensions by hooking to this action.
+		do_action( 'hewa_playlist_rss_jwplayer_header', $post );
 
 	}
 

@@ -313,6 +313,9 @@ class HelixWare {
 		$this->loader->add_action( 'wp_ajax_hw_asset_image', $this->asset_image_service, 'wp_ajax_get_image' );
 		$this->loader->add_action( 'wp_ajax_hw_rss_jwplayer', $this->playlist_rss_jwplayer, 'ajax_rss_jwplayer' );
 
+		// Output a VTT images file.
+		$this->loader->add_action( 'wp_ajax_hw_vtt_images', $this->asset_image_service, 'ajax_vtt_images' );
+
 	}
 
 	/**
@@ -330,6 +333,9 @@ class HelixWare {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		$this->loader->add_action( 'wp_ajax_nopriv_hw_asset_image', $this->asset_image_service, 'wp_ajax_get_image' );
 		$this->loader->add_action( 'wp_ajax_nopriv_hw_rss_jwplayer', $this->playlist_rss_jwplayer, 'ajax_rss_jwplayer' );
+
+		// Output a VTT images file.
+		$this->loader->add_action( 'wp_ajax_nopriv_hw_vtt_images', $this->asset_image_service, 'ajax_vtt_images' );
 
 	}
 
