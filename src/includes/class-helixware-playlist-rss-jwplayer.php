@@ -52,9 +52,10 @@ class HelixWare_Playlist_RSS_JWPlayer {
 
 		header( 'Content-Type: application/rss+xml' );
 
-		$thumbnail_url = $this->asset_image_service->get_local_image_url_by_id( $post->ID );
+		$thumbnail_url  = $this->asset_image_service->get_local_image_url_by_id( $post->ID );
+		$thumbnails_url = $this->asset_image_service->get_vtt_thumbnails_url( $post->ID );
 
-		$this->_print_header( $post, $post->post_title, $post->post_content, $thumbnail_url );
+		$this->_print_header( $post, $post->post_title, $post->post_content, $thumbnail_url, $thumbnails_url );
 		array_walk( $this->stream_service->get_streams( $post->ID ), function ( $stream ) {
 			echo( "<jwplayer:source file=\"$stream->url\" label=\"$stream->label\" />\n" );
 		} );
@@ -64,7 +65,18 @@ class HelixWare_Playlist_RSS_JWPlayer {
 
 	}
 
-	private function _print_header( $post, $title = NULL, $description = NULL, $thumbnail_url = NULL ) {
+	/**
+	 * Print the RSS/JWPlayer header.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param WP_Post $post The attachment.
+	 * @param string|null $title The attachment's title.
+	 * @param string|null $description The attachment's description.
+	 * @param string|null $thumbnail_url A link to a thumbnail image.
+	 * @param string|null $thumbnails_url A link to a VTT files with thumbnails.
+	 */
+	private function _print_header( $post, $title = NULL, $description = NULL, $thumbnail_url = NULL, $thumbnails_url = NULL ) {
 
 		echo( "<rss version=\"2.0\" xmlns:jwplayer=\"http://rss.jwpcdn.com/\">\n" );
 		echo( "<channel>\n" );
@@ -80,6 +92,10 @@ class HelixWare_Playlist_RSS_JWPlayer {
 
 		if ( isset( $thumbnail_url ) ) {
 			echo( sprintf( "<jwplayer:image>%s</jwplayer:image>\n", htmlentities( $thumbnail_url ) ) );
+		}
+
+		if ( isset( $thumbnails_url ) ) {
+			echo( '<jwplayer:track file="' . htmlentities( $thumbnails_url ) . '" kind="thumbnails" />' . "\n" );
 		}
 
 		// We delegate adding other information here, e.g. chapters are added by the MICO

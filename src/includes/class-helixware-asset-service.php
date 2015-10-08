@@ -25,6 +25,7 @@ class HelixWare_Asset_Service {
 	const META_THUMBNAIL_URL = '_hw_thumbnail_url';
 	const META_TYPE = '_hw_type';
 	const META_LAST_MODIFIED_DATE = '_hw_last_modified_date';
+	const META_DURATION = '_hw_duration';
 
 	// The minimum last modified date to get all assets.
 	const MIN_LAST_MODIFIED_DATE = '1970-01-01T00:00:00.000Z';
@@ -166,6 +167,25 @@ class HelixWare_Asset_Service {
 	}
 
 	/**
+	 * Get the duration for the specified post.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param int $id The attachment id.
+	 *
+	 * @return int|FALSE The duration or FALSE if not found.
+	 */
+	public function get_duration( $id ) {
+
+		if ( FALSE === ( $value = get_post_meta( $id, self::META_DURATION, TRUE ) ) ) {
+			return FALSE;
+		}
+
+		return (int) $value;
+
+	}
+
+	/**
 	 * Set the last modified date.
 	 *
 	 * @since 1.1.0
@@ -207,6 +227,20 @@ class HelixWare_Asset_Service {
 
 		// Save a reference to the thumbnail if it exists.
 		$this->_update_post_meta( $id, HelixWare_Asset_Service::META_THUMBNAIL_URL, ( isset( $value ) ? "$value?width=$width" : NULL ) );
+
+	}
+
+	/**
+	 * Set the duration for the specified post id.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param int $id The attachment id.
+	 * @param double $value The duration.
+	 */
+	public function set_duration( $id, $value ) {
+
+		$this->_update_post_meta( $id, HelixWare_Asset_Service::META_DURATION, ( is_numeric( $value ) ? intval( $value ) : NULL ) );
 
 	}
 

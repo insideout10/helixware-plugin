@@ -220,6 +220,8 @@ class HelixWare {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/interface-helixware-http-client-authentication.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/interface-helixware-player.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-helper.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client-application-authentication.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client-basic-authentication.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client.php';
@@ -313,8 +315,8 @@ class HelixWare {
 		$this->loader->add_action( 'wp_ajax_hw_asset_image', $this->asset_image_service, 'wp_ajax_get_image' );
 		$this->loader->add_action( 'wp_ajax_hw_rss_jwplayer', $this->playlist_rss_jwplayer, 'ajax_rss_jwplayer' );
 
-		// Output a VTT images file.
-		$this->loader->add_action( 'wp_ajax_hw_vtt_images', $this->asset_image_service, 'ajax_vtt_images' );
+		// Output a VTT thumbnails file.
+		$this->loader->add_action( 'wp_ajax_hw_vtt_thumbnails', $this->asset_image_service, 'ajax_vtt_thumbnails' );
 
 	}
 
@@ -335,7 +337,7 @@ class HelixWare {
 		$this->loader->add_action( 'wp_ajax_nopriv_hw_rss_jwplayer', $this->playlist_rss_jwplayer, 'ajax_rss_jwplayer' );
 
 		// Output a VTT images file.
-		$this->loader->add_action( 'wp_ajax_nopriv_hw_vtt_images', $this->asset_image_service, 'ajax_vtt_images' );
+		$this->loader->add_action( 'wp_ajax_nopriv_hw_vtt_thumbnails', $this->asset_image_service, 'ajax_vtt_thumbnails' );
 
 	}
 

@@ -13,9 +13,10 @@ class HelixWare_Asset_Image_Service {
 	const MEDIA_LIBRARY_THUMBNAIL_WIDTH = 230;
 	const DEFAULT_TIMECODE = 5;
 	const DEFAULT_WIDTH = 640;
+	const DEFAULT_THUMBNAIL_WIDTH = 100;
 
 	/**
-	 * @var HelixWare_HTTP_Client $http_clent An HTTP client.
+	 * @var \HelixWare_HTTP_Client $http_clent An HTTP client.
 	 */
 	private $http_client;
 
@@ -118,6 +119,22 @@ class HelixWare_Asset_Image_Service {
 	}
 
 	/**
+	 * Get the URL to the VTT images file pointing to a list of thumbnails for the asset.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param int $id The post id.
+	 * @param int $width The image width.
+	 *
+	 * @return string|void
+	 */
+	public function get_vtt_thumbnails_url( $id, $width = self::DEFAULT_THUMBNAIL_WIDTH ) {
+
+		return admin_url( "admin-ajax.php?action=hw_vtt_thumbnails&id=$id&width=$width" );
+
+	}
+
+	/**
 	 * Hooked to the _hw_asset_image_ AJAX action, it'll get the path from the
 	 * request parameters and call {@see get_image}.
 	 *
@@ -194,25 +211,31 @@ class HelixWare_Asset_Image_Service {
 	 *
 	 * @since 1.2.0
 	 */
-	public function ajax_vtt_images() {
+	public function ajax_vtt_thumbnails() {
 
 		// Check that a post ID has been provided.
 		if ( ! isset( $_GET['id'] ) || ! is_numeric( $_GET['id'] ) ) {
 			wp_die( 'A numeric id is required.' );
 		}
 
+		// Get the ID and width parameters.
+		$id    = $_GET['id'];
+		$width = ( isset( $_GET['width'] ) && is_numeric( $_GET['width'] ) ? (int) $_GET['width'] : 100 );
+
+		if ( FALSE === ( $duration = $this->asset_service->get_duration( $id ) ) ) {
+			wp_die( 'Duration unknown' );
+		};
+
 		echo( "WEBVTT\n\n" );
 
-		// TODO: implement
-//		array_walk( $fragments, function ( $fragment ) ) {
-//
-//			echo( 'chapter_' . ( ++ $chapter_no ) . "\n" );
-//			echo( $this->_milliseconds_to_timecode( $fragment->start ) . " --> " . $this->_milliseconds_to_timecode( $fragment->end ) . "\n" );
-//			echo( 'Chapter ' . $chapter_no . "\n" );
-//			echo( "\n" );
-//
-//		} );
-//
+		// Show a thumbnail every second.
+		for ( $seconds = 0; $seconds < $duration; $seconds ++ ) {
+			echo( HelixWare_Helper::milliseconds_to_timecode( $seconds * 1000 ) . ' --> ' . HelixWare_Helper::milliseconds_to_timecode( ( $seconds + 1 ) * 1000 ) . "\n" );
+			// We add ext.png as hack otherwise JWPlayer 7 doesn't show the image.
+			echo( $this->get_local_image_url_by_id( $id, $seconds, $width ) . "&ext.png\n" );
+			echo( "\n" );
+		}
+
 		wp_die();
 
 	}

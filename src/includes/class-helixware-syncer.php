@@ -126,6 +126,11 @@ class HelixWare_Syncer {
 		$this->asset_service->set_type( $attachment_id, $asset->type );
 		$this->asset_service->set_last_modified_date( $attachment_id, $asset->lastModifiedDate );
 
+		// Set the duration if available.
+		if ( isset( $asset->duration ) ) {
+			$this->asset_service->set_duration( $attachment_id, $asset->duration );
+		}
+
 	}
 
 }
