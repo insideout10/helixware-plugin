@@ -16,7 +16,7 @@
  * Plugin Name:       HelixWare MICO Extensions
  * Plugin URI:        http://helixware.tv
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.2.0-dev
+ * Version:           1.2.1-dev
  * Author:            David Riccitelli
  * Author URI:        http://insideout.io
  * License:           GPL-2.0+
