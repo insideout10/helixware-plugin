@@ -19,14 +19,15 @@ function hewa_shortcode_player( $atts ) {
 	// TODO: the default path might point to a custom video that invites the user to select a video.
 	// TODO: default width and height ratio should be calculated from the video.
 	$params = shortcode_atts( array(
-		'width'        => '100%', // by default we stretch the full width of the containing element.
-		'asset_id'     => null,
-		'live_id'      => null,
+		'width'        => '100%',
+		// by default we stretch the full width of the containing element.
+		'asset_id'     => NULL,
+		'live_id'      => NULL,
 		'aspectratio'  => '5:3',
-		'listbar'      => null,
+		'listbar'      => NULL,
 		'listbar_size' => 240,
 		'listbar_cat'  => 'for-you',
-		'autostart'    => true,
+		'autostart'    => TRUE,
 		'max'          => 5,
 		'skin'         => hewa_get_option( HEWA_SETTINGS_JWPLAYER_DEFAULT_SKIN, '' ),
 		'logo_url'     => hewa_get_option( HEWA_SETTINGS_JWPLAYER_LOGO_URL, '' ),
@@ -52,28 +53,28 @@ function hewa_shortcode_player( $atts ) {
 
 	// Build the player array which will then be translated to JavaScript for JWPlayer initialization.
 	$player                = array();
-	$player['flashplayer'] = plugins_url( 'js/jwplayer-6.11/jwplayer.flash.swf', __FILE__ );
-	$player['html5player'] = plugins_url( 'js/jwplayer-6.11/jwplayer.html5.js', __FILE__ );
-	$player['androidhls']  = true;
+//	$player['flashplayer'] = plugins_url( 'js/jwplayer-6.11/jwplayer.flash.swf', __FILE__ );
+//	$player['html5player'] = plugins_url( 'js/jwplayer-6.11/jwplayer.html5.js', __FILE__ );
+	$player['androidhls']  = TRUE;
 	$player['autostart']   = ( $params['autostart'] && is_singular() ? 'true' : 'false' );
-	$player['playlist']    = ( $is_live || null === $params['listbar']
+	$player['playlist']    = ( $is_live || NULL === $params['listbar']
 		? hewa_get_server_url() . "/4/pub/asset/$asset_id/streams.xml"
 		: apply_filters( HEWA_FILTERS_PLAYER_PLAYLIST_URL,
 			admin_url( 'admin-ajax.php?action=hewa_rss&id=' . $asset_id .
 			           '&t=' . $title_u . // set the title
 			           '&i=' . $image_u . // set the image
 			           '&max=' . $params['max'] . // set the maximum number of elements
-			           ( null !== $params['listbar'] ? '&cat=' . $params['listbar_cat'] : '' ) // add the category if we have the listbar.
+			           ( NULL !== $params['listbar'] ? '&cat=' . $params['listbar_cat'] : '' ) // add the category if we have the listbar.
 			)
 		) );
 	$player['width']       = $params['width'];
 	$player['aspectratio'] = $params['aspectratio'];
 	$player['ga']          = array(
 		// playlist title or mediaid
-		'idstring'    => ( null != $params['ga_id_string'] ? $params['ga_id_string'] : 'mediaid' ),
-		'universalga' => ( null != $params['ga_tracking_object'] ? $params['ga_tracking_object'] : '__gaTracker' ),
+		'idstring'    => ( NULL != $params['ga_id_string'] ? $params['ga_id_string'] : 'mediaid' ),
+		'universalga' => ( NULL != $params['ga_tracking_object'] ? $params['ga_tracking_object'] : '__gaTracker' ),
 		// mediaid or title
-		'label'       => ( null != $params['ga_media_id'] ? $params['ga_media_id'] : 'title' )
+		'label'       => ( NULL != $params['ga_media_id'] ? $params['ga_media_id'] : 'title' )
 	);
 
 	// Add the logo and the link if provided.
@@ -96,7 +97,7 @@ function hewa_shortcode_player( $atts ) {
 	$loading = esc_html__( 'Loading player...', HEWA_LANGUAGE_DOMAIN );
 
 	// Build the *responsive* listbar.
-	if ( null !== $params['listbar'] && 'responsive' === $params['listbar'] ) {
+	if ( NULL !== $params['listbar'] && 'responsive' === $params['listbar'] ) {
 		wp_enqueue_style( 'helixware-player-css', plugins_url( 'css/helixware.player.css', dirname( __FILE__ ) ) );
 
 		$listbar_id = uniqid();
@@ -115,7 +116,7 @@ function hewa_shortcode_player( $atts ) {
 	}
 
 	// Build a standard listbar.
-	if ( null !== $params['listbar'] && 'responsive' !== $params['listbar'] ) {
+	if ( NULL !== $params['listbar'] && 'responsive' !== $params['listbar'] ) {
 
 		$player['listbar'] = array(
 			'position' => $params['listbar'],
@@ -128,15 +129,13 @@ function hewa_shortcode_player( $atts ) {
 	$player_json = json_encode( $player, JSON_PRETTY_PRINT );
 
 	// Start printing out the player javascript.
-	$jwplayer_url = plugins_url( 'js/jwplayer-6.11/jwplayer.js', __FILE__ );
+
+	wp_enqueue_script( 'jwplayer6', sprintf( HelixWare_Player_JWPlayer6::LIBRARY_URL, $jwplayer_key ) );
 	$result .= <<<EOF
         <script type="text/javascript">
             jQuery( function( $ ) {
-				$.getScript('$jwplayer_url', function() {
 
-                jwplayer.key = '$jwplayer_key';
-                jwplayer('$player_id')
-                    .setup($player_json);
+                jwplayer('$player_id').setup($player_json);
 
 EOF;
 
@@ -200,7 +199,7 @@ EOF;
 	}
 
 	// Close the script and return the results.
-	return $result . '}); });</script>';
+	return $result . '});</script>';
 
 }
 

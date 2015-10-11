@@ -114,7 +114,7 @@ class HelixWare_Embed_Shortcode {
 		$id = $atts['id'];
 
 		// The playlist points to the RSS/JWPlayer.
-		$url = admin_url( "admin-ajax.php?action=hw_rss_jwplayer&id=$id" );
+		$url = HelixWare_Playlist_RSS_JWPlayer::get_rss_jwplayer_url( $id );
 
 		return $this->player->render( $url, 640, 360, $this->asset_image_service->get_local_image_url_by_id( $id, 5 ) );
 

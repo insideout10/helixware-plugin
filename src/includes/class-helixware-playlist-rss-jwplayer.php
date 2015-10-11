@@ -37,6 +37,27 @@ class HelixWare_Playlist_RSS_JWPlayer {
 
 	}
 
+	/**
+	 * Get the URL to the RSS JWPlayer playlist.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param int $id The post id.
+	 *
+	 * @return string The URL to the RSS JWPlayer.
+	 */
+	public static function get_rss_jwplayer_url( $id ) {
+
+		return admin_url( "admin-ajax.php?action=hw_rss_jwplayer&id=$id" );
+
+	}
+
+	/**
+	 * Handles the _hw_rss_jwplayer_ AJAX action, by outputting the RSS JWPlayer
+	 * playlist.
+	 *
+	 * @since 1.2.0
+	 */
 	public function ajax_rss_jwplayer() {
 
 		// Check if a post id has been provided.
@@ -114,11 +135,6 @@ class HelixWare_Playlist_RSS_JWPlayer {
 		echo( "</item>\n" );
 		echo( "</channel>\n" );
 		echo( "</rss>\n" );
-
-	}
-
-	private function _print_item( $title = NULL, $description = NULL, $thumbnail_url = NULL ) {
-
 
 	}
 
