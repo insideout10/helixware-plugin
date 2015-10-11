@@ -38,6 +38,11 @@ If you have any question, send us an e-mail to info@helixware.tv
 
 == Changelog ==
 
+= 1.2.0 (2015-10-11) =
+
+* add support for JWPlayer 7; do not include non-GPL files with the plugin and use CDN for JWPlayer [#15](https://github.com/insideout10/helixware-plugin/issues/15)
+* add support for MICO extensions, temporal video segmentation [#20](https://github.com/insideout10/helixware-plugin/issues/20)
+
 = 1.1.0 (2015-10-04) =
 
 * WordPress Media Library integration [#10](https://github.com/insideout10/helixware-plugin/issues/10)
