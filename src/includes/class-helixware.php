@@ -271,7 +271,7 @@ class HelixWare {
 
 		$this->playlist_rss_jwplayer = new HelixWare_Playlist_RSS_JWPlayer( $this->stream_service, $this->asset_image_service );
 
-		$jwplayer = ( ! empty( $jwplayer7_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_7_KEY, '' ) ) )
+		$jwplayer = ( '' !== ( $jwplayer7_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_7_KEY, '' ) ) )
 			? new HelixWare_Player_JWPlayer7( $jwplayer7_key )
 			: new HelixWare_Player_JWPlayer6( hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' ) );
 
