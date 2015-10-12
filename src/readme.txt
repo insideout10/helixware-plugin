@@ -38,6 +38,10 @@ If you have any question, send us an e-mail to info@helixware.tv
 
 == Changelog ==
 
+= 1.2.1 (2015-10-12) =
+
+* move the MICO extensions to a separate plugin [#25](https://github.com/insideout10/helixware-plugin/issues/25)
+
 = 1.2.0 (2015-10-11) =
 
 * add support for JWPlayer 7; do not include non-GPL files with the plugin and use CDN for JWPlayer [#15](https://github.com/insideout10/helixware-plugin/issues/15)
