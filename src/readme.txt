@@ -1,9 +1,9 @@
-=== Plugin Name ===
+=== HelixWare ===
 Contributors: insideout10, ziodave
 Tags: video, streaming, ondemand, SEO, audio, HLS, Flash, OTT, DASH, rtsp
 Requires at least: 4.3
 Tested up to: 4.3.1
-Stable tag: 1.1.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,8 +35,11 @@ To install:
 
 If you have any question, send us an e-mail to info@helixware.tv
 
-
 == Changelog ==
+
+= 1.2.1 (2015-10-12) =
+
+* move the MICO extensions to a separate plugin [#25](https://github.com/insideout10/helixware-plugin/issues/25)
 
 = 1.2.0 (2015-10-11) =
 

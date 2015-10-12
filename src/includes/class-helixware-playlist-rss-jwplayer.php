@@ -77,7 +77,8 @@ class HelixWare_Playlist_RSS_JWPlayer {
 		$thumbnails_url = $this->asset_image_service->get_vtt_thumbnails_url( $post->ID );
 
 		$this->_print_header( $post, $post->post_title, $post->post_content, $thumbnail_url, $thumbnails_url );
-		array_walk( $this->stream_service->get_streams( $post->ID ), function ( $stream ) {
+		$streams = $this->stream_service->get_streams( $post->ID );
+		array_walk( $streams, function ( $stream ) {
 
 			// JWPlayer 6 tries to play rtsp links, therefore we remove them.
 			if ( 0 !== strpos( $stream->url, 'rtsp://' ) ) {
