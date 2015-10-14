@@ -4,4 +4,4 @@
 setenv.sh
 vendor/
 composer.lock
-.svn/
+.svn/tmp/
