@@ -170,6 +170,9 @@ class HelixWare {
 		// Set the singleton instance.
 		self::$instance = $this;
 
+		// Run the extensions.
+		do_action( 'hewa_run_extensions', $this );
+
 	}
 
 	/**
