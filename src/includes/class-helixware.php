@@ -112,13 +112,13 @@ class HelixWare {
 	private $attachment_service;
 
 	/**
-	 * An instance of the syncer which synchronizes the local library with the remote one.
+	 * An instance of the Asset sync service which synchronizes the local library with the remote one.
 	 *
-	 * @since 1.1.0
+	 * @since 1.3.0
 	 * @access private
-	 * @var \HelixWare_Syncer $syncer The syncer instance.
+	 * @var \HelixWare_Asset_Sync_Service $asset_sync_service The Asset Sync service.
 	 */
-	private $syncer;
+	private $asset_sync_service;
 
 	/**
 	 * The Admin Attachments class handles requests for attachments from WordPress
@@ -241,7 +241,9 @@ class HelixWare {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-hal-response.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-hal-request.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-hal-client.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-syncer.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-sync-service.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-asset-sync-service.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-attachment-sync-service.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-asset-service.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-asset-image-service.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-attachment-service.php';
@@ -278,9 +280,12 @@ class HelixWare {
 
 		$this->asset_service       = new HelixWare_Asset_Service( $this->hal_client, hewa_get_server_url() );
 		$this->asset_image_service = new HelixWare_Asset_Image_Service( $this->http_client, hewa_get_server_url(), $this->asset_service );
-		$this->attachment_service  = new HelixWare_Attachment_Service();
-		$this->syncer              = new HelixWare_Syncer( $this->asset_service );
-		$this->admin_attachments   = new HelixWare_Admin_Attachments( $this->syncer );
+		$this->asset_sync_service  = new HelixWare_Asset_Sync_Service( $this->asset_service );
+
+		$attachment_sync_service  = new HelixWare_Attachment_Sync_Service();
+		$this->attachment_service = new HelixWare_Attachment_Service( $attachment_sync_service );
+
+		$this->admin_attachments = new HelixWare_Admin_Attachments( $this->asset_sync_service  );
 
 		$this->stream_service = new HelixWare_Stream_Service( $this->http_client, hewa_get_server_url(), $this->asset_service );
 
@@ -337,8 +342,8 @@ class HelixWare {
 		// Output a VTT thumbnails file.
 		$this->loader->add_action( 'wp_ajax_hw_vtt_thumbnails', $this->asset_image_service, 'ajax_vtt_thumbnails' );
 
-		// Filters attachment inserts/updates.
-		$this->loader->add_action( 'wp_insert_attachment_data', $this->attachment_service, 'wp_insert_attachment_data', 10, 2 );
+		// Filters attachment updates.
+		$this->loader->add_action( 'pre_post_update', $this->attachment_service, 'pre_post_update', 10, 2 );
 
 	}
 

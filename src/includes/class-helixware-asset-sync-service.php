@@ -7,7 +7,7 @@
  * @subpackage HelixWare/includes
  * @author     David Riccitelli <david@insideout.io>
  */
-class HelixWare_Syncer {
+class HelixWare_Asset_Sync_Service extends HelixWare_Sync_Service {
 
 	/**
 	 * The Log service.
@@ -36,7 +36,7 @@ class HelixWare_Syncer {
 	 */
 	public function __construct( $asset_service ) {
 
-		$this->log_service = HelixWare_Log_Service::get_logger( 'HelixWare_Syncer' );
+		$this->log_service = HelixWare_Log_Service::get_logger( 'HelixWare_Asset_Sync_Service' );
 
 		$this->asset_service = $asset_service;
 	}
@@ -64,7 +64,7 @@ class HelixWare_Syncer {
 		do {
 			foreach ( $response->get_embedded( 'assets' ) as $asset ) {
 
-				$this->_sync( $asset );
+				$this->push( NULL, $asset );
 			}
 		} while ( $response->has_next() && $response = $response->get_next() );
 
@@ -75,9 +75,11 @@ class HelixWare_Syncer {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param $asset
+	 * @param object $asset An Asset representation.
+	 *
+	 * @return bool TRUE if successful otherwise FALSE.
 	 */
-	private function _sync( $asset ) {
+	public function push( $post_id, $asset ) {
 		global $wpdb;
 
 		$self = $asset->_links->self->href;
@@ -90,19 +92,25 @@ class HelixWare_Syncer {
 			'post_title'     => $asset->title,
 			'post_content'   => '', // must be an empty string.
 			'post_status'    => 'inherit',
-			'post_mime_type' => $mime_type
+			'post_mime_type' => $mime_type,
 		);
 
 		// Check if attachment already exists for this guid.
 		if ( NULL !== ( $attachment_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid=%s", $self ) ) ) ) {
 			$attachment['ID'] = $attachment_id;
+
+			// Set the sync flag for existing attachments.
+			$this->set_syncing( $attachment_id, TRUE );
 		}
 
 		$this->log_service->trace( "Syncing [ " . str_replace( "\n", '', var_export( $attachment, TRUE ) ) . " ]" );
 
 		if ( 0 === ( $attachment_id = wp_insert_attachment( $attachment ) ) ) {
-			return;
+			return FALSE;
 		};
+
+		// Clear the syncing flag.
+		$this->set_syncing( $attachment_id, FALSE );
 
 		// Set the additional fields.
 		$this->asset_service->set_thumbnail_url( $attachment_id, isset( $asset->_links->thumbnail->href ) ? $asset->_links->thumbnail->href : NULL );
@@ -114,6 +122,7 @@ class HelixWare_Syncer {
 			$this->asset_service->set_duration( $attachment_id, $asset->duration );
 		}
 
+		return TRUE;
 	}
 
 }
