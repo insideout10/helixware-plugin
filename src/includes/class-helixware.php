@@ -89,7 +89,7 @@ class HelixWare {
 	 *
 	 * @since 1.1.0
 	 * @access private
-	 * @var HelixWare_Asset_Service $asset_service The Asset Service.
+	 * @var \HelixWare_Asset_Service $asset_service The Asset Service.
 	 */
 	private $asset_service;
 
@@ -98,9 +98,18 @@ class HelixWare {
 	 *
 	 * @since 1.1.0
 	 * @access private
-	 * @var HelixWare_Asset_Image_Service $asset_image_service The Asset Image Service.
+	 * @var \HelixWare_Asset_Image_Service $asset_image_service The Asset Image Service.
 	 */
 	private $asset_image_service;
+
+	/**
+	 * The Attachment service.
+	 *
+	 * @since 1.3.0
+	 * @access private
+	 * @var \HelixWare_Attachment_Service $attachment_service The Attachment service.
+	 */
+	private $attachment_service;
 
 	/**
 	 * An instance of the syncer which synchronizes the local library with the remote one.
@@ -223,6 +232,7 @@ class HelixWare {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/interface-helixware-http-client-authentication.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/interface-helixware-player.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-log-service.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-helper.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-http-client-application-authentication.php';
@@ -234,6 +244,7 @@ class HelixWare {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-syncer.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-asset-service.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-asset-image-service.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-attachment-service.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-stream-service.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-playlist-rss-jwplayer.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-player-jwplayer6.php';
@@ -265,9 +276,10 @@ class HelixWare {
 		$this->http_client   = new HelixWare_HTTP_Client( $http_authentication );
 		$this->hal_client    = new HelixWare_HAL_Client( $this->http_client );
 
-		$this->asset_service       = new HelixWare_Asset_Service();
+		$this->asset_service       = new HelixWare_Asset_Service( $this->hal_client, hewa_get_server_url() );
 		$this->asset_image_service = new HelixWare_Asset_Image_Service( $this->http_client, hewa_get_server_url(), $this->asset_service );
-		$this->syncer              = new HelixWare_Syncer( $this->hal_client, hewa_get_server_url(), $this->asset_service );
+		$this->attachment_service  = new HelixWare_Attachment_Service();
+		$this->syncer              = new HelixWare_Syncer( $this->asset_service );
 		$this->admin_attachments   = new HelixWare_Admin_Attachments( $this->syncer );
 
 		$this->stream_service = new HelixWare_Stream_Service( $this->http_client, hewa_get_server_url(), $this->asset_service );
@@ -324,6 +336,9 @@ class HelixWare {
 
 		// Output a VTT thumbnails file.
 		$this->loader->add_action( 'wp_ajax_hw_vtt_thumbnails', $this->asset_image_service, 'ajax_vtt_thumbnails' );
+
+		// Filters attachment inserts/updates.
+		$this->loader->add_action( 'wp_insert_attachment_data', $this->attachment_service, 'wp_insert_attachment_data', 10, 2 );
 
 	}
 

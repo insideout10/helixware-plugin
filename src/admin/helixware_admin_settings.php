@@ -97,11 +97,11 @@ function hewa_admin_settings_add_field( $option, $label, $input_callback, $selec
 	$section       = $configuration[0];
 	$key           = $configuration[1];
 
-	hewa_write_log( 'Adding field [ option :: {option} ][ section :: {section} ][ key :: {key} ]', array(
-		'option'  => $option,
-		'section' => $section,
-		'key'     => $key
-	) );
+//	hewa_write_log( 'Adding field [ option :: {option} ][ section :: {section} ][ key :: {key} ]', array(
+//		'option'  => $option,
+//		'section' => $section,
+//		'key'     => $key
+//	) );
 
 	add_settings_field( $key, $label, $input_callback, $section, $section, array(
 		'option'  => $option,

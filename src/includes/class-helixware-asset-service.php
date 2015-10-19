@@ -30,12 +30,41 @@ class HelixWare_Asset_Service {
 	// The minimum last modified date to get all assets.
 	const MIN_LAST_MODIFIED_DATE = '1970-01-01T00:00:00.000Z';
 
+	// The API path to the assets and the search paths.
+	const ASSETS_PATH = '/api/assets';
+	const FIND_BY_LAST_MODIFIED_DATE_GREATER_THAN_PATH = '/search/findByLastModifiedDateGreaterThan?date=%s';
+
+	/**
+	 * A HAL client.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @var \HelixWare_HAL_Client $hal_client A HAL client.
+	 */
+	private $hal_client;
+
+	/**
+	 * The HelixWare server URL.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @var string $server_url The server URL.
+	 */
+	private $server_url;
+
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.1.0
+	 *
+	 * @param \HelixWare_HAL_Client $hal_client A HAL client.
+	 * @param string $server_url The server URL.
 	 */
-	public function __construct() {
+	public function __construct( $hal_client, $server_url ) {
+
+		$this->hal_client = $hal_client;
+		$this->server_url = $server_url;
 
 	}
 
@@ -86,6 +115,28 @@ class HelixWare_Asset_Service {
 		         || self::MIME_TYPE_BROADCAST === $mime_type
 		         || self::MIME_TYPE_CHANNEL === $mime_type
 		         || self::MIME_TYPE_UNKNOWN );
+
+	}
+
+	/**
+	 * Get all the assets modified after the specified date.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $last_modified_date A last modified date in ISO8601 format.
+	 *
+	 * @return \HelixWare_HAL_Response The HAL response.
+	 */
+	public function get_assets_where_last_modified_date_greater_than( $last_modified_date ) {
+
+		// Set the path to the /api/assets and append the path to filter by date.
+		$path = self::ASSETS_PATH
+		        . sprintf( self::FIND_BY_LAST_MODIFIED_DATE_GREATER_THAN_PATH, $last_modified_date );
+
+		// Create a HAL request.
+		$request = new HelixWare_HAL_Request( 'GET', $this->server_url . $path );
+
+		return $this->hal_client->execute( $request );
 
 	}
 

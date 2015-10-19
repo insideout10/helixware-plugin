@@ -77,9 +77,12 @@ class HelixWare_Asset_Image_Service {
 		}
 
 		// dump out the image.
-		$content_type = $response['headers']['content-type'];
-		header( "Content-Type: $content_type" );
-		echo( $response['body'] );
+		if ( isset( $response['headers']['content-type'] ) ) {
+			$content_type = $response['headers']['content-type'];
+			header( "Content-Type: $content_type" );
+		}
+
+		echo( isset( $response['body'] ) ? $response['body'] : '' );
 
 		wp_die();
 

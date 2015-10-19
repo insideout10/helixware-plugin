@@ -60,7 +60,7 @@ class HelixWare_Admin_Attachments {
 		$this->syncer->sync();
 
 		// If it has been requested to filter by video, add the HelixWare mime types.
-		if ( 'video' === $query['post_mime_type'] ) {
+		if ( isset( $query['post_mime_type'] ) && 'video' === $query['post_mime_type'] ) {
 			$query['post_mime_type'] .= ',' . HelixWare_Asset_Service::MIME_TYPE_ONDEMAND .
 			                            ',' . HelixWare_Asset_Service::MIME_TYPE_LIVE .
 			                            ',' . HelixWare_Asset_Service::MIME_TYPE_BROADCAST .
