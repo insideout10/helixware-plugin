@@ -17,26 +17,26 @@ class HelixWare_Attachment_Service {
 	private $log_service;
 
 	/**
-	 * The Attachment Sync service.
+	 * The Asset service.
 	 *
 	 * @since 1.3.0
 	 * @access private
-	 * @var \HelixWare_Attachment_Sync_Service $attachment_sync_service The Attachment Sync service.
+	 * @var \HelixWare_Asset_Service $asset_service The Asset service.
 	 */
-	private $attachment_sync_service;
+	private $asset_service;
 
 	/**
-	 * Create an instance of the Attachment service.
+	 * Create an instance of the Asset service.
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param \HelixWare_Attachment_Sync_Service $attachment_sync_service The Attachment Sync service.
+	 * @param \HelixWare_Asset_Service $asset_service The Asset service.
 	 */
-	public function __construct( $attachment_sync_service ) {
+	public function __construct( $asset_service ) {
 
 		$this->log_service = HelixWare_Log_Service::get_logger( 'HelixWare_Attachment_Service' );
 
-		$this->attachment_sync_service = $attachment_sync_service;
+		$this->asset_service = $asset_service;
 
 	}
 
@@ -63,9 +63,9 @@ class HelixWare_Attachment_Service {
 		}
 
 		// Try updating HelixWare, if it fails, fail the local update as well.
-		if ( ! $this->attachment_sync_service->push( $post_id, $data ) ) {
-			// TODO: handle
-			wp_die( 'need to return a proper error message' );
+		if ( FALSE === $this->asset_service->push( $post_id, $data ) ) {
+			// TODO: send an error message somewhere to the UI here?
+			wp_die( 'Cannot update HelixWare: halting update.' );
 		}
 	}
 
