@@ -22,24 +22,24 @@
 class HelixWare_Admin_Attachments {
 
 	/**
-	 * The Asset Sync service enables assets syncing.
+	 * The Asset service enables assets syncing.
 	 *
 	 * @since 1.3.0
 	 * @access private
-	 * @var \HelixWare_Asset_Sync_Service $asset_sync_service The Asset Sync service.
+	 * @var \HelixWare_Asset_Service $asset_service The Asset service.
 	 */
-	private $asset_sync_service;
+	private $asset_service;
 
 	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
 	 *
-	 * @param \HelixWare_Asset_Sync_Service $asset_sync_service The Asset Sync service.
+	 * @param \HelixWare_Asset_Service $asset_service The Asset service.
 	 */
-	public function __construct( $asset_sync_service ) {
+	public function __construct( $asset_service ) {
 
-		$this->asset_sync_service = $asset_sync_service;
+		$this->asset_service = $asset_service;
 
 	}
 
@@ -57,7 +57,7 @@ class HelixWare_Admin_Attachments {
 	public function ajax_query_attachments_args( $query ) {
 
 		// Synchronize the library.
-		$this->asset_sync_service->sync();
+		$this->asset_service->sync();
 
 		// If it has been requested to filter by video, add the HelixWare mime types.
 		if ( isset( $query['post_mime_type'] ) && 'video' === $query['post_mime_type'] ) {
