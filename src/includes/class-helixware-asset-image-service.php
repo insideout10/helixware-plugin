@@ -218,6 +218,9 @@ class HelixWare_Asset_Image_Service {
 
 		$response['image'] = array( 'src' => $this->get_local_image_url_by_id( $attachment->ID, self::DEFAULT_TIMECODE, self::MEDIA_LIBRARY_THUMBNAIL_WIDTH ) );
 
+		// Set the filename to the title of the attachment.
+		$response['filename'] = $response['title'];
+
 		return $response;
 	}
 
