@@ -110,15 +110,16 @@ class HelixWare_Attachment_Service {
 		// need to explicitly check for FALSE.
 		if ( FALSE === $this->asset_service->delete( $post_id, $data ) ) {
 
-			// Sending an error here, will also prevent local modifications.
-
-			// Send a JSON error.
-			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-				wp_send_json_error( HelixWare_Error_Helper::create( HelixWare_Error_Helper::ERR_CODE_ASSET_DELETE, 'An error occurred during asset delete.' ) );
-			} else {
-				// TODO: send an error message somewhere to the UI here?
-				wp_die( 'Cannot delete asset on HelixWare: halting delete.' );
-			}
+			$this->log_service->warn("HelixWare asset delete failed [ post id :: $post_id ]");
+//			// Sending an error here, will also prevent local modifications.
+//
+//			// Send a JSON error.
+//			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+//				wp_send_json_error( HelixWare_Error_Helper::create( HelixWare_Error_Helper::ERR_CODE_ASSET_DELETE, 'An error occurred during asset delete.' ) );
+//			} else {
+//				// TODO: send an error message somewhere to the UI here?
+//				wp_die( 'Cannot delete asset on HelixWare: halting delete.' );
+//			}
 
 		}
 
