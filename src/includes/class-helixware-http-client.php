@@ -70,14 +70,15 @@ class HelixWare_HTTP_Client {
 		$response = wp_remote_request( $url, $args );
 
 		// If an error occurs, print the error and exit.
-		if ( is_wp_error( $response ) || 200 !== (int) $response['response']['code'] ) {
+		$status_code = ( isset( $response['response']['code'] ) && is_numeric( $response['response']['code'] ) ? (int) $response['response']['code'] : NULL );
+		if ( is_wp_error( $response ) || is_null( $status_code ) || 2 !== intval( $status_code / 100 ) ) {
 			hewa_write_log(
-				'An error occurred while calling the remote server ( ' .
+				"An error occurred while calling the remote server [ status code :: $status_code ]( " .
 				( is_wp_error( $response ) ? $response->get_error_message() : $response['body'] ) . ' )'
 			);
 
 			return ( __(
-				'An error occurred while calling the remote server ( ' .
+				"An error occurred while calling the remote serve [ status code :: $status_code ]( " .
 				( is_wp_error( $response ) ? $response->get_error_message() : $response['body'] ) . ' )',
 				HEWA_LANGUAGE_DOMAIN
 			) );

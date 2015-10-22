@@ -8,6 +8,7 @@
 class HelixWare_Error_Helper {
 
 	const ERR_CODE_ASSET_PUSH = 'hewa_err_asset_push';
+	const ERR_CODE_ASSET_DELETE = 'hewa_err_asset_delete';
 
 	public function __construct() {
 

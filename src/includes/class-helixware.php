@@ -330,6 +330,7 @@ class HelixWare {
 
 		// Filters attachment updates.
 		$this->loader->add_action( 'pre_post_update', $this->attachment_service, 'pre_post_update', 10, 2 );
+		$this->loader->add_action( 'delete_attachment', $this->attachment_service, 'delete_attachment', 10, 1 );
 
 	}
 

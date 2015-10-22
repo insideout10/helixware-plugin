@@ -197,6 +197,21 @@ class HelixWare_Asset_Service {
 	}
 
 	/**
+	 * Get a HelixWare asset URL given a post id.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param int $post_id The post id.
+	 *
+	 * @return string The HelixWare asset URL.
+	 */
+	public function get_asset_url( $post_id ) {
+
+		return $this->server_url . self::ASSETS_PATH . '/' . $this->get_asset_id( $post_id );
+
+	}
+
+	/**
 	 * Get the most recent last modified date.
 	 *
 	 * @since 1.1.0
@@ -398,19 +413,42 @@ class HelixWare_Asset_Service {
 			return FALSE;
 		}
 
-		// Build the URL and set the payload.
-		$url = $this->server_url . self::ASSETS_PATH . '/' . $this->get_asset_id( $post_id );
-
 		$payload = array(
 			'title'       => $data['post_title'],
 			'description' => $data['post_content']
 		);
 
 		// Create the request and execute.
-		$request  = new HelixWare_HAL_Request( 'PATCH', $url, $payload, HelixWare_HAL_Request::CONTENT_TYPE_APPLICATION_JSON );
+		$request  = new HelixWare_HAL_Request( 'PATCH', $this->get_asset_url( $post_id ), $payload, HelixWare_HAL_Request::CONTENT_TYPE_APPLICATION_JSON );
 		$response = $this->hal_client->execute( $request );
 
 		return ( is_numeric( $response->get_status_code() ) && 2 === intval( $response->get_status_code() / 100 ) );
+
+	}
+
+	/**
+	 * Delete the asset on HelixWare.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param int $post_id The post id.
+	 * @param array $data The post fields.
+	 *
+	 * @return bool TRUE if the operation was successful otherwise FALSE.
+	 */
+	public function delete( $post_id, $data ) {
+
+		// If the mime type is not set or it's not HelixWare, do nothing.
+		if ( ! isset( $data['post_mime_type'] ) || ! HelixWare_Asset_Service::is_helixware_mime_type( $data['post_mime_type'] ) ) {
+			return NULL;
+		}
+
+		// Create the request and execute.
+		$request  = new HelixWare_HAL_Request( 'DELETE', $this->get_asset_url( $post_id ) );
+		$response = $this->hal_client->execute( $request );
+
+		return ( is_numeric( $response->get_status_code() ) && 2 === intval( $response->get_status_code() / 100 ) );
+
 	}
 
 	/**
