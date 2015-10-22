@@ -410,9 +410,7 @@ class HelixWare_Asset_Service {
 		$request  = new HelixWare_HAL_Request( 'PATCH', $url, $payload, HelixWare_HAL_Request::CONTENT_TYPE_APPLICATION_JSON );
 		$response = $this->hal_client->execute( $request );
 
-		var_dump( $response );
-		wp_die();
-
+		return ( is_numeric( $response->get_status_code() ) && 2 === intval( $response->get_status_code() / 100 ) );
 	}
 
 	/**

@@ -79,4 +79,18 @@ class HelixWare_HAL_Response {
 
 	}
 
+	/**
+	 * Get the response status code.
+	 *
+	 * @since 1.3.0
+	 * @return int|null The status code if available otherwise NULL.
+	 */
+	public function get_status_code() {
+
+		return ( isset( $this->response['response']['code'] ) && is_numeric( $this->response['response']['code'] )
+			? (int) $this->response['response']['code']
+			: NULL );
+
+	}
+
 }

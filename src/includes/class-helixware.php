@@ -217,6 +217,8 @@ class HelixWare {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-i18n.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-error-helper.php';
+
 		/**
 		 * The class responsible for making HTTP requests.
 		 */

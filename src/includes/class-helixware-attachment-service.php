@@ -62,10 +62,19 @@ class HelixWare_Attachment_Service {
 			return;
 		}
 
-		// Try updating HelixWare, if it fails, fail the local update as well.
+		// Try updating HelixWare, if it fails, fail the local update as well. Note that
+		// the push function may return also 0 if no synchronization took place, so we
+		// need to explicitly check for FALSE.
 		if ( FALSE === $this->asset_service->push( $post_id, $data ) ) {
-			// TODO: send an error message somewhere to the UI here?
-			wp_die( 'Cannot update HelixWare: halting update.' );
+
+			// Send a JSON error.
+			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+				wp_send_json_error( HelixWare_Error_Helper::create( HelixWare_Error_Helper::ERR_CODE_ASSET_PUSH, 'An error occurred during asset synchronization.' ) );
+			} else {
+				// TODO: send an error message somewhere to the UI here?
+				wp_die( 'Cannot update HelixWare: halting update.' );
+			}
+
 		}
 	}
 
