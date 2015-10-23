@@ -241,6 +241,7 @@ class HelixWare {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-playlist-rss-jwplayer.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-player-jwplayer6.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-player-jwplayer7.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-player-videojs.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
@@ -277,11 +278,13 @@ class HelixWare {
 
 		$this->playlist_rss_jwplayer = new HelixWare_Playlist_RSS_JWPlayer( $this->stream_service, $this->asset_image_service );
 
-		$jwplayer = ( '' !== ( $jwplayer7_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_7_KEY, '' ) ) )
+		$player = ( '' !== ( $jwplayer7_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_7_KEY, '' ) ) )
 			? new HelixWare_Player_JWPlayer7( $jwplayer7_key )
 			: new HelixWare_Player_JWPlayer6( hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' ) );
 
-		$this->embed_shortcode = new HelixWare_Embed_Shortcode( $this->asset_service, $this->asset_image_service, $jwplayer );
+		$player = new HelixWare_Player_VideoJS();
+
+		$this->embed_shortcode = new HelixWare_Embed_Shortcode( $this->asset_service, $this->asset_image_service, $player );
 
 	}
 
