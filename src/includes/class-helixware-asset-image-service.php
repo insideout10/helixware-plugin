@@ -189,7 +189,7 @@ class HelixWare_Asset_Image_Service {
 		// Get the width or use 640 as default.
 		$width = ( isset( $_GET['width'] ) && is_numeric( $_GET['width'] ) ? $_GET['width'] : self::DEFAULT_WIDTH );
 
-		$height = ( isset( $_GET['width'] ) && is_numeric( $_GET['width'] ) ? $_GET['width'] : self::DEFAULT_WIDTH );
+		$height = ( isset( $_GET['height'] ) && is_numeric( $_GET['height'] ) ? $_GET['height'] : NULL );
 		$x      = ( isset( $_GET['x'] ) && is_numeric( $_GET['x'] ) ? $_GET['x'] : NULL );
 		$y      = ( isset( $_GET['y'] ) && is_numeric( $_GET['y'] ) ? $_GET['y'] : NULL );
 

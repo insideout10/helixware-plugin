@@ -282,7 +282,7 @@ class HelixWare {
 			? new HelixWare_Player_JWPlayer7( $jwplayer7_key )
 			: new HelixWare_Player_JWPlayer6( hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' ) );
 
-		$player = new HelixWare_Player_VideoJS();
+//		$player = new HelixWare_Player_VideoJS();
 
 		$this->embed_shortcode = new HelixWare_Embed_Shortcode( $this->asset_service, $this->asset_image_service, $player );
 

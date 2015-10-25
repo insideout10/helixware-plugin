@@ -75,7 +75,7 @@ class HelixWare_HAL_Response {
 			return $this->embedded;
 		}
 
-		return $this->embedded->{$key};
+		return ( isset( $this->embedded->{$key} ) ? $this->embedded->{$key} : array() );
 
 	}
 
