@@ -280,15 +280,21 @@ class HelixWare {
 
 		$this->stream_service = new HelixWare_Stream_Service( $this->http_client, hewa_get_server_url(), $this->asset_service );
 
-		// JWPlayer
+		// Player set-up according to available keys.
 		$this->media_rss_player_url_service = new HelixWare_MediaRSS_Player_URL_Service( $this->stream_service, $this->asset_image_service );
-		$player                             = ( '' !== ( $jwplayer7_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_7_KEY, '' ) ) )
-			? new HelixWare_Player_JWPlayer7( $this->media_rss_player_url_service, $jwplayer7_key )
-			: new HelixWare_Player_JWPlayer6( $this->media_rss_player_url_service, hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' ) );
 
-		// VideoJS
-		$player_url_service = new HelixWare_HLS_Player_URL_Service( $this->stream_service );
-		$player             = new HelixWare_Player_VideoJS( $player_url_service );
+		$jwplayer7_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_7_KEY, '' );
+		$jwplayer6_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' );
+
+		if ( '' !== $jwplayer7_key ) {
+			$player = new HelixWare_Player_JWPlayer7( $this->media_rss_player_url_service, $jwplayer7_key );
+		} elseif ( '' !== $jwplayer6_key ) {
+			$player = new HelixWare_Player_JWPlayer6( $this->media_rss_player_url_service, hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' ) );
+		} else {
+			// VideoJS
+			$player_url_service = new HelixWare_HLS_Player_URL_Service( $this->stream_service );
+			$player             = new HelixWare_Player_VideoJS( $player_url_service );
+		}
 
 		$this->embed_shortcode = new HelixWare_Embed_Shortcode( $this->asset_service, $this->asset_image_service, $player );
 
