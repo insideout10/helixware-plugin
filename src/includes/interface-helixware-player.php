@@ -12,7 +12,7 @@ interface HelixWare_Player {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $url The URL of the video.
+	 * @param int $id The attachment id.
 	 * @param int $width The player width (default 640).
 	 * @param int $height The player height (default 360).
 	 * @param string $thumbnail_url The URL of the thumbnail.
@@ -21,6 +21,6 @@ interface HelixWare_Player {
 	 *
 	 * @return string The HTML code for the player.
 	 */
-	public function render( $url, $width = 640, $height = 360, $thumbnail_url = NULL, $title = NULL, $description = NULL );
+	public function render( $id, $width = 640, $height = 360, $thumbnail_url = NULL, $title = NULL, $description = NULL );
 
 }

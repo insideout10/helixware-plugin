@@ -1,8 +1,11 @@
 <?php
 
 /**
+ * Generates Media RSS/JWPlayer playlists.
+ *
+ * @since 1.2.0
  */
-class HelixWare_Playlist_RSS_JWPlayer {
+class HelixWare_MediaRSS_Player_URL_Service implements HelixWare_Player_URL_Service {
 
 	/**
 	 *  The Stream service.
@@ -23,7 +26,7 @@ class HelixWare_Playlist_RSS_JWPlayer {
 	private $asset_image_service;
 
 	/**
-	 * Create an instance of the HelixWare_Playlist_RSS_JWPlayer.
+	 * Create an instance of the HelixWare_MediaRSS_Player_URL_Service.
 	 *
 	 * @since 1.2.0
 	 *
@@ -46,7 +49,7 @@ class HelixWare_Playlist_RSS_JWPlayer {
 	 *
 	 * @return string The URL to the RSS JWPlayer.
 	 */
-	public static function get_rss_jwplayer_url( $id ) {
+	public function get_url( $id ) {
 
 		return admin_url( "admin-ajax.php?action=hw_rss_jwplayer&id=$id" );
 

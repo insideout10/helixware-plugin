@@ -135,9 +135,9 @@ class HelixWare {
 	 *
 	 * @since 1.2.0
 	 * @access private
-	 * @var \HelixWare_Playlist_RSS_JWPlayer $playlist_rss_jwplayer Output RSS-JWPlayer playlists.
+	 * @var \HelixWare_MediaRSS_Player_URL_Service $media_rss_player_url_service Output RSS-JWPlayer playlists.
 	 */
-	private $playlist_rss_jwplayer;
+	private $media_rss_player_url_service;
 
 	/**
 	 * The Stream service.
@@ -238,7 +238,11 @@ class HelixWare {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-asset-image-service.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-attachment-service.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-stream-service.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-playlist-rss-jwplayer.php';
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/interface-helixware-player-url-service.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-hls-player-url-service.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-mediarss-player-url-service.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-player-jwplayer6.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-player-jwplayer7.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-helixware-player-videojs.php';
@@ -276,13 +280,15 @@ class HelixWare {
 
 		$this->stream_service = new HelixWare_Stream_Service( $this->http_client, hewa_get_server_url(), $this->asset_service );
 
-		$this->playlist_rss_jwplayer = new HelixWare_Playlist_RSS_JWPlayer( $this->stream_service, $this->asset_image_service );
+		// JWPlayer
+		$this->media_rss_player_url_service = new HelixWare_MediaRSS_Player_URL_Service( $this->stream_service, $this->asset_image_service );
+		$player                             = ( '' !== ( $jwplayer7_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_7_KEY, '' ) ) )
+			? new HelixWare_Player_JWPlayer7( $this->media_rss_player_url_service, $jwplayer7_key )
+			: new HelixWare_Player_JWPlayer6( $this->media_rss_player_url_service, hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' ) );
 
-		$player = ( '' !== ( $jwplayer7_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_7_KEY, '' ) ) )
-			? new HelixWare_Player_JWPlayer7( $jwplayer7_key )
-			: new HelixWare_Player_JWPlayer6( hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' ) );
-
-//		$player = new HelixWare_Player_VideoJS();
+		// VideoJS
+		$player_url_service = new HelixWare_HLS_Player_URL_Service( $this->stream_service );
+		$player             = new HelixWare_Player_VideoJS( $player_url_service );
 
 		$this->embed_shortcode = new HelixWare_Embed_Shortcode( $this->asset_service, $this->asset_image_service, $player );
 
@@ -326,7 +332,7 @@ class HelixWare {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'wp_ajax_hw_asset_image', $this->asset_image_service, 'wp_ajax_get_image' );
-		$this->loader->add_action( 'wp_ajax_hw_rss_jwplayer', $this->playlist_rss_jwplayer, 'ajax_rss_jwplayer' );
+		$this->loader->add_action( 'wp_ajax_hw_rss_jwplayer', $this->media_rss_player_url_service, 'ajax_rss_jwplayer' );
 
 		// Output a VTT thumbnails file.
 		$this->loader->add_action( 'wp_ajax_hw_vtt_thumbnails', $this->asset_image_service, 'ajax_vtt_thumbnails' );
@@ -351,7 +357,7 @@ class HelixWare {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		$this->loader->add_action( 'wp_ajax_nopriv_hw_asset_image', $this->asset_image_service, 'wp_ajax_get_image' );
-		$this->loader->add_action( 'wp_ajax_nopriv_hw_rss_jwplayer', $this->playlist_rss_jwplayer, 'ajax_rss_jwplayer' );
+		$this->loader->add_action( 'wp_ajax_nopriv_hw_rss_jwplayer', $this->media_rss_player_url_service, 'ajax_rss_jwplayer' );
 
 		// Output a VTT images file.
 		$this->loader->add_action( 'wp_ajax_nopriv_hw_vtt_thumbnails', $this->asset_image_service, 'ajax_vtt_thumbnails' );

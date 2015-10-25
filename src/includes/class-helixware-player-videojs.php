@@ -15,28 +15,41 @@ class HelixWare_Player_VideoJS implements HelixWare_Player {
 	 *
 	 * @since 1.3.0
 	 * @access private
-	 * @var string $mediaSourcesLibraryURL The URL to the videojs-media-sources JavaScript library.
+	 * @var string $media_sources_library_url The URL to the videojs-media-sources JavaScript library.
 	 */
-	private $mediaSourcesLibraryURL;
+	private $media_sources_library_url;
 
 	/**
 	 * The URL to the HLS JavaScript library.
 	 *
 	 * @since 1.3.0
 	 * @access private
-	 * @var string $hlsLibraryURL The URL to the HLS JavaScript library.
+	 * @var string $hls_library_url The URL to the HLS JavaScript library.
 	 */
-	private $hlsLibraryURL;
+	private $hls_library_url;
+
+	/**
+	 * A URL service which generates playable URLs.
+	 *
+	 * @since 1.3.0
+	 * @access private
+	 * @var \HelixWare_Player_URL_Service $player_url_service A URL service which generates playable URLs.
+	 */
+	private $player_url_service;
 
 	/**
 	 * Create an instance of the HelixWare_Player_VideoJS class.
 	 *
 	 * @since 1.3.0
+	 *
+	 * @param \HelixWare_Player_URL_Service $player_url_service A URL service which generates playable URLs.
 	 */
-	public function __construct() {
+	public function __construct( $player_url_service ) {
 
-		$this->mediaSourcesLibraryURL = plugin_dir_url( dirname( __FILE__ ) ) . 'public/js/videojs-media-sources.min.js';
-		$this->hlsLibraryURL          = plugin_dir_url( dirname( __FILE__ ) ) . 'public/js/videojs.hls.min.js';
+		$this->media_sources_library_url = plugin_dir_url( dirname( __FILE__ ) ) . 'public/js/videojs-media-sources.min.js';
+		$this->hls_library_url           = plugin_dir_url( dirname( __FILE__ ) ) . 'public/js/videojs.hls.min.js';
+
+		$this->player_url_service = $player_url_service;
 
 	}
 
@@ -48,8 +61,8 @@ class HelixWare_Player_VideoJS implements HelixWare_Player {
 	private function queue_scripts() {
 
 		wp_enqueue_script( 'videojs', self::LIBRARY_URL );
-		wp_enqueue_script( 'videojs-media-sources', $this->mediaSourcesLibraryURL, array( 'videojs' ) );
-		wp_enqueue_script( 'videojs-hls', $this->hlsLibraryURL, array( 'videojs-media-sources' ) );
+		wp_enqueue_script( 'videojs-media-sources', $this->media_sources_library_url, array( 'videojs' ) );
+		wp_enqueue_script( 'videojs-hls', $this->hls_library_url, array( 'videojs-media-sources' ) );
 		wp_enqueue_style( 'videojs', self::CSS_URL );
 
 	}
@@ -68,7 +81,9 @@ class HelixWare_Player_VideoJS implements HelixWare_Player {
 	 *
 	 * @return string The HTML code for the player.
 	 */
-	public function render( $url, $width = 640, $height = 360, $thumbnail_url = NULL, $title = NULL, $description = NULL ) {
+	public function render( $id, $width = 640, $height = 360, $thumbnail_url = NULL, $title = NULL, $description = NULL ) {
+
+		$url = $this->player_url_service->get_url( $id );
 
 		// Queue the required scripts and styles.
 		$this->queue_scripts();
@@ -77,35 +92,12 @@ class HelixWare_Player_VideoJS implements HelixWare_Player {
 		$element_id = uniqid( 'videojs' );
 
 		// Preset the initial configuration.
-		$args = array(
-			'playlist' => $url,
-			'width'    => $width,
-			'height'   => $height
-		);
+		$args = array();
 
 		// The other configuration parameters if provided.
 		// The thumbnail URL is also set in the playlist.
 		if ( isset( $thumbnail_url ) ) {
-			$args['image'] = $thumbnail_url;
-		}
-
-		if ( isset( $title ) ) {
-			$args['title'] = $title;
-		}
-
-		if ( isset( $description ) ) {
-			$args['description'] = $description;
-		}
-
-		if ( isset( $chapters_url ) ) {
-
-			$args['tracks'] = array(
-				array(
-					'file' => $chapters_url,
-					'kind' => 'chapters'
-				)
-			);
-
+			$args['poster'] = $thumbnail_url;
 		}
 
 		// Encode the arguments in JSON format.
@@ -113,17 +105,14 @@ class HelixWare_Player_VideoJS implements HelixWare_Player {
 
 		return <<<EOF
 
-<video id="$element_id" width=600 height=300 class="video-js vjs-default-skin" controls>Loading the player...
-
-<source
-     src="http://cloud.helixware.localhost/4/pub/asset/104/streams.m3u8"
-     type="application/x-mpegURL">
+<video id="$element_id" width="$width" height="$height" class="video-js vjs-default-skin" controls>Loading the player...
+	<source src="$url" type="application/x-mpegURL" />
 </video>
 
 <script type="text/javascript">
 (jQuery(function($) {
 
-	videojs('$element_id', { /* Options */ }, function() {
+	videojs('$element_id', $args_js, function() {
 	});
 
 }));
