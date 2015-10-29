@@ -3,7 +3,7 @@ module.exports = function ( grunt ) {
     var path = require( 'path' ),
         SOURCE_DIR = 'src/',
         BUILD_DIR = 'build/',
-        autoprefixer = require( 'autoprefixer' ),
+        //autoprefixer = require( 'autoprefixer' ),
         config = {},
         builds = [ 'admin' ];
 
@@ -183,7 +183,8 @@ module.exports = function ( grunt ) {
             'default': {
                 cmd: 'phpunit',
                 args: [ '-c', 'phpunit.xml' ]
-            }        },
+            }
+        },
         uglify: {
             options: {
                 ASCIIOnly: true
@@ -252,7 +253,7 @@ module.exports = function ( grunt ) {
             }
         },
         imagemin: {
-            core: {
+            all: {
                 expand: true,
                 cwd: SOURCE_DIR,
                 src: [
@@ -291,21 +292,6 @@ module.exports = function ( grunt ) {
 
     // Register tasks.
 
-    // RTL task.
-    grunt.registerTask( 'rtl', [ 'rtlcss:core', 'rtlcss:colors' ] );
-
-    // Color schemes task.
-    grunt.registerTask( 'colors', [ 'sass:colors', 'postcss:colors' ] );
-
-    // JSHint task.
-    grunt.registerTask( 'jshint:corejs', [
-        'jshint:grunt',
-        'jshint:tests',
-        'jshint:themes',
-        'jshint:core',
-        'jshint:media'
-    ] );
-
     grunt.renameTask( 'watch', '_watch' );
 
     grunt.registerTask( 'watch', function () {
@@ -330,13 +316,12 @@ module.exports = function ( grunt ) {
     grunt.registerTask( 'build', [
         'clean:all',
         'copy:all',
-        'cssmin:core',
-        'uglify:core',
+        'uglify:admin',
         'jsvalidate:build'
     ] );
 
     // Testing tasks.
-    grunt.registerMultiTask( 'phpunit', 'Runs PHPUnit tests, including the ajax, external-http, and multisite tests.', function () {
+    grunt.registerMultiTask( 'phpunit', 'Runs PHPUnit tests.', function () {
         grunt.util.spawn( {
             cmd: this.data.cmd,
             args: this.data.args,
