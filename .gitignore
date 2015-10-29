@@ -5,3 +5,6 @@ setenv.sh
 vendor/
 composer.lock
 .svn/
+
+/build/
+/node_modules/
