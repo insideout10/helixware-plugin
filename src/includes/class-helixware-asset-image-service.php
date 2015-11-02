@@ -63,10 +63,13 @@ class HelixWare_Asset_Image_Service {
 	 * @param int $id The attachment id.
 	 * @param int $seconds The timecode of the image.
 	 * @param int $width The width of the image (default 640).
+	 * @param int $height The height of the image (default NULL), used for cropping.
+	 * @param int $x The x coordinate of the image (default NULL), used for cropping.
+	 * @param int $y The y coordinate of the image (default NULL), used for cropping.
 	 */
-	public function send_image( $id, $seconds, $width = self::DEFAULT_WIDTH ) {
+	public function send_image( $id, $seconds, $width = self::DEFAULT_WIDTH, $height = NULL, $x = NULL, $y = NULL ) {
 
-		$url      = $this->get_remote_image_url_by_id( $id, $seconds, $width );
+		$url      = $this->get_remote_image_url_by_id( $id, $seconds, $width, $height, $x, $y );
 		$response = $this->http_client->execute( 'GET', $url, NULL, NULL, self::ACCEPT );
 
 		if ( is_wp_error( $response ) ) {
@@ -74,9 +77,12 @@ class HelixWare_Asset_Image_Service {
 		}
 
 		// dump out the image.
-		$content_type = $response['headers']['content-type'];
-		header( "Content-Type: $content_type" );
-		echo( $response['body'] );
+		if ( isset( $response['headers']['content-type'] ) ) {
+			$content_type = $response['headers']['content-type'];
+			header( "Content-Type: $content_type" );
+		}
+
+		echo( isset( $response['body'] ) ? $response['body'] : '' );
 
 		wp_die();
 
@@ -90,13 +96,23 @@ class HelixWare_Asset_Image_Service {
 	 * @param int $id The post id.
 	 * @param int $seconds The timecode of the image.
 	 * @param int $width The width of the image (default 640).
+	 * @param int $height The height of the image (default NULL), used for cropping.
+	 * @param int $x The x coordinate of the image (default NULL), used for cropping.
+	 * @param int $y The y coordinate of the image (default NULL), used for cropping.
 	 *
 	 * @return string A relative path to the image.
 	 */
-	public function get_remote_image_url_by_id( $id, $seconds, $width = self::DEFAULT_WIDTH ) {
+	public function get_remote_image_url_by_id( $id, $seconds, $width = self::DEFAULT_WIDTH, $height = NULL, $x = NULL, $y = NULL ) {
 
 		$guid = $this->asset_service->get_guid( $id );
-		$url  = $guid . '/images/' . date( 'H/i/s', $seconds ) . '?width=' . $width;
+
+		// If we have been provided with valid parameters for height, x and y then
+		// we set the parameters for cropping, otherwise for scaling.
+		$parameters = ( isset( $height ) && is_numeric( $height ) && isset( $x ) && is_numeric( $x ) && isset( $y ) && is_numeric( $y )
+			? "w=$width&h=$height&x=$x&y=$y"
+			: "width=$width" );
+
+		$url = $guid . '/images/' . date( 'H/i/s', $seconds ) . '?' . $parameters;
 
 		return $url;
 	}
@@ -109,12 +125,29 @@ class HelixWare_Asset_Image_Service {
 	 * @param int $id The post id.
 	 * @param int $seconds The timecode of the image (default 5).
 	 * @param int $width The width of the image (default 640).
+	 * @param int $height The height of the image (default NULL), used for cropping.
+	 * @param int $x The x coordinate of the image (default NULL), used for cropping.
+	 * @param int $y The y coordinate of the image (default NULL), used for cropping.
 	 *
 	 * @return string The local URL to the image.
 	 */
-	public function get_local_image_url_by_id( $id, $seconds = self::DEFAULT_TIMECODE, $width = self::DEFAULT_WIDTH ) {
+	public function get_local_image_url_by_id( $id, $seconds = self::DEFAULT_TIMECODE, $width = self::DEFAULT_WIDTH, $height = NULL, $x = NULL, $y = NULL ) {
 
-		return admin_url( "admin-ajax.php?action=hw_asset_image&id=$id&seconds=$seconds&width=$width" );
+		$path = "admin-ajax.php?action=hw_asset_image&id=$id&seconds=$seconds&width=$width";
+
+		if ( isset( $height ) && is_numeric( $height ) ) {
+			$path .= "&height=$height";
+		}
+
+		if ( isset( $x ) && is_numeric( $x ) ) {
+			$path .= "&x=$x";
+		}
+
+		if ( isset( $y ) && is_numeric( $y ) ) {
+			$path .= "&y=$y";
+		}
+
+		return admin_url( $path );
 
 	}
 
@@ -156,7 +189,11 @@ class HelixWare_Asset_Image_Service {
 		// Get the width or use 640 as default.
 		$width = ( isset( $_GET['width'] ) && is_numeric( $_GET['width'] ) ? $_GET['width'] : self::DEFAULT_WIDTH );
 
-		$this->send_image( $id, $seconds, $width );
+		$height = ( isset( $_GET['height'] ) && is_numeric( $_GET['height'] ) ? $_GET['height'] : NULL );
+		$x      = ( isset( $_GET['x'] ) && is_numeric( $_GET['x'] ) ? $_GET['x'] : NULL );
+		$y      = ( isset( $_GET['y'] ) && is_numeric( $_GET['y'] ) ? $_GET['y'] : NULL );
+
+		$this->send_image( $id, $seconds, $width, $height, $x, $y );
 
 	}
 
@@ -180,6 +217,9 @@ class HelixWare_Asset_Image_Service {
 		}
 
 		$response['image'] = array( 'src' => $this->get_local_image_url_by_id( $attachment->ID, self::DEFAULT_TIMECODE, self::MEDIA_LIBRARY_THUMBNAIL_WIDTH ) );
+
+		// Set the filename to the title of the attachment.
+		$response['filename'] = $response['title'];
 
 		return $response;
 	}

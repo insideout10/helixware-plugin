@@ -1,8 +1,11 @@
 <?php
 
 /**
+ * Generates Media RSS/JWPlayer playlists.
+ *
+ * @since 1.2.0
  */
-class HelixWare_Playlist_RSS_JWPlayer {
+class HelixWare_MediaRSS_Player_URL_Service implements HelixWare_Player_URL_Service {
 
 	/**
 	 *  The Stream service.
@@ -23,7 +26,7 @@ class HelixWare_Playlist_RSS_JWPlayer {
 	private $asset_image_service;
 
 	/**
-	 * Create an instance of the HelixWare_Playlist_RSS_JWPlayer.
+	 * Create an instance of the HelixWare_MediaRSS_Player_URL_Service.
 	 *
 	 * @since 1.2.0
 	 *
@@ -46,7 +49,7 @@ class HelixWare_Playlist_RSS_JWPlayer {
 	 *
 	 * @return string The URL to the RSS JWPlayer.
 	 */
-	public static function get_rss_jwplayer_url( $id ) {
+	public function get_url( $id ) {
 
 		return admin_url( "admin-ajax.php?action=hw_rss_jwplayer&id=$id" );
 
@@ -78,14 +81,21 @@ class HelixWare_Playlist_RSS_JWPlayer {
 
 		$this->_print_header( $post, $post->post_title, $post->post_content, $thumbnail_url, $thumbnails_url );
 		$streams = $this->stream_service->get_streams( $post->ID );
-		array_walk( $streams, function ( $stream ) {
 
-			// JWPlayer 6 tries to play rtsp links, therefore we remove them.
-			if ( 0 !== strpos( $stream->url, 'rtsp://' ) ) {
-				echo( "<jwplayer:source file=\"$stream->url\" label=\"$stream->label\" />\n" );
-			}
+		if ( is_array( $streams ) ) {
 
-		} );
+			// Print each stream in the streams array (if it's not an RTSP link).
+			array_walk( $streams, function ( $stream ) {
+
+				// JWPlayer 6 tries to play rtsp links, therefore we remove them.
+				if ( 0 !== strpos( $stream->url, 'rtsp://' ) ) {
+					echo( "<jwplayer:source file=\"$stream->url\" label=\"$stream->label\" />\n" );
+				}
+
+			} );
+
+		}
+
 		$this->_print_footer();
 
 		wp_die();

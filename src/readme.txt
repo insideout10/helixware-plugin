@@ -37,6 +37,13 @@ If you have any question, send us an e-mail to info@helixware.tv
 
 == Changelog ==
 
+= 1.3.0 (2015-11-02) =
+
+* add the video preview of an on-demand asset in the Media Library [#29](https://github.com/insideout10/helixware-plugin/issues/29)
+* add support for VideoJS - APL video player [#14](https://github.com/insideout10/helixware-plugin/issues/14)
+* Media Library data is synchronized (two-ways) with HelixWare Server [#13](https://github.com/insideout10/helixware-plugin/issues/13)
+* when an asset is deleted from the Media Library it is deleted in HelixWare Server as well [#12](https://github.com/insideout10/helixware-plugin/issues/12)
+
 = 1.2.1 (2015-10-12) =
 
 * move the MICO extensions to a separate plugin [#25](https://github.com/insideout10/helixware-plugin/issues/25)

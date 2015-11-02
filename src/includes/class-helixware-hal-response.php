@@ -75,7 +75,21 @@ class HelixWare_HAL_Response {
 			return $this->embedded;
 		}
 
-		return $this->embedded->{$key};
+		return ( isset( $this->embedded->{$key} ) ? $this->embedded->{$key} : array() );
+
+	}
+
+	/**
+	 * Get the response status code.
+	 *
+	 * @since 1.3.0
+	 * @return int|null The status code if available otherwise NULL.
+	 */
+	public function get_status_code() {
+
+		return ( isset( $this->response['response']['code'] ) && is_numeric( $this->response['response']['code'] )
+			? (int) $this->response['response']['code']
+			: NULL );
 
 	}
 

@@ -10,6 +10,15 @@ class HelixWare_Player_JWPlayer6 implements HelixWare_Player {
 	const LIBRARY_URL = '//content.jwplatform.com/libraries/%s.js"';
 
 	/**
+	 * The Player URL service.
+	 *
+	 * @since 1.3.0
+	 * @access private
+	 * @var \HelixWare_Player_URL_Service $player_url_service The Player URL service.
+	 */
+	private $player_url_service;
+
+	/**
 	 * The JWPlayer 6 key.
 	 *
 	 * @since 1.2.0
@@ -23,16 +32,18 @@ class HelixWare_Player_JWPlayer6 implements HelixWare_Player {
 	 *
 	 * @since 1.2.0
 	 *
+	 * @param \HelixWare_Player_URL_Service $player_url_service The Player URL service.
 	 * @param string $key The player key.
 	 */
-	public function __construct( $key ) {
+	public function __construct( $player_url_service, $key ) {
 
 		// Check that the key is set.
 		if ( FALSE === $key ) {
 			hewa_write_log( 'The JWPlayer key is not set.' );
 		}
 
-		$this->key = $key;
+		$this->player_url_service = $player_url_service;
+		$this->key                = $key;
 	}
 
 	/**
@@ -51,7 +62,7 @@ class HelixWare_Player_JWPlayer6 implements HelixWare_Player {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $url The URL of the video.
+	 * @param int $id The post id.
 	 * @param int $width The player width (default 640).
 	 * @param int $height The player height (default 360).
 	 * @param string $thumbnail_url The URL of the thumbnail.
@@ -60,7 +71,9 @@ class HelixWare_Player_JWPlayer6 implements HelixWare_Player {
 	 *
 	 * @return string The HTML code for the player.
 	 */
-	public function render( $url, $width = 640, $height = 360, $thumbnail_url = NULL, $title = NULL, $description = NULL, $chapters_url = NULL ) {
+	public function render( $id, $width = 640, $height = 360, $thumbnail_url = NULL, $title = NULL, $description = NULL ) {
+
+		$url = $this->player_url_service->get_url( $id );
 
 		// Queue the required scripts.
 		$this->queue_scripts();
