@@ -209,6 +209,10 @@ class HelixWare_Template_Service {
 
 			</div>
 		</script>
+		<style>
+			/* Ensure the generated video-js player is responsive */
+			.thumbnail > .video-js { width: 100%; height: 100%; }
+		</style>
 		<script>
 			(function ( $ ) {
 
@@ -250,21 +254,28 @@ class HelixWare_Template_Service {
 
 						// Get the
 						wp.ajax.post( 'hw_hls_url', { id: this.model.get( 'id' ) } )
+							// We got a URL back.
 							.done( function ( response ) {
-								console.log( 'done' );
-								console.log( response );
 
-								var $video = $( '<video class="video-js vjs-default-skin" controls><source src="' + response + '" type="application/x-mpegURL" /></video>' );
+								// Create the video element and append it to the thumbnail div.
+								// We create the video element dynamically to avoid MediaElement.js
+								// to be instantiated on it.
+								var $video = $(
+									'<video class="video-js vjs-default-skin" controls>'
+									+ '<source src="' + response + '" type="application/x-mpegURL" />'
+									+ '</video>'
+								);
+
 								view.$( '.thumbnail' ).append( $video );
 
-								console.log( $video );
-
-								videojs( $video[ 0 ], {}, function () { } );
+								// Instantiate the video on the video player.
+								videojs( $video[ 0 ], {}, function () {
+								} );
 
 							} )
+							// Something went wrong.
 							.fail( function ( response ) {
-								console.log( 'fail' );
-								console.log( response );
+								view.$( '.thumbnail' ).html( 'Something wrong happened: ' + response );
 							} );
 
 						return this;
