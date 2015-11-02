@@ -17,9 +17,9 @@ VERSION=`egrep -o "Version:\s+\d+\.\d+\.\d+" $FILE | egrep -o "\d+\.\d+\.\d+"`
 if [[ -z "$VERSION" ]]; then
 	echo "version not set, halting."
 else
-	echo "removig tag $VERSION..."
+	echo "removing tag $VERSION..."
 	svn rm --force tags/$VERSION
-	echo "removig trunk..."
+	echo "removing trunk..."
 	svn rm --force trunk
 	svn ci -m "updating trunk (1 of 2)"
 	mv src trunk
