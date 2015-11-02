@@ -1,6 +1,7 @@
 #!/bin/bash
 
 FILE='src/helixware.php'
+README='trunk/readme.txt'
 
 echo "checking out and updating the svn branch..."
 git checkout -b svn
@@ -23,6 +24,8 @@ else
 	svn rm --force trunk
 	svn ci -m "updating trunk (1 of 2)"
 	mv src trunk
+	echo "Setting the stable tag in $README..."
+	sed -i '' "s/Stable tag: .*/Stable tag: $VERSION/g" $README
 	svn add trunk
 	svn cp trunk tags/$VERSION
 	svn ci -m "updating trunk (2 of 2)"
