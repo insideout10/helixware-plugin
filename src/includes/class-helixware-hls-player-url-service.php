@@ -43,7 +43,7 @@ class HelixWare_HLS_Player_URL_Service implements HelixWare_Player_URL_Service {
 
 		$streams = $this->stream_service->get_streams( $id );
 
-
+		// Get the stream which is HLS and ABR.
 		$url = array_reduce( $streams, function ( $carry, $item ) {
 
 			if ( 'application/x-mpegurl' === $item->mimeType && 'Auto' === $item->label ) {
@@ -55,6 +55,27 @@ class HelixWare_HLS_Player_URL_Service implements HelixWare_Player_URL_Service {
 		} );
 
 		return $url;
+
+	}
+
+	/**
+	 * An AJAX method that returns the HLS ABR URL for an asset id.
+	 *
+	 * @since 1.3.0
+	 */
+	public function ajax_hls_url() {
+
+		// Check that the id parameter has been provided.
+		if ( ! isset( $_REQUEST['id'] ) || ! is_numeric( $_REQUEST['id'] ) ) {
+
+			wp_send_json_error( 'The id parameter is required.' );
+
+		}
+
+		// Get the URL and return it as JSON.
+		$url = $this->get_url( (int) $_REQUEST['id'] );
+
+		wp_send_json_success( $url );
 
 	}
 

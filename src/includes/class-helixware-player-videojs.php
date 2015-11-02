@@ -72,7 +72,7 @@ class HelixWare_Player_VideoJS implements HelixWare_Player {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param string $url The URL of the video.
+	 * @param int $id The attachment id.
 	 * @param int $width The player width (default 640).
 	 * @param int $height The player height (default 360).
 	 * @param string $thumbnail_url The URL of the thumbnail.
@@ -110,13 +110,9 @@ class HelixWare_Player_VideoJS implements HelixWare_Player {
 </video>
 
 <script type="text/javascript">
-(jQuery(function($) {
-
-	videojs('$element_id', $args_js, function() {
-	});
-
-}));
-
+	( jQuery( function( $ ) {
+		videojs( '$element_id', $args_js, function() {} );
+	} ) );
 </script>
 
 EOF;

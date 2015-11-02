@@ -140,6 +140,15 @@ class HelixWare {
 	private $media_rss_player_url_service;
 
 	/**
+	 * HLS Player URL service.
+	 *
+	 * @since 1.3.0
+	 * @access private
+	 * @var \HelixWare_HLS_Player_URL_Service The HLS Player URL service.
+	 */
+	private $hls_player_url_service;
+
+	/**
 	 * The Stream service.
 	 *
 	 * @since 1.2.0
@@ -147,6 +156,15 @@ class HelixWare {
 	 * @var \HelixWare_Stream_Service $stream_service The Stream service.
 	 */
 	private $stream_service;
+
+	/**
+	 * The Template service.
+	 *
+	 * @since 1.3.0
+	 * @access private
+	 * @var \HelixWare_Template_Service The Template service.
+	 */
+	private $template_service;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -252,6 +270,7 @@ class HelixWare {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-helixware-admin.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-helixware-admin-attachments.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-helixware-template-service.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
@@ -282,6 +301,7 @@ class HelixWare {
 
 		// Player set-up according to available keys.
 		$this->media_rss_player_url_service = new HelixWare_MediaRSS_Player_URL_Service( $this->stream_service, $this->asset_image_service );
+		$this->hls_player_url_service       = new HelixWare_HLS_Player_URL_Service( $this->stream_service );
 
 		$jwplayer7_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_7_KEY, '' );
 		$jwplayer6_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' );
@@ -292,11 +312,13 @@ class HelixWare {
 			$player = new HelixWare_Player_JWPlayer6( $this->media_rss_player_url_service, hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' ) );
 		} else {
 			// VideoJS
-			$player_url_service = new HelixWare_HLS_Player_URL_Service( $this->stream_service );
-			$player             = new HelixWare_Player_VideoJS( $player_url_service );
+			$player = new HelixWare_Player_VideoJS( $this->hls_player_url_service );
 		}
 
 		$this->embed_shortcode = new HelixWare_Embed_Shortcode( $this->asset_service, $this->asset_image_service, $player );
+
+		// Admin screen.
+		$this->template_service = new HelixWare_Template_Service();
 
 	}
 
@@ -340,12 +362,18 @@ class HelixWare {
 		$this->loader->add_action( 'wp_ajax_hw_asset_image', $this->asset_image_service, 'wp_ajax_get_image' );
 		$this->loader->add_action( 'wp_ajax_hw_rss_jwplayer', $this->media_rss_player_url_service, 'ajax_rss_jwplayer' );
 
+		// Get the HLS URL for an asset.
+		$this->loader->add_action( 'wp_ajax_hw_hls_url', $this->hls_player_url_service, 'ajax_hls_url' );
+
 		// Output a VTT thumbnails file.
 		$this->loader->add_action( 'wp_ajax_hw_vtt_thumbnails', $this->asset_image_service, 'ajax_vtt_thumbnails' );
 
 		// Filters attachment updates.
 		$this->loader->add_action( 'pre_post_update', $this->attachment_service, 'pre_post_update', 10, 2 );
 		$this->loader->add_action( 'delete_attachment', $this->attachment_service, 'delete_attachment', 10, 1 );
+
+		// When the attachment page is shown, customize the client-side template.
+		$this->loader->add_action( 'admin_footer-upload.php', $this->template_service, 'admin_footer_upload' );
 
 	}
 
@@ -364,6 +392,9 @@ class HelixWare {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		$this->loader->add_action( 'wp_ajax_nopriv_hw_asset_image', $this->asset_image_service, 'wp_ajax_get_image' );
 		$this->loader->add_action( 'wp_ajax_nopriv_hw_rss_jwplayer', $this->media_rss_player_url_service, 'ajax_rss_jwplayer' );
+
+		// Get the HLS URL for an asset.
+		$this->loader->add_action( 'wp_ajax_nopriv_hw_hls_url', $this->hls_player_url_service, 'ajax_hls_url' );
 
 		// Output a VTT images file.
 		$this->loader->add_action( 'wp_ajax_nopriv_hw_vtt_thumbnails', $this->asset_image_service, 'ajax_vtt_thumbnails' );

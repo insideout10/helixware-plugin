@@ -3,7 +3,7 @@ module.exports = function ( grunt ) {
     var path = require( 'path' ),
         SOURCE_DIR = 'src/',
         BUILD_DIR = 'build/',
-        //autoprefixer = require( 'autoprefixer' ),
+    //autoprefixer = require( 'autoprefixer' ),
         config = {},
         builds = [ 'admin' ];
 
@@ -358,10 +358,6 @@ module.exports = function ( grunt ) {
             grunt.config( [ 'clean', 'dynamic', 'src' ], src );
         } else {
             grunt.config( [ 'copy', 'dynamic', 'src' ], src );
-
-            if ( target === 'rtl' ) {
-                grunt.config( [ 'dynamic', 'src' ], src );
-            }
         }
     } );
 };
