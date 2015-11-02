@@ -56,14 +56,16 @@ class HelixWare_Player_VideoJS implements HelixWare_Player {
 	/**
 	 * Queue the scripts and styles required by VideoJS.
 	 *
-	 * @since 1..0
+	 * @since 1.3.0
 	 */
-	private function queue_scripts() {
+	public function queue_scripts() {
 
-		wp_enqueue_script( 'videojs', self::LIBRARY_URL );
-		wp_enqueue_script( 'videojs-media-sources', $this->media_sources_library_url, array( 'videojs' ) );
-		wp_enqueue_script( 'videojs-hls', $this->hls_library_url, array( 'videojs-media-sources' ) );
-		wp_enqueue_style( 'videojs', self::CSS_URL );
+		$version = HelixWare::get_instance()->get_version();
+
+		wp_enqueue_script( 'videojs', self::LIBRARY_URL, array(), '1.3.0', $version );
+		wp_enqueue_script( 'videojs-media-sources', $this->media_sources_library_url, array( 'videojs' ), $version, TRUE );
+		wp_enqueue_script( 'videojs-hls', $this->hls_library_url, array( 'videojs-media-sources' ), $version, TRUE );
+		wp_enqueue_style( 'videojs', self::CSS_URL, array(), $version );
 
 	}
 

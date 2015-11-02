@@ -303,8 +303,12 @@ class HelixWare {
 		$this->media_rss_player_url_service = new HelixWare_MediaRSS_Player_URL_Service( $this->stream_service, $this->asset_image_service );
 		$this->hls_player_url_service       = new HelixWare_HLS_Player_URL_Service( $this->stream_service );
 
+		// Create an instance of VideoJS which is used by the HelixWare template service.
+		$player_videojs = new HelixWare_Player_VideoJS( $this->hls_player_url_service );
+
 		$jwplayer7_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_7_KEY, '' );
 		$jwplayer6_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' );
+
 
 		if ( '' !== $jwplayer7_key ) {
 			$player = new HelixWare_Player_JWPlayer7( $this->media_rss_player_url_service, $jwplayer7_key );
@@ -312,13 +316,13 @@ class HelixWare {
 			$player = new HelixWare_Player_JWPlayer6( $this->media_rss_player_url_service, hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' ) );
 		} else {
 			// VideoJS
-			$player = new HelixWare_Player_VideoJS( $this->hls_player_url_service );
+			$player = $player_videojs;
 		}
 
 		$this->embed_shortcode = new HelixWare_Embed_Shortcode( $this->asset_service, $this->asset_image_service, $player );
 
 		// Admin screen.
-		$this->template_service = new HelixWare_Template_Service();
+		$this->template_service = new HelixWare_Template_Service( $player_videojs );
 
 	}
 
@@ -359,6 +363,7 @@ class HelixWare {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+
 		$this->loader->add_action( 'wp_ajax_hw_asset_image', $this->asset_image_service, 'wp_ajax_get_image' );
 		$this->loader->add_action( 'wp_ajax_hw_rss_jwplayer', $this->media_rss_player_url_service, 'ajax_rss_jwplayer' );
 
@@ -373,6 +378,7 @@ class HelixWare {
 		$this->loader->add_action( 'delete_attachment', $this->attachment_service, 'delete_attachment', 10, 1 );
 
 		// When the attachment page is shown, customize the client-side template.
+		$this->loader->add_action( 'admin_enqueue_scripts', $this->template_service, 'admin_enqueue_scripts' );
 		$this->loader->add_action( 'admin_footer-upload.php', $this->template_service, 'admin_footer_upload' );
 
 	}

@@ -8,11 +8,36 @@
 class HelixWare_Template_Service {
 
 	/**
+	 * The VideoJS Player service.
+	 *
+	 * @since 1.3.0
+	 * @access private
+	 * @var \HelixWare_Player_VideoJS $player The VideoJS Player service.
+	 */
+	private $player;
+
+	/**
 	 * Create an instance of the HelixWare_Template_Service.
 	 *
 	 * @since 1.3.0
+	 *
+	 * @param \HelixWare_Player_VideoJS $player The VideoJS Player service.
 	 */
-	public function __construct() {
+	public function __construct( $player ) {
+
+		$this->player = $player;
+
+	}
+
+	/**
+	 * Enqueue the required scripts.
+	 *
+	 * @since 1.3.0
+	 */
+	public function admin_enqueue_scripts() {
+
+		// Enqueue the player scripts.
+		$this->player->queue_scripts();
 
 	}
 
@@ -30,8 +55,6 @@ class HelixWare_Template_Service {
 
 			<div class="attachment-media-view {{ data.orientation }}">
 				<div class="thumbnail thumbnail-{{ data.type }}">
-
-					HelixWare player.
 
 				</div>
 			</div>
@@ -223,7 +246,26 @@ class HelixWare_Template_Service {
 
 						TwoColumn.__super__.render.apply( this, arguments );
 
-						console.log( this.model );
+						var view = this;
+
+						// Get the
+						wp.ajax.post( 'hw_hls_url', { id: this.model.get( 'id' ) } )
+							.done( function ( response ) {
+								console.log( 'done' );
+								console.log( response );
+
+								var $video = $( '<video class="video-js vjs-default-skin" controls><source src="' + response + '" type="application/x-mpegURL" /></video>' );
+								view.$( '.thumbnail' ).append( $video );
+
+								console.log( $video );
+
+								videojs( $video[ 0 ], {}, function () { } );
+
+							} )
+							.fail( function ( response ) {
+								console.log( 'fail' );
+								console.log( response );
+							} );
 
 						return this;
 
