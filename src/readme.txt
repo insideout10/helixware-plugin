@@ -1,13 +1,13 @@
-=== HelixWare ===
+=== HelixWare - Video Hosting for WordPress ===
 Contributors: insideout10, ziodave
-Tags: video, streaming, ondemand, SEO, audio, HLS, Flash, OTT, DASH, rtsp
+Tags: video, streaming, ondemand, SEO, audio, media analysis, hd video, encoding, HLS, Flash, OTT, DASH, rtsp
 Requires at least: 4.3
 Tested up to: 4.3.1
 Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-HelixWare turns WordPress into a video streaming platform. Stop nurturing YouTube with your own contents, publish any video seamlessly on your blog or web site and enjoy cloud multi-bitrate and multi-format transcodings that allow you to target any device and any screen. SEO is integrated in HelixWare to deliver automatic tagging of clips including thumbnails.
+HelixWare turns WordPress into a Video Hosting platform, supports live broadcasting and makes videos discoverable, searchable, and beautifully organised.
 
 == Description ==
 
