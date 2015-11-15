@@ -1,0 +1,14 @@
+/* fix the size of the list of media items to use the full width */
+#media-items {
+    width: 100%; }
+
+.hewa-asset {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    vertical-align: middle;
+    line-height: 28px;
+}
+
+.hewa-asset select {
+    vertical-align: baseline; }
