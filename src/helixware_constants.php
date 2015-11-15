@@ -40,13 +40,14 @@ define( 'HEWA_SETTINGS_FILE_EXTENSIONS', 'hewa_file_extensions' );
 define( 'HEWA_POST_TYPE_CLIP', 'hewa_clip' );
 
 define( 'HEWA_API_HTTP_OPTIONS', serialize( array(
-	'timeout'     => 300,
-	'redirection' => 5,
-	'httpversion' => '1.1',
-	'blocking'    => TRUE,
-	'cookies'     => array(),
-	'sslverify'   => TRUE,
-	'sslcertificates' => dirname( __FILE__ ) . '/includes/helixware.pem'
+	'timeout'         => 30,
+	'redirection'     => 5,
+	'httpversion'     => '1.1',
+	'blocking'        => TRUE,
+	'cookies'         => array(),
+	'sslverify'       => TRUE,
+	'sslcertificates' => dirname( __FILE__ ) . '/includes/helixware.pem',
+	'decompress'      => FALSE
 ) ) );
 
 // The max file size for HelixWare-related uploads. This information is used with the uploader as well as for display
