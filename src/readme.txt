@@ -37,6 +37,9 @@ If you have any question, send us an e-mail to info@helixware.tv
 
 == Changelog ==
 
+= 1.3.2 (2015-11-15) =
+* update server certificates.
+
 = 1.3.1 (2015-11-15) =
 
 * fix server certificate.
