@@ -15,6 +15,8 @@
  */
 function hewa_shortcode_player( $atts ) {
 
+	HelixWare_Player_JWPlayer6::get_instance()->queue_scripts();
+
 	// Extract attributes and set default values
 	// TODO: the default path might point to a custom video that invites the user to select a video.
 	// TODO: default width and height ratio should be calculated from the video.
@@ -38,7 +40,7 @@ function hewa_shortcode_player( $atts ) {
 	// wp_enqueue_script( 'jwplayer', plugins_url( 'js/jwplayer-6.11/jwplayer.js', __FILE__ ) );
 
 	// Get the player key.
-	$jwplayer_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' );
+	// $jwplayer_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' );
 
 	// Get the asset Id.
 	$player_id = uniqid( 'hewa-player-' );
@@ -52,7 +54,7 @@ function hewa_shortcode_player( $atts ) {
 	$image_u        = urlencode( $attachment_url );
 
 	// Build the player array which will then be translated to JavaScript for JWPlayer initialization.
-	$player                = array();
+	$player = array();
 //	$player['flashplayer'] = plugins_url( 'js/jwplayer-6.11/jwplayer.flash.swf', __FILE__ );
 //	$player['html5player'] = plugins_url( 'js/jwplayer-6.11/jwplayer.html5.js', __FILE__ );
 	$player['androidhls']  = TRUE;
@@ -130,7 +132,7 @@ function hewa_shortcode_player( $atts ) {
 
 	// Start printing out the player javascript.
 
-	wp_enqueue_script( 'jwplayer6', sprintf( HelixWare_Player_JWPlayer6::LIBRARY_URL, $jwplayer_key ) );
+	// wp_enqueue_script( 'jwplayer6', sprintf( HelixWare_Player_JWPlayer6::LIBRARY_URL, $jwplayer_key ) );
 	$result .= <<<EOF
         <script type="text/javascript">
             jQuery( function( $ ) {
