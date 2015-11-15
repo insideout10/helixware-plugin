@@ -31,6 +31,7 @@ function hewa_ajax_load_rss() {
 	$m3u8 = $streams->formats->{'m3u8-redirector'};
 
 
+	ob_clean();
 	ob_start();
 	header( "Content-Type: application/rss+xml" );
 
@@ -96,9 +97,6 @@ add_action( 'wp_ajax_nopriv_hewa_rss', 'hewa_ajax_load_rss' );
 
 function hewa_echo_rss_item( $asset_id, $m3u8 = NULL, $title = NULL, $image_url = NULL, $post_id = NULL ) {
 
-	// Get the ajax URL.
-	$ajax_url = admin_url( 'admin-ajax.php' );
-
 	echo "  <item>\n";
 
 	if ( NULL !== $title ) {
@@ -114,14 +112,15 @@ function hewa_echo_rss_item( $asset_id, $m3u8 = NULL, $title = NULL, $image_url 
 	}
 
 	// TODO: make the following URL parametric and use the authenticated PHP call.
-	$server_url   = hewa_get_server_url();
-	$chapters_url = admin_url( 'admin-ajax.php?action=hw_vtt_chapters&id=' . $post_id );
+	$server_url = hewa_get_server_url();
 
 	echo "   <jwplayer:source file=\"$server_url/4/pub/asset/$asset_id/streams.smil\" label=\"Auto\" type=\"rtmp\" />\n";
 	echo "   <jwplayer:source file=\"$server_url/4/pub/asset/$asset_id/streams.m3u8\" label=\"Auto\" default=\"true\" type=\"hls\" />\n";
 	echo "   <jwplayer:track file=\"$server_url/4/pub/asset/$asset_id/vtt?w=95&amp;i=5\" kind=\"thumbnails\" />\n";
-	echo "   <jwplayer:track file=\"$chapters_url\" kind=\"chapters\" />\n";
-
+	if ( isset ( $post_id ) && is_numeric( $post_id ) ) {
+		$chapters_url = admin_url( 'admin-ajax.php?action=hw_vtt_chapters&amp;id=' . $post_id );
+		echo "   <jwplayer:track file=\"$chapters_url\" kind=\"chapters\" />\n";
+	}
 
 	// Print if there are m3u8 files and the client is not an Android.
 	if ( NULL !== $m3u8 && FALSE === stripos( $_SERVER['HTTP_USER_AGENT'], 'Android' ) ) {

@@ -7,7 +7,7 @@
  */
 class HelixWare_Player_JWPlayer6 implements HelixWare_Player {
 
-	const LIBRARY_URL = '//content.jwplatform.com/libraries/%s.js"';
+	const LIBRARY_URL = '//content.jwplatform.com/libraries/%s.js';
 
 	/**
 	 * The Player URL service.
@@ -28,6 +28,15 @@ class HelixWare_Player_JWPlayer6 implements HelixWare_Player {
 	private $key;
 
 	/**
+	 * Provide static access to the JWPlayer 6 instance.
+	 *
+	 * @since 1.3.1
+	 * @access private
+	 * @var \HelixWare_Player_JWPlayer6 $instance The JWPlayer 6 instance.
+	 */
+	private static $instance;
+
+	/**
 	 * Create an instance of the HelixWare_JWPlayer6 class.
 	 *
 	 * @since 1.2.0
@@ -44,16 +53,31 @@ class HelixWare_Player_JWPlayer6 implements HelixWare_Player {
 
 		$this->player_url_service = $player_url_service;
 		$this->key                = $key;
+
+		self::$instance = $this;
+	}
+
+	/**
+	 * Get the JWPlayer 6 service instance.
+	 *
+	 * @since 1.3.1
+	 *
+	 * @return \HelixWare_Player_JWPlayer6 The JWPlayer 6 instance.
+	 */
+	public static function get_instance() {
+
+		return self::$instance;
 	}
 
 	/**
 	 * Queue the scripts required by JWPlayer 6.
 	 *
 	 * @since 1.2.0
+	 * @since 1.3.1 make the function public to allow external functions to load scripts.
 	 */
-	private function queue_scripts() {
+	public function queue_scripts() {
 
-		wp_enqueue_script( 'jwplayer6', sprintf( self::LIBRARY_URL, $this->key ) );
+		wp_enqueue_script( 'jwplayer6', sprintf( self::LIBRARY_URL, $this->key ), array(), FALSE, TRUE );
 
 	}
 

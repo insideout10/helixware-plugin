@@ -35,8 +35,12 @@ To install:
 
 If you have any question, send us an e-mail to info@helixware.tv
 
-
 == Changelog ==
+
+= 1.3.1 (2015-11-15) =
+
+* fix server certificate.
+* fix scripts for player shortcode.
 
 = 1.3.0 (2015-11-02) =
 

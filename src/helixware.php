@@ -33,6 +33,9 @@
  * Domain Path:       /languages
  */
 
+// Get the HelixWare server URL.
+defined( 'HELIXWARE_SERVER_URL' ) || define( 'HELIXWARE_SERVER_URL', 'https://cloud.helixware.tv' );
+
 // Log functions.
 require_once( 'helixware_log.php' );
 
@@ -93,9 +96,6 @@ require_once( 'modules/seo/seo.php' );
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-
-// Get the HelixWare server URL.
-defined( 'HELIXWARE_SERVER_URL' ) || define( 'HELIXWARE_SERVER_URL', 'https://cloud.helixware.tv' );
 
 /**
  * The code that runs during plugin activation.
