@@ -60,7 +60,7 @@ function hewa_shortcode_player( $atts ) {
 	$player['androidhls']  = TRUE;
 	$player['autostart']   = ( $params['autostart'] && is_singular() ? 'true' : 'false' );
 	$player['playlist']    = ( $is_live || NULL === $params['listbar']
-		? hewa_get_server_url() . "/4/pub/asset/$asset_id/streams.xml"
+		? HELIXWARE_CLIENT_URL . "/4/pub/asset/$asset_id/streams.xml"
 		: apply_filters( HEWA_FILTERS_PLAYER_PLAYLIST_URL,
 			admin_url( 'admin-ajax.php?action=hewa_rss&id=' . $asset_id .
 			           '&t=' . $title_u . // set the title

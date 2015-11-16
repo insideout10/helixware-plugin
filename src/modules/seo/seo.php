@@ -48,7 +48,7 @@ function hewa_seo_player_in_element( $asset_id ) {
 	$duration_h = esc_html( gmdate( 'H:i:s', $asset->duration ) );
 	$duration_j = json_encode( gmdate( 'H:i:s', $asset->duration ) );
 
-	$thumbnail_url   = hewa_get_server_url() . "/4/pub/asset/$asset_id/image?w=640&tc=00:00:03";
+	$thumbnail_url   = HELIXWARE_CLIENT_URL . "/4/pub/asset/$asset_id/image?w=640&tc=00:00:03";
 	$thumbnail_url_j = json_encode( $thumbnail_url );
 
 	$content_url   = get_permalink();

@@ -37,6 +37,9 @@ If you have any question, send us an e-mail to info@helixware.tv
 
 == Changelog ==
 
+= 1.3.5 (2015-11-16) =
+* Fix: disable SSL communications to avoid issues with some hosts.
+
 = 1.3.4 (2015-11-16) =
 * Fix: rename hls redirector.
 

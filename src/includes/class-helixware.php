@@ -178,7 +178,7 @@ class HelixWare {
 	public function __construct() {
 
 		$this->plugin_name = 'helixware';
-		$this->version     = '1.3.4';
+		$this->version     = '1.3.5';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -292,12 +292,12 @@ class HelixWare {
 		$this->http_client   = new HelixWare_HTTP_Client( $http_authentication );
 		$this->hal_client    = new HelixWare_HAL_Client( $this->http_client );
 
-		$this->asset_service       = new HelixWare_Asset_Service( $this->hal_client, hewa_get_server_url() );
-		$this->asset_image_service = new HelixWare_Asset_Image_Service( $this->http_client, hewa_get_server_url(), $this->asset_service );
+		$this->asset_service       = new HelixWare_Asset_Service( $this->hal_client, HELIXWARE_SERVER_URL );
+		$this->asset_image_service = new HelixWare_Asset_Image_Service( $this->http_client, HELIXWARE_SERVER_URL, $this->asset_service );
 		$this->attachment_service  = new HelixWare_Attachment_Service( $this->asset_service );
 		$this->admin_attachments   = new HelixWare_Admin_Attachments( $this->asset_service );
 
-		$this->stream_service = new HelixWare_Stream_Service( $this->http_client, hewa_get_server_url(), $this->asset_service );
+		$this->stream_service = new HelixWare_Stream_Service( $this->http_client, HELIXWARE_SERVER_URL, $this->asset_service );
 
 		// Player set-up according to available keys.
 		$this->media_rss_player_url_service = new HelixWare_MediaRSS_Player_URL_Service( $this->stream_service, $this->asset_image_service );

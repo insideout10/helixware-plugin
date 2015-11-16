@@ -24,7 +24,7 @@
  * Plugin Name:       HelixWare
  * Plugin URI:        http://helixware.tv
  * Description:       HelixWare turns WordPress in a full featured Video site
- * Version:           1.3.4
+ * Version:           1.3.5
  * Author:            InsideOut10
  * Author URI:        http://helixware.tv
  * License:           GPL-2.0+
@@ -33,8 +33,11 @@
  * Domain Path:       /languages
  */
 
-// Get the HelixWare server URL.
-defined( 'HELIXWARE_SERVER_URL' ) || define( 'HELIXWARE_SERVER_URL', 'https://cloud.helixware.tv' );
+// Get the HelixWare server URL for API communications.
+defined( 'HELIXWARE_SERVER_URL' ) || define( 'HELIXWARE_SERVER_URL', 'http://cloud.helixware.tv' );
+
+// Get the HelixWare URL for streaming and client-side calls.
+defined( 'HELIXWARE_CLIENT_URL' ) || define( 'HELIXWARE_CLIENT_URL', 'https://cloud.helixware.tv' );
 
 // Log functions.
 require_once( 'helixware_log.php' );

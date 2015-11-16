@@ -112,7 +112,7 @@ function hewa_echo_rss_item( $asset_id, $m3u8 = NULL, $title = NULL, $image_url 
 	}
 
 	// TODO: make the following URL parametric and use the authenticated PHP call.
-	$server_url = hewa_get_server_url();
+	$server_url = HELIXWARE_CLIENT_URL;
 
 	echo "   <jwplayer:source file=\"$server_url/4/pub/asset/$asset_id/streams.smil\" label=\"Auto\" type=\"rtmp\" />\n";
 	echo "   <jwplayer:source file=\"$server_url/4/pub/asset/$asset_id/streams.m3u8\" label=\"Auto\" default=\"true\" type=\"hls\" />\n";
