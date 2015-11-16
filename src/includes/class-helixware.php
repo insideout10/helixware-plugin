@@ -309,11 +309,13 @@ class HelixWare {
 		$jwplayer7_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_7_KEY, '' );
 		$jwplayer6_key = hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' );
 
+		$jwplayer7 = new HelixWare_Player_JWPlayer7( $this->media_rss_player_url_service, $jwplayer7_key );
+		$jwplayer6 = new HelixWare_Player_JWPlayer6( $this->media_rss_player_url_service, hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' ) );
 
 		if ( '' !== $jwplayer7_key ) {
-			$player = new HelixWare_Player_JWPlayer7( $this->media_rss_player_url_service, $jwplayer7_key );
+			$player = $jwplayer7;
 		} elseif ( '' !== $jwplayer6_key ) {
-			$player = new HelixWare_Player_JWPlayer6( $this->media_rss_player_url_service, hewa_get_option( HEWA_SETTINGS_JWPLAYER_ID, '' ) );
+			$player = $jwplayer6;
 		} else {
 			// VideoJS
 			$player = $player_videojs;
