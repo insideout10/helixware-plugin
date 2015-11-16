@@ -37,6 +37,9 @@ If you have any question, send us an e-mail to info@helixware.tv
 
 == Changelog ==
 
+= 1.3.4 (2015-11-16) =
+* Fix: rename hls redirector.
+
 = 1.3.3 (2015-11-16) =
 * Fix: support legacy JWPlayer 6 instances also when JWPlayer 7 is configured.
 

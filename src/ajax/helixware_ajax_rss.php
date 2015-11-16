@@ -28,7 +28,7 @@ function hewa_ajax_load_rss() {
 	$order     = ( isset( $_GET['o'] ) ? $_GET['o'] : 'desc' );
 	$streams   = hewa_get_clip_urls( $asset_id );
 
-	$m3u8 = $streams->formats->{'m3u8-redirector'};
+	$m3u8 = $streams->formats->{'application/x-mpegurl'};
 
 
 	ob_clean();
