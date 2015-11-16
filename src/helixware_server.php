@@ -21,16 +21,15 @@ function hewa_server_request(
 ) {
 
 	// Get the configuration settings and die if not set.
-	$server_url = hewa_get_server_url();
 	$app_key    = hewa_get_option( HEWA_SETTINGS_APPLICATION_KEY, FALSE );
 	$app_secret = hewa_get_option( HEWA_SETTINGS_APPLICATION_SECRET, FALSE );
 
-	if ( FALSE === $server_url || FALSE === $app_key || FALSE === $app_secret ) {
+	if ( FALSE === $app_key || FALSE === $app_secret ) {
 		wp_die( __( 'The plugin is not configured.', HEWA_LANGUAGE_DOMAIN ) );
 	}
 
 	// Set the full URL.
-	$url = $server_url . $endpoint;
+	$url = HELIXWARE_SERVER_URL . $endpoint;
 
 	// Prepare the default arguments.
 	$args = array_merge_recursive( unserialize( HEWA_API_HTTP_OPTIONS ), array(
@@ -89,18 +88,5 @@ function hewa_server_call(
 
 	// Return the response as a string.
 	return $response['body'];
-
-}
-
-
-/**
- * Get the HelixWare server URL.
- *
- * @since 4.0.0
- * @return string
- */
-function hewa_get_server_url() {
-
-	return HELIXWARE_SERVER_URL;
 
 }

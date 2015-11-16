@@ -14,7 +14,7 @@ function hewa_admin_scripts() {
 
 	// Get the configuration options.
 	$options = array(
-		'url'           => hewa_get_server_url() . '/4/user/ondemand',
+		'url'           => HELIXWARE_CLIENT_URL . '/4/user/ondemand',
 		'key'           => hewa_get_option( HEWA_SETTINGS_APPLICATION_KEY ),
 		'secret'        => hewa_get_option( HEWA_SETTINGS_APPLICATION_SECRET ),
 		'extensions'    => hewa_get_option( HEWA_SETTINGS_FILE_EXTENSIONS ),

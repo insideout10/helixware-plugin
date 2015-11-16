@@ -31,7 +31,7 @@ function hewa_admin_metabox_clip_ingest_callback( $post ) {
     // Add an nonce field so we can check for it later.
     wp_nonce_field( 'hewa_admin_metabox_clip_ingest', 'hewa_admin_metabox_clip_ingest_nonce' );
 
-    $url_j        = json_encode( hewa_get_server_url() . '/4/users/files' );
+    $url_j        = json_encode( HELIXWARE_CLIENT_URL . '/4/users/files' );
     $app_key_j    = json_encode( hewa_get_option( HEWA_SETTINGS_APPLICATION_KEY ) );
     $app_secret_j = json_encode( hewa_get_option( HEWA_SETTINGS_APPLICATION_SECRET ) );
 
