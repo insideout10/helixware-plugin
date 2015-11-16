@@ -25,7 +25,7 @@ function hewa_ajax_load_m3u8() {
     $streams  = hewa_get_clip_urls( $asset_id );
 
     $ratio    = $streams->ratio;
-    $m3u8     = $streams->formats->{'m3u8-redirector'};
+    $m3u8     = $streams->formats->{'application/x-mpegurl'};
 
     ob_start();
     header( "Content-Type: application/vnd.apple.mpegurl" );
