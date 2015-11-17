@@ -15,6 +15,7 @@ HelixWare turns WordPress into a Video Hosting platform, supports live and makes
 == Description ==
 
 > #### HelixWare - Upload and play beautiful HD video right from your site.
+>
 
 HelixWare is a WordPress plugin which integrates with the [HelixWare](http://helixware.tv) **video cloud platform**.
 
