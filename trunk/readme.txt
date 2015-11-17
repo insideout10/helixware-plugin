@@ -1,4 +1,7 @@
 === HelixWare - Video Hosting for WordPress ===
+Author URL: https://blog.insideout.io/about-us
+Plugin URL: https://helixware.tv
+
 Contributors: insideout10, ziodave
 Tags: video, streaming, ondemand, SEO, audio, media analysis, hd video, encoding, HLS, Flash, OTT, DASH, rtsp
 Requires at least: 4.3
@@ -7,19 +10,27 @@ Stable tag: 1.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-HelixWare turns WordPress into a Video Hosting platform, supports live broadcasting and makes videos discoverable, searchable, and beautifully organised.
+HelixWare turns WordPress into a Video Hosting platform, supports live and makes videos discoverable, searchable, and beautifully organised.
 
 == Description ==
 
-HelixWare is a WordPress plugin which integrates with the [HelixWare](http://helixware.tv) cloud platform.
+> #### HelixWare - Upload and play beautiful HD video right from your site.
 
-Installing and activating HelixWare turns WordPress into a powerful integrated streaming platform with the following
-features:
+HelixWare is a WordPress plugin which integrates with the [HelixWare](http://helixware.tv) **video cloud platform**.
+
+With this plugin, you can upload videos, organise them using the WordPress Media library and add a shortcode to display them on your site.
+
+Installing and activating HelixWare turns WordPress into a **powerful integrated streaming platform** with the following features:
 
 * Upload any video file via the familiar WordPress Media screen
-* Videos take **zero** space and **zero** CPU on your WordPress hosting
+* Videos take **zero space** and **zero CPU** on your WordPress hosting
 * We automatically encode your videos to multiple bitrates and formats
 * Stream to any device: PCs, Macs, Linux, iPhones, Androids
+
+> #### HelixWare - Registration
+> To use this plugin you need to register on [helixware.tv](https://helixware.tv/sign-up/) <br />
+> get the application key and secret and add it to the configuration panel. 
+> 
 
 == Installation ==
 
