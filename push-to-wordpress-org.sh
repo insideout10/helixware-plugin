@@ -11,7 +11,9 @@ rm -fr src
 echo "updating the svn branch..."
 svn up
 echo "checking out the src folder from master branch..."
-git pull --all
+git checkout master
+git pull
+git checkout svn
 git checkout master -- src
 
 VERSION=`egrep -o "Version:\s+\d+\.\d+\.\d+" $FILE | egrep -o "\d+\.\d+\.\d+"`
