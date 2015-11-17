@@ -4,11 +4,6 @@
 setenv.sh
 vendor/
 composer.lock
-<<<<<<< HEAD
-.svn/tmp/
-=======
 .svn/
-
 /build/
 /node_modules/
->>>>>>> e64c757b9a966bb65add2403383e5cf6ca48cd90
