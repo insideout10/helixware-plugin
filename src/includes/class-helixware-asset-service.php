@@ -128,7 +128,7 @@ class HelixWare_Asset_Service {
 		         || self::MIME_TYPE_LIVE === $mime_type
 		         || self::MIME_TYPE_BROADCAST === $mime_type
 		         || self::MIME_TYPE_CHANNEL === $mime_type
-		         || self::MIME_TYPE_UNKNOWN );
+		         || self::MIME_TYPE_UNKNOWN === $mime_type );
 
 	}
 
