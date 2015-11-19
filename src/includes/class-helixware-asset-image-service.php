@@ -39,6 +39,15 @@ class HelixWare_Asset_Image_Service {
 	private $asset_service;
 
 	/**
+	 * The Log service.
+	 *
+	 * @since 1.3.6
+	 * @access private
+	 * @var \HelixWare_Log_Service $log_service The Log service.
+	 */
+	private $log_service;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.1.0
@@ -52,6 +61,8 @@ class HelixWare_Asset_Image_Service {
 		$this->http_client   = $http_client;
 		$this->server_url    = $server_url;
 		$this->asset_service = $asset_service;
+
+		$this->log_service = HelixWare_Log_Service::get_logger( 'HelixWare_Asset_Image_Service' );
 
 	}
 
