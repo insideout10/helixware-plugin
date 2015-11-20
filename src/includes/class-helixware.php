@@ -167,6 +167,15 @@ class HelixWare {
 	private $template_service;
 
 	/**
+	 * The Upload service.
+	 *
+	 * @since 1.3.7
+	 * @access private
+	 * @var \HelixWare_Upload_Service The Upload service.
+	 */
+	private $upload_service;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -271,6 +280,7 @@ class HelixWare {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-helixware-admin.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-helixware-admin-attachments.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-helixware-template-service.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-helixware-upload-service.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
@@ -325,6 +335,9 @@ class HelixWare {
 
 		// Admin screen.
 		$this->template_service = new HelixWare_Template_Service( $player_videojs );
+
+		// Create an instance of the upload service. It is later hooked to load the upload JavaScript in the media-new page.
+		$this->upload_service = new HelixWare_Upload_Service();
 
 	}
 
@@ -382,6 +395,9 @@ class HelixWare {
 		// When the attachment page is shown, customize the client-side template.
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->template_service, 'admin_enqueue_scripts' );
 		$this->loader->add_action( 'admin_footer-upload.php', $this->template_service, 'admin_footer_upload' );
+
+		// Hook the upload service to the media new page in order to load the relevant scripts.
+		$this->loader->add_action( 'admin_head-media-new.php', $this->upload_service, 'admin_head_media_new' );
 
 	}
 

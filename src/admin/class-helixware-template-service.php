@@ -17,6 +17,15 @@ class HelixWare_Template_Service {
 	private $player;
 
 	/**
+	 * The Log service.
+	 *
+	 * @since 1.3.7
+	 * @access private
+	 * @var \Wordlift_Log_Service $log_service The Log service.
+	 */
+	private $log_service;
+
+	/**
 	 * Create an instance of the HelixWare_Template_Service.
 	 *
 	 * @since 1.3.0
@@ -24,6 +33,8 @@ class HelixWare_Template_Service {
 	 * @param \HelixWare_Player_VideoJS $player The VideoJS Player service.
 	 */
 	public function __construct( $player ) {
+
+		$this->log_service = HelixWare_Log_Service::get_logger( 'HelixWare_Template_Service' );
 
 		$this->player = $player;
 
@@ -211,7 +222,10 @@ class HelixWare_Template_Service {
 		</script>
 		<style>
 			/* Ensure the generated video-js player is responsive */
-			.thumbnail > .video-js { width: 100%; height: 100%; }
+			.thumbnail > .video-js {
+				width: 100%;
+				height: 100%;
+			}
 		</style>
 		<script>
 			(function ( $ ) {
