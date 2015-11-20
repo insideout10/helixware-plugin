@@ -26,6 +26,15 @@ class HelixWare_Template_Service {
 	private $log_service;
 
 	/**
+	 * The plugin version (used when queueing scripts and styles).
+	 *
+	 * @since 1.4.0
+	 * @access private
+	 * @var string $version The plugin version.
+	 */
+	private $version;
+
+	/**
 	 * Create an instance of the HelixWare_Template_Service.
 	 *
 	 * @since 1.3.0
@@ -36,6 +45,10 @@ class HelixWare_Template_Service {
 
 		$this->log_service = HelixWare_Log_Service::get_logger( 'HelixWare_Template_Service' );
 
+		// Set the plugin version, for queueing scripts and styles.
+		$this->version = HelixWare::get_instance()->get_version();
+
+		// Set the player to preview videos.
 		$this->player = $player;
 
 	}
@@ -49,6 +62,18 @@ class HelixWare_Template_Service {
 
 		// Enqueue the player scripts.
 		$this->player->queue_scripts();
+
+	}
+
+	/**
+	 * Load scripts required to enhance the upload page.
+	 *
+	 * @since 1.4.0
+	 */
+	public function admin_head_upload() {
+
+		// Load ZeroClipboard to allow quick clipboard copy of the hw embed code.
+		wp_enqueue_script( 'zeroclipboard', plugin_dir_url( __FILE__ ) . 'js/zeroclipboard/ZeroClipboard.min.js', array(), $this->version, TRUE );
 
 	}
 
@@ -77,8 +102,7 @@ class HelixWare_Template_Service {
 
 				<div class="details">
 					<div class="filename">
-						<strong><?php _e( 'File type:' ); ?></strong> {{
-						data.mime }}
+						<strong><?php _e( 'File type:' ); ?></strong> HelixWare
 					</div>
 					<div class="uploaded">
 						<strong><?php _e( 'Uploaded on:' ); ?></strong> {{
@@ -124,6 +148,14 @@ class HelixWare_Template_Service {
 				</div>
 
 				<div class="settings">
+					<label class="setting">
+						<span class="name"><?php _e( 'Embed code:' ); ?></span>
+						<input type="text" class="hw-txt-embed-code"
+						       value="[hw_embed id='{{ data.id }}']"
+						       readonly/>
+						<button class="hw-btn-copy">Copy</button>
+					</label>
+
 					<label class="setting" data-setting="url">
 						<span class="name"><?php _e( 'URL' ); ?></span>
 						<input type="text" value="{{ data.url }}" readonly/>
@@ -264,7 +296,15 @@ class HelixWare_Template_Service {
 
 						TwoColumn.__super__.render.apply( this, arguments );
 
+						// Set a reference to the view for async events.
 						var view = this;
+
+						// Set up the ZeroClipboard button for the hw_embed shortcode.
+						var client = new ZeroClipboard( this.$( ".hw-btn-copy" ) );
+						client.on( "copy", function ( event ) {
+							var clipboard = event.clipboardData;
+							clipboard.setData( "text/plain", view.$( ".hw-txt-embed-code" ).val() );
+						} );
 
 						// Get the
 						wp.ajax.post( 'hw_hls_url', { id: this.model.get( 'id' ) } )
