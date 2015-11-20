@@ -21,7 +21,7 @@ class HelixWare_Template_Service {
 	 *
 	 * @since 1.3.7
 	 * @access private
-	 * @var \Wordlift_Log_Service $log_service The Log service.
+	 * @var \HelixWare_Log_Service $log_service The Log service.
 	 */
 	private $log_service;
 

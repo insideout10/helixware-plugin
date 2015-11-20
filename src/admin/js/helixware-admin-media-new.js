@@ -5,15 +5,16 @@
         // Capture the preset *filters.max_file_size*.
         var url, maxFileSize, fileDataName;
 
+        // Removed: allow to create a post from the upload screen.
         // Create the select with the post options, this is used when building the asset uploaded line.
-        var postTypeSelect = '<select name="post_type">';
-        for ( var type in hewa_admin_options.post_types ) {
-
-            postTypeSelect += '<option value="' + type + '"' + ('post' === type ? ' selected' : '') + '>' +
-                hewa_admin_options.post_types[ type ].title + '</option>';
-
-        }
-        postTypeSelect += '</select>';
+        //var postTypeSelect = '<select name="post_type">';
+        //for ( var type in hewa_admin_options.post_types ) {
+        //
+        //    postTypeSelect += '<option value="' + type + '"' + ('post' === type ? ' selected' : '') + '>' +
+        //        hewa_admin_options.post_types[ type ].title + '</option>';
+        //
+        //}
+        //postTypeSelect += '</select>';
 
 
         /**
@@ -25,13 +26,13 @@
         var isVideo = function ( file ) {
 
             return ( 0 === file.type.indexOf( "video/" ) );
-
         };
 
         /**
          * Our handler for the *fileUploaded* method from the uploader. At the end of the process, the handler set back
          * again to the WordPress handler.
          *
+         * @param up
          * @param file The uploaded file.
          * @param response The response from the server.
          */
@@ -45,46 +46,49 @@
             // Get the asset data, the element where the data is shown and a reference to the div containing the meta-data.
             var asset = $.parseJSON( response.response );
             var elem = $( '#media-item-' + file.id );
-            var divId = 'hewa-asset-' + asset.id;
+            //var divId = 'hewa-asset-' + asset.id;
 
             elem.html(
-                '<img src="' + hewa_admin_options.form_action + '?action=hewa_still_image&id=' + asset.id +
-                '&w=150&tc=10" class="pinkynail" onerror="this.style.visibility = \'hidden\';"><div class="filename new">' +
-                '<span class="title">' + asset.title + '</span>' +
-                '<div id="' + divId + '" class="hewa-asset">' +
-                postTypeSelect +
-                '<input type="hidden" name="asset_id" value="' + asset.id + '">' +
-                '<input type="text" name="post_title" placeholder="' + hewa_admin_options.labels.title +
-                '" value="' + asset.title + '">' +
-                '<input type="text" name="post_tags" placeholder="' + hewa_admin_options.labels.tags + '">' +
-                '<button type="button" class="hewa-submit-button button">' + hewa_admin_options.labels.save + '</button>' +
-                '</div></div>' );
+                '<img src="' + hewa_admin_options.form_action + '?action=hewa_still_image&id=' + asset.id
+                + '&w=150&tc=10" class="pinkynail" onerror="this.style.visibility = \'hidden\';"><div class="filename new">'
+                + '<span class="title">' + asset.title + '</span>'
+                    // Removed: allow to create a post from the upload screen.
+                    //'<div id="' + divId + '" class="hewa-asset">' +
+                    //postTypeSelect +
+                    //'<input type="hidden" name="asset_id" value="' + asset.id + '">' +
+                    //'<input type="text" name="post_title" placeholder="' + hewa_admin_options.labels.title +
+                    //'" value="' + asset.title + '">' +
+                    //'<input type="text" name="post_tags" placeholder="' + hewa_admin_options.labels.tags + '">' +
+                    //'<button type="button" class="hewa-submit-button button">' + hewa_admin_options.labels.save + '</button>' +
+                    // '</div>'
+                + '</div>' );
 
 
-            $( '#' + divId + ' .hewa-submit-button' ).click( function ( event ) {
-
-                // After the button is clicked, disable it and notify user that saving is in progress.
-                $( event.target ).prop( 'disabled', true )
-                    .text( 'Saving...' );
-
-                var div = $( event.target ).parent();
-
-                var assetData = {
-                    'assetId': div.children( 'input[name="asset_id"]' ).val(),
-                    'postType': div.children( 'select[name="post_type"]' ).val(),
-                    'postTitle': div.children( 'input[name="post_title"]' ).val(),
-                    'postTags': div.children( 'input[name="post_tags"]' ).val()
-                };
-
-                $.post( hewa_admin_options.form_action + '?action=' + hewa_admin_options.ajax_action, assetData )
-                    .done( function ( data ) {
-
-                        div.html( '<a href="' + hewa_admin_options.form_action + '?action=hewa_edit_post&id=' + data +
-                            '">Edit</a>' );
-
-                    } );
-
-            } );
+            // Removed: allow to create a post from the upload screen.
+            //$( '#' + divId + ' .hewa-submit-button' ).click( function ( event ) {
+            //
+            //    // After the button is clicked, disable it and notify user that saving is in progress.
+            //    $( event.target ).prop( 'disabled', true )
+            //        .text( 'Saving...' );
+            //
+            //    var div = $( event.target ).parent();
+            //
+            //    var assetData = {
+            //        'assetId': div.children( 'input[name="asset_id"]' ).val(),
+            //        'postType': div.children( 'select[name="post_type"]' ).val(),
+            //        'postTitle': div.children( 'input[name="post_title"]' ).val(),
+            //        'postTags': div.children( 'input[name="post_tags"]' ).val()
+            //    };
+            //
+            //    $.post( hewa_admin_options.form_action + '?action=' + hewa_admin_options.ajax_action, assetData )
+            //        .done( function ( data ) {
+            //
+            //            div.html( '<a href="' + hewa_admin_options.form_action + '?action=hewa_edit_post&id=' + data +
+            //                '">Edit</a>' );
+            //
+            //        } );
+            //
+            //} );
 
         };
 
@@ -107,7 +111,6 @@
                 params.file_data_name = fileDataName;
 
                 return;
-
             }
 
             // It's a video, then direct the uploader towards HelixWare.
@@ -162,7 +165,6 @@
         if ( typeof uploader === 'undefined' ) {
 
             return;
-
         }
 
         // Initialize.
@@ -176,7 +178,7 @@
         // Set the default *file_data_name*.
         fileDataName = uploader.settings.file_data_name;
 
-//    uploader.bind( 'UploadFile', handleUploadFile );
+        // uploader.bind( 'UploadFile', handleUploadFile );
 
         uploader.bind( 'BeforeUpload', handleBeforeUpload );
 
