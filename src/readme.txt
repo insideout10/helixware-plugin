@@ -49,6 +49,10 @@ If you have any question, send us an e-mail to info@helixware.tv
 
 == Changelog ==
 
+= 1.4.0 (2015-11-20) =
+* Enhancement [#28](https://github.com/insideout10/helixware-plugin/issues/28): now that HelixWare is integrated with the WordPress Media Library we don't need to expose the "create post" row after an upload.
+* Enhancement [#39](https://github.com/insideout10/helixware-plugin/issues/39): add the HelixWare embed shortcode in the video assets metadata.
+
 = 1.3.7 (2015-11-20) =
 * Fix [#36](https://github.com/insideout10/helixware-plugin/issues/36): helixware-admin.css not found.
 * Fix [#37](https://github.com/insideout10/helixware-plugin/issues/37): cannot add custom fields using ACF Pro.
