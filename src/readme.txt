@@ -49,6 +49,10 @@ If you have any question, send us an e-mail to info@helixware.tv
 
 == Changelog ==
 
+= 1.3.7 (2015-11-20) =
+* Fix [#36](https://github.com/insideout10/helixware-plugin/issues/36): helixware-admin.css not found.
+* Fix [#37](https://github.com/insideout10/helixware-plugin/issues/37): cannot add custom fields using ACF Pro.
+
 = 1.3.6 (2015-11-16) =
 * Fix [#32](https://github.com/insideout10/helixware-plugin/issues/32): add media with assets other than HelixWare videos doesn't work.
 * Fix [#33](https://github.com/insideout10/helixware-plugin/issues/33): incompatibility with ACF plugin.
