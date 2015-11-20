@@ -189,13 +189,13 @@ class HelixWare {
 		$this->plugin_name = 'helixware';
 		$this->version     = '1.4.0-dev';
 
+		// Set the singleton instance.
+		self::$instance = $this;
+
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
-		// Set the singleton instance.
-		self::$instance = $this;
 
 		// Run the extensions.
 		do_action( 'hewa_run_extensions', $this );
@@ -394,6 +394,7 @@ class HelixWare {
 
 		// When the attachment page is shown, customize the client-side template.
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->template_service, 'admin_enqueue_scripts' );
+		$this->loader->add_action( 'admin_head-upload.php', $this->template_service, 'admin_head_upload' );
 		$this->loader->add_action( 'admin_footer-upload.php', $this->template_service, 'admin_footer_upload' );
 
 		// Hook the upload service to the media new page in order to load the relevant scripts.
