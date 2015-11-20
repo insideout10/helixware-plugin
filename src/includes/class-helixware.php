@@ -187,7 +187,7 @@ class HelixWare {
 	public function __construct() {
 
 		$this->plugin_name = 'helixware';
-		$this->version     = '1.4.0-dev';
+		$this->version     = '1.4.0';
 
 		// Set the singleton instance.
 		self::$instance = $this;
