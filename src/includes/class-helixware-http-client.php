@@ -77,11 +77,7 @@ class HelixWare_HTTP_Client {
 				( is_wp_error( $response ) ? $response->get_error_message() : $response['body'] ) . ' )'
 			);
 
-			return ( __(
-				"An error occurred while calling the remote serve [ status code :: $status_code ]( " .
-				( is_wp_error( $response ) ? $response->get_error_message() : $response['body'] ) . ' )',
-				HEWA_LANGUAGE_DOMAIN
-			) );
+			return $response;
 
 		}
 

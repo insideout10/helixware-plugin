@@ -87,6 +87,16 @@ class HelixWare_Asset_Image_Service {
 			wp_die( 'An error occurred.' );
 		}
 
+		// Get the status code from the response.
+		$status_code = ( isset( $response['response']['code'] ) && is_numeric( $response['response']['code'] ) ? (int) $response['response']['code'] : NULL );
+
+		// If the status code is 401, show an not authorized image.
+		if ( 401 === $status_code ) {
+			header( "Content-Type: image/png" );
+			echo( file_get_contents( plugin_dir_url( dirname( __FILE__ ) ) . '/public/images/not-authorized.png' ) );
+			wp_die();
+		}
+
 		// dump out the image.
 		if ( isset( $response['headers']['content-type'] ) ) {
 			$content_type = $response['headers']['content-type'];
