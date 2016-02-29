@@ -62,8 +62,7 @@ class HelixWare_Embed_Shortcode {
 	}
 
 	/**
-	 * Render the _hw_embed_ shortcode. Internally this method will rely to
-	 * {@see _render_compat} which calls the existing _hw_player_ shortcode.
+	 * Render the _hw_embed_ shortcode.
 	 *
 	 * @since 1.1.0
 	 *
@@ -81,12 +80,16 @@ class HelixWare_Embed_Shortcode {
 		// The attachment ID.
 		$id = $atts['id'];
 
+		$width    = isset( $atts['width'] ) ? $atts['width'] : 640;
+		$height   = isset( $atts['height'] ) ? $atts['height'] : 360;
+		$autoplay = isset( $atts['autoplay'] );
+
 		// Check that the attachment exists, otherwise return a *video not found* message.
 		if ( FALSE === wp_get_attachment_url( $id ) ) {
 			return "Video not found";
 		}
 
-		return $this->player->render( $id, 640, 360, $this->asset_image_service->get_local_image_url_by_id( $id, 5 ) );
+		return $this->player->render( $id, $width, $height, $autoplay, $this->asset_image_service->get_local_image_url_by_id( $id, 5 ) );
 
 	}
 
