@@ -64,6 +64,14 @@ class HelixWare_Asset_Service {
 	 */
 	private $server_url;
 
+	/**
+	 * A reference to the singleton instance of the service.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @var HelixWare_Asset_Service
+	 */
+	private static $instance;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -80,6 +88,20 @@ class HelixWare_Asset_Service {
 		$this->hal_client = $hal_client;
 		$this->server_url = $server_url;
 
+		self::$instance = $this;
+
+	}
+
+	/**
+	 * Get the singleton instance of this service.
+	 *
+	 * @since 1.5.0
+	 * 
+	 * @return HelixWare_Asset_Service
+	 */
+	public static function get_instance() {
+
+		return self::$instance;
 	}
 
 	/**
@@ -165,8 +187,8 @@ class HelixWare_Asset_Service {
 	 */
 	public function get_guid( $id ) {
 
-		if ( NULL === ( $post = get_post( $id ) ) ) {
-			return NULL;
+		if ( null === ( $post = get_post( $id ) ) ) {
+			return null;
 		};
 
 		// Return the GUID.
@@ -186,8 +208,8 @@ class HelixWare_Asset_Service {
 	public function get_asset_id( $id ) {
 
 		// Get the guid in the format of http://server/assets/$asset_id
-		if ( NULL === ( $post = get_post( $id ) ) ) {
-			return NULL;
+		if ( null === ( $post = get_post( $id ) ) ) {
+			return null;
 		}
 
 		$parts = explode( '/', $post->guid );
@@ -237,7 +259,7 @@ class HelixWare_Asset_Service {
 		}
 
 		// If the last modified date is not set on the post, return the default last modified date.
-		if ( FALSE === ( $last_modified_date = get_post_meta( $posts[0], HelixWare_Asset_Service::META_LAST_MODIFIED_DATE, TRUE ) ) ) {
+		if ( false === ( $last_modified_date = get_post_meta( $posts[0], HelixWare_Asset_Service::META_LAST_MODIFIED_DATE, true ) ) ) {
 			return self::MIN_LAST_MODIFIED_DATE;
 		}
 
@@ -257,8 +279,8 @@ class HelixWare_Asset_Service {
 	 */
 	public function get_duration( $id ) {
 
-		if ( FALSE === ( $value = get_post_meta( $id, self::META_DURATION, TRUE ) ) ) {
-			return FALSE;
+		if ( false === ( $value = get_post_meta( $id, self::META_DURATION, true ) ) ) {
+			return false;
 		}
 
 		return (int) $value;
@@ -303,10 +325,10 @@ class HelixWare_Asset_Service {
 	 * @param string $value The thumbnail URL.
 	 * @param int $width The requested width (if not provided, it'll be set to 230 by default).
 	 */
-	public function set_thumbnail_url( $id, $value = NULL, $width = 230 ) {
+	public function set_thumbnail_url( $id, $value = null, $width = 230 ) {
 
 		// Save a reference to the thumbnail if it exists.
-		$this->_update_post_meta( $id, HelixWare_Asset_Service::META_THUMBNAIL_URL, ( isset( $value ) ? "$value?width=$width" : NULL ) );
+		$this->_update_post_meta( $id, HelixWare_Asset_Service::META_THUMBNAIL_URL, ( isset( $value ) ? "$value?width=$width" : null ) );
 
 	}
 
@@ -320,7 +342,7 @@ class HelixWare_Asset_Service {
 	 */
 	public function set_duration( $id, $value ) {
 
-		$this->_update_post_meta( $id, HelixWare_Asset_Service::META_DURATION, ( is_numeric( $value ) ? intval( $value ) : NULL ) );
+		$this->_update_post_meta( $id, HelixWare_Asset_Service::META_DURATION, ( is_numeric( $value ) ? intval( $value ) : null ) );
 
 	}
 
@@ -352,24 +374,24 @@ class HelixWare_Asset_Service {
 		);
 
 		// Check if attachment already exists for this guid.
-		if ( NULL !== ( $attachment_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid=%s", $self ) ) ) ) {
+		if ( null !== ( $attachment_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid=%s", $self ) ) ) ) {
 			$attachment['ID'] = $attachment_id;
 
 			// Set the sync flag for existing attachments.
-			$this->set_syncing( $attachment_id, TRUE );
+			$this->set_syncing( $attachment_id, true );
 		}
 
-		$this->log_service->trace( "Syncing [ " . str_replace( "\n", '', var_export( $attachment, TRUE ) ) . " ]" );
+		$this->log_service->trace( "Syncing [ " . str_replace( "\n", '', var_export( $attachment, true ) ) . " ]" );
 
 		if ( 0 === ( $attachment_id = wp_insert_attachment( $attachment ) ) ) {
-			return FALSE;
+			return false;
 		};
 
 		// Clear the syncing flag.
-		$this->set_syncing( $attachment_id, FALSE );
+		$this->set_syncing( $attachment_id, false );
 
 		// Set the additional fields.
-		$this->set_thumbnail_url( $attachment_id, isset( $asset->_links->thumbnail->href ) ? $asset->_links->thumbnail->href : NULL );
+		$this->set_thumbnail_url( $attachment_id, isset( $asset->_links->thumbnail->href ) ? $asset->_links->thumbnail->href : null );
 		$this->set_type( $attachment_id, $asset->type );
 		$this->set_last_modified_date( $attachment_id, $asset->lastModifiedDate );
 
@@ -378,7 +400,7 @@ class HelixWare_Asset_Service {
 			$this->set_duration( $attachment_id, $asset->duration );
 		}
 
-		return TRUE;
+		return true;
 
 	}
 
@@ -396,21 +418,21 @@ class HelixWare_Asset_Service {
 
 		// If the mime type is not set or it's not HelixWare, do nothing.
 		if ( ! isset( $data['post_mime_type'] ) || ! HelixWare_Asset_Service::is_helixware_mime_type( $data['post_mime_type'] ) ) {
-			return NULL;
+			return null;
 		}
 
 		// If the post is being synchronized, do nothing.
 		if ( $this->is_syncing( $post_id ) ) {
 			$this->log_service->trace( "Post is synchronizing [ post id :: $post_id ]" );
 
-			return NULL;
+			return null;
 		}
 
 		// If the asset id is not found, fail.
-		if ( NULL === ( $asset_id = $this->get_asset_id( $post_id ) ) ) {
+		if ( null === ( $asset_id = $this->get_asset_id( $post_id ) ) ) {
 			$this->log_service->error( "Asset id not found [ post id :: $post_id ]" );
 
-			return FALSE;
+			return false;
 		}
 
 		$payload = array(
@@ -440,7 +462,7 @@ class HelixWare_Asset_Service {
 
 		// If the mime type is not set or it's not HelixWare, do nothing.
 		if ( ! isset( $data['post_mime_type'] ) || ! HelixWare_Asset_Service::is_helixware_mime_type( $data['post_mime_type'] ) ) {
-			return NULL;
+			return null;
 		}
 
 		// Create the request and execute.
@@ -458,7 +480,7 @@ class HelixWare_Asset_Service {
 	 *
 	 * @param bool $incremental Whether to do incremental sync, by default yes.
 	 */
-	public function sync( $incremental = TRUE ) {
+	public function sync( $incremental = true ) {
 
 		// If incremental, we ask to HelixWare only assets changed after the most recent last modified date.
 		$last_modified_date = ( $incremental ?
@@ -489,7 +511,7 @@ class HelixWare_Asset_Service {
 	 * @param string $key The key name.
 	 * @param string|int|null $value The value to set for the key. If the value is NULL, the key will be removed.
 	 */
-	private function _update_post_meta( $id, $key, $value = NULL ) {
+	private function _update_post_meta( $id, $key, $value = null ) {
 
 		if ( isset( $value ) ) {
 			update_post_meta( $id, $key, $value );
@@ -509,7 +531,7 @@ class HelixWare_Asset_Service {
 	 *
 	 * @return array The array of fields with the syncing flag.
 	 */
-	private function set_syncing( $post_id, $value = TRUE ) {
+	private function set_syncing( $post_id, $value = true ) {
 
 		if ( $value ) {
 			update_post_meta( $post_id, self::META_SYNCHRONIZING, 1 );
@@ -530,7 +552,7 @@ class HelixWare_Asset_Service {
 	 */
 	private function is_syncing( $post_id ) {
 
-		return ( '' !== get_post_meta( $post_id, self::META_SYNCHRONIZING, TRUE ) );
+		return ( '' !== get_post_meta( $post_id, self::META_SYNCHRONIZING, true ) );
 
 	}
 

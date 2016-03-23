@@ -62,6 +62,8 @@ EOF;
 		foreach ( $posts as $post ) {
 
 			$matches = array();
+
+			// Look for asset IDs using the hewa_player shortcode.
 			if ( 1 === preg_match( '/ asset_id=(\d+)/', $post->post_content, $matches ) ) {
 
 				$this_asset_id = $matches[1];
@@ -74,9 +76,28 @@ EOF;
 				$thumbnail_id = get_post_thumbnail_id( $post->ID );
 				// TODO: get attachment of the required size.
 				$attachment_url = wp_get_attachment_url( $thumbnail_id );
-				hewa_echo_rss_item( $this_asset_id, NULL, $post->post_title, $attachment_url, $post->ID );
+				hewa_echo_rss_item( $this_asset_id, null, $post->post_title, $attachment_url, $post->ID );
+
+				continue;
+			}
+
+			// Look for asset IDs using the hw_embed shortcode.
+			if ( 1 === preg_match( "/hw_embed id='(\\d+)'/", $post->post_content, $matches ) ) {
+
+				$this_asset_id = HelixWare_Asset_Service::get_instance()->get_asset_id( $matches[1] );
+
+				// Don't add the same asset.
+				if ( $asset_id === $this_asset_id ) {
+					continue;
+				}
+
+				$thumbnail_id = get_post_thumbnail_id( $post->ID );
+				// TODO: get attachment of the required size.
+				$attachment_url = wp_get_attachment_url( $thumbnail_id );
+				hewa_echo_rss_item( $this_asset_id, null, $post->post_title, $attachment_url, $post->ID );
 
 			}
+
 		}
 
 	}
@@ -95,11 +116,11 @@ add_action( 'wp_ajax_hewa_rss', 'hewa_ajax_load_rss' );
 add_action( 'wp_ajax_nopriv_hewa_rss', 'hewa_ajax_load_rss' );
 
 
-function hewa_echo_rss_item( $asset_id, $m3u8 = NULL, $title = NULL, $image_url = NULL, $post_id = NULL ) {
+function hewa_echo_rss_item( $asset_id, $m3u8 = null, $title = null, $image_url = null, $post_id = null ) {
 
 	echo "  <item>\n";
 
-	if ( NULL !== $title ) {
+	if ( null !== $title ) {
 
 		// Escape the title.
 		$title_h = esc_html( $title );
@@ -107,7 +128,7 @@ function hewa_echo_rss_item( $asset_id, $m3u8 = NULL, $title = NULL, $image_url 
 
 	}
 
-	if ( NULL !== $image_url && ! empty( $image_url ) ) {
+	if ( null !== $image_url && ! empty( $image_url ) ) {
 		echo "   <jwplayer:image>$image_url</jwplayer:image>\n";
 	}
 
@@ -123,7 +144,7 @@ function hewa_echo_rss_item( $asset_id, $m3u8 = NULL, $title = NULL, $image_url 
 	}
 
 	// Print if there are m3u8 files and the client is not an Android.
-	if ( NULL !== $m3u8 && FALSE === stripos( $_SERVER['HTTP_USER_AGENT'], 'Android' ) ) {
+	if ( null !== $m3u8 && false === stripos( $_SERVER['HTTP_USER_AGENT'], 'Android' ) ) {
 
 		// Sort the bitrates.
 		$bitrates = $m3u8->bitrates;
