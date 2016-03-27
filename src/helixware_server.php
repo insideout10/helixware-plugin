@@ -87,6 +87,6 @@ function hewa_server_call(
 	$response = hewa_server_request( $endpoint, 'GET', '', $content_type, $accept );
 
 	// Return the response as a string.
-	return $response['body'];
+	return isset($response['body']) ? $response['body'] : '';
 
 }
