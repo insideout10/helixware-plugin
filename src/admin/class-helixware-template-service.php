@@ -83,7 +83,8 @@ class HelixWare_Template_Service {
 	 * @since 1.3.0
 	 */
 	public function admin_footer_upload() {
-
+  $mode = get_user_option( 'media_library_mode', get_current_user_id() ) ;
+  if ($mode ==='grid'){
 		?>
 
 		<script type="text/html"
@@ -344,7 +345,7 @@ class HelixWare_Template_Service {
 			})( jQuery );
 		</script>
 		<?php
-
+    }
 	}
 
 }
