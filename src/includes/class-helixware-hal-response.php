@@ -37,7 +37,7 @@ class HelixWare_HAL_Response {
 
 		$this->hal_client = $hal_client;
 		$this->response   = $response;
-		$this->body_json  = json_decode( $response['body'] );
+		$this->body_json  = json_decode( isset($response['body']) ? $response['body'] : NULL);
 		$this->links      = ( isset( $this->body_json->_links ) ? $this->body_json->_links : NULL );
 		$this->embedded   = ( isset( $this->body_json->_embedded ) ? $this->body_json->_embedded : NULL );
 
