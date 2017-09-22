@@ -153,7 +153,7 @@ EOF;
 
                     for (var i = 0; i < playlist.length; i++) {
 
-                        html += '<li><a href="javascript:jwplayer(\'$player_id\').playlistItem(' + i + ');">';
+                        html += '<li><a href="javascript:void(jwplayer(\'$player_id\').playlistItem(' + i + '));">';
 
                         if ( undefined != playlist[i].image ) {
                             html += '<img height="75" width="120" src="' + playlist[i].image + '" />';
