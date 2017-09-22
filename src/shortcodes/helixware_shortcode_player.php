@@ -23,17 +23,18 @@ function hewa_shortcode_player( $atts ) {
 	$params = shortcode_atts( array(
 		'width'        => '100%',
 		// by default we stretch the full width of the containing element.
-		'asset_id'     => NULL,
-		'live_id'      => NULL,
+		'asset_id'     => null,
+		'live_id'      => null,
 		'aspectratio'  => '5:3',
-		'listbar'      => NULL,
+		'listbar'      => null,
 		'listbar_size' => 240,
 		'listbar_cat'  => 'for-you',
-		'autostart'    => TRUE,
+		'autostart'    => true,
 		'max'          => 5,
 		'skin'         => hewa_get_option( HEWA_SETTINGS_JWPLAYER_DEFAULT_SKIN, '' ),
 		'logo_url'     => hewa_get_option( HEWA_SETTINGS_JWPLAYER_LOGO_URL, '' ),
-		'logo_link'    => hewa_get_option( HEWA_SETTINGS_JWPLAYER_LOGO_LINK, '' )
+		'logo_link'    => hewa_get_option( HEWA_SETTINGS_JWPLAYER_LOGO_LINK, '' ),
+		'title'        => ''
 	), $atts );
 
 	// Queue the scripts.
@@ -46,7 +47,7 @@ function hewa_shortcode_player( $atts ) {
 	$player_id = uniqid( 'hewa-player-' );
 	$is_live   = ! empty( $params['live_id'] );
 	$asset_id  = ( $is_live ? $params['live_id'] : $params['asset_id'] );
-	$title_u   = urlencode( get_the_title() );
+	$title_u   = urlencode( $params['title'] ?: get_the_title() );
 
 	// Get the thumbnail URL.
 	// TODO: get the thumbnail of the right size.
@@ -57,26 +58,26 @@ function hewa_shortcode_player( $atts ) {
 	$player = array();
 //	$player['flashplayer'] = plugins_url( 'js/jwplayer-6.11/jwplayer.flash.swf', __FILE__ );
 //	$player['html5player'] = plugins_url( 'js/jwplayer-6.11/jwplayer.html5.js', __FILE__ );
-	$player['androidhls']  = TRUE;
+	$player['androidhls']  = true;
 	$player['autostart']   = ( $params['autostart'] && is_singular() ? 'true' : 'false' );
-	$player['playlist']    = ( $is_live || NULL === $params['listbar']
+	$player['playlist']    = ( $is_live || null === $params['listbar']
 		? HELIXWARE_CLIENT_URL . "/4/pub/asset/$asset_id/streams.xml"
 		: apply_filters( HEWA_FILTERS_PLAYER_PLAYLIST_URL,
 			admin_url( 'admin-ajax.php?action=hewa_rss&id=' . $asset_id .
 			           '&t=' . $title_u . // set the title
 			           '&i=' . $image_u . // set the image
 			           '&max=' . $params['max'] . // set the maximum number of elements
-			           ( NULL !== $params['listbar'] ? '&cat=' . $params['listbar_cat'] : '' ) // add the category if we have the listbar.
+			           ( null !== $params['listbar'] ? '&cat=' . $params['listbar_cat'] : '' ) // add the category if we have the listbar.
 			)
 		) );
 	$player['width']       = $params['width'];
 	$player['aspectratio'] = $params['aspectratio'];
 	$player['ga']          = array(
 		// playlist title or mediaid
-		'idstring'    => ( NULL != $params['ga_id_string'] ? $params['ga_id_string'] : 'mediaid' ),
-		'universalga' => ( NULL != $params['ga_tracking_object'] ? $params['ga_tracking_object'] : '__gaTracker' ),
+		'idstring'    => ( null != $params['ga_id_string'] ? $params['ga_id_string'] : 'mediaid' ),
+		'universalga' => ( null != $params['ga_tracking_object'] ? $params['ga_tracking_object'] : '__gaTracker' ),
 		// mediaid or title
-		'label'       => ( NULL != $params['ga_media_id'] ? $params['ga_media_id'] : 'title' )
+		'label'       => ( null != $params['ga_media_id'] ? $params['ga_media_id'] : 'title' )
 	);
 
 	// Add the logo and the link if provided.
@@ -99,7 +100,7 @@ function hewa_shortcode_player( $atts ) {
 	$loading = esc_html__( 'Loading player...', HEWA_LANGUAGE_DOMAIN );
 
 	// Build the *responsive* listbar.
-	if ( NULL !== $params['listbar'] && 'responsive' === $params['listbar'] ) {
+	if ( null !== $params['listbar'] && 'responsive' === $params['listbar'] ) {
 		wp_enqueue_style( 'helixware-player-css', plugins_url( 'css/helixware.player.css', dirname( __FILE__ ) ) );
 
 		$listbar_id = uniqid();
@@ -118,7 +119,7 @@ function hewa_shortcode_player( $atts ) {
 	}
 
 	// Build a standard listbar.
-	if ( NULL !== $params['listbar'] && 'responsive' !== $params['listbar'] ) {
+	if ( null !== $params['listbar'] && 'responsive' !== $params['listbar'] ) {
 
 		$player['listbar'] = array(
 			'position' => $params['listbar'],
